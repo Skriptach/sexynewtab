@@ -1,0 +1,81 @@
+﻿<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="user-scalable=no, width=device-width"/>
+	<title>Sexy NewTab</title>
+	<style>
+html,body {
+	background-color:#000;
+	background-size:0;
+	margin:0;
+	overflow:hidden;
+	-webkit-user-select: none;
+	font-size:12;
+	height: 100%;
+	width: 100%;
+}
+	</style>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="container">
+	<div id="main">
+		<div id="set"></div>
+	</div>
+	<div id="edit">
+		<div>
+			<div id="tabs" class="Node"><script>document.write(chrome.i18n.getMessage("fn_tabs"))</script></div>
+			<div class="Tree"></div>
+			<div id="bookmarks" class="Node"><script>document.write(chrome.i18n.getMessage("fn_bookmarks"))</script></div>
+			<div class="Tree"></div>
+			<div id="history" class="Node"><script>document.write(chrome.i18n.getMessage("fn_history"))</script></div>
+			<div class="Tree"></div>
+		</div>
+		<div style="position:absolute;bottom:7;left:7;right:7">
+			<input id="link_url" type="edit">
+			<input id="edit_ok" type="button" value="Ok"><script>document.write('<input id="edit_cancel" type="button" value="'+chrome.i18n.getMessage("mb_cancal")+'">')</script>
+		</div>
+	</div>
+</div>
+	<div id="footer">
+	</div>
+	<div id="optionsbutton"></div>
+	<div id="options">
+		<div>
+			<font style="font-size:1.7em;font-weigh:bold"><script>document.write(chrome.i18n.getMessage("o_header"))</script></font>
+		</div>
+		<div>
+			<font style="font-size:1.3em;margin-left:1em"><script>document.write(chrome.i18n.getMessage("o_row"))</script></font>
+			<select id="selectRows" onChange="dialsNumberChanged(event, 0);">
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</select>
+		</div>
+		<div>
+			<font style="font-size:1.3em;margin-left:1em"><script>document.write(chrome.i18n.getMessage("o_col"))</script></font>
+			<select id="selectCols" onChange="dialsNumberChanged(event, 1);">
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+			</select>
+		</div>
+		<div style="margin-top:10;maring-left:10;">
+			<script>document.write('<input type="button" value="'+chrome.i18n.getMessage("ob_save")+'" onClick="openOptions();"/>')</script>
+		</div>
+	</div>
+	<div id="menu">
+		<div class="item" onMouseDown="menuClick(0)"><script>document.write(chrome.i18n.getMessage("m_open"))</script></div>
+		<div class="item" onMouseDown="menuClick(0)"><script>document.write(chrome.i18n.getMessage("m_edit"))</script></div>
+		<div class="item" onMouseDown="menuClick(1)"><script>document.write(chrome.i18n.getMessage("m_copy"))</script></div>
+		<div class="separator"></div>
+		<div class="item" onMouseDown="menuClick(2)"><script>document.write(chrome.i18n.getMessage("m_clear"))</script></div>
+	</div>
+</body>
+<script type="text/javascript" language="javascript1.7" src="script.js"></script>
+</html>

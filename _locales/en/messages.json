@@ -1,0 +1,50 @@
+﻿{
+	"descript":{
+		"message":"Sexy NewTab replace Chrome New Tab with page similar to Top Sites in Safari and Express-panel in Opera. And synchronizes via bookmarks."
+	},
+	"window_size":{
+		"message":"Quirk triggered the chromes bug (returns fictive window size)! Look Console"
+	},
+	"fn_tabs":{
+		"message":"Opened tabs"
+	},
+	"fn_bookmarks":{
+		"message":"Bookmarks"
+	},
+	"fn_history":{
+		"message":"History"
+	},
+	"m_open":{
+		"message":"Open"
+	},
+	"m_edit":{
+		"message":"Edit…"
+	},
+	"m_upd":{
+		"message":"Update thumb"
+	},
+	"m_copy":{
+		"message":"Copy link"
+	},
+	"m_clear":{
+		"message":"Clear"
+	},
+	"o_header":{
+		"message":"Cells count:"
+	},
+	"o_row":{
+		"message":"Rows:"
+	},
+	"o_col":{
+		"message":"Cols:"
+	},
+	"ob_save":{
+		"message":"Save"
+	},
+	"pa_add":{
+		"message":"Add current page"
+	},
+	"mb_cancal":{
+		"message":"Cancel"
+	}
+}

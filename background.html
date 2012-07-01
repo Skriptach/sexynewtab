@@ -1,0 +1,212 @@
+﻿<script>
+slots = new Array();
+settingsNodeId="";
+Settings=[];
+callbacks=new Array();
+init();
+/*chrome.tabs.onCreated.addListener(function(tab) {
+	tabsList[tab.id+""] = {
+		id      : tab.id,
+		url     : tab.url,
+		title   : tab.title
+	}
+});
+chrome.tabs.onUpdated.addListener(function(tabId, object , tab) {
+	tabsList[tab.id+""] = {
+		id      : tab.id,
+		url     : tab.url,
+		title   : tab.title
+	}
+});
+*///chrome.tabs.onSelectionChanged.addListener(function(tabId, object) {});
+
+chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
+	switch (request.action){
+		case "refreshThumb":
+			if ( sender.tab ){
+				for ( var i=1; i<slots.length; i++ ){
+					// check if sender tab url really added to fav pages
+					if ( sender.tab.url == slots[i].url ){
+						// save sender tab id we could use it inside callback
+						var senderTabId = sender.tab.id;
+						try{
+							chrome.tabs.getSelected(null,function (currentTab){
+								// save current tab id in case user have changed tab and sender is inactive
+								var TabIdReturnTo = currentTab.id
+								// switch to sender tab
+								chrome.tabs.update(senderTabId, {selected: true, pinned:false}, function(tab){
+									// take screenshot
+									createThumb(function(thumb){
+										// save it
+										slots[i].thumb = thumb;
+										save(i);
+										refreshNewTabPages(i);
+									});
+									// switch back
+									chrome.tabs.update(TabIdReturnTo, {selected: true, pinned:false});
+								});
+							});
+						}catch(e){
+							console.log(e);
+						}
+						break;
+					}
+				}
+			}
+			break;
+		case "getSlots":
+			if ( sender.tab ){
+				sendResponse({slots: slots});
+			}
+			break;
+		case "subscribe":
+			if ( sender.tab ){
+				subscribe(request.callback);
+				sendResponse({});
+			}
+			break;
+		default: sendResponse({}); // snub them.
+	}
+});
+
+function init(){
+	chrome.bookmarks.search('$Sexy NewTab$',function(slotsAnchor){
+		if ( 0==slotsAnchor.length ){
+			chrome.bookmarks.getTree(function(Tree){
+				var tmpOtherBookmarksId=Tree[0].children[1].id;
+				chrome.bookmarks.create({parentId:tmpOtherBookmarksId,title:"$Sexy NewTab$"}, function(parentFolder){
+					settingsNodeId = parentFolder.id;
+					chrome.bookmarks.create({
+						parentId: settingsNodeId,
+						title: "$Sexy NewTab$ !do not edit!",
+						url:"https://chrome.google.com/webstore/detail/cbmkldolpdkljfjhghoaeehelhbiimbh",
+						index: 0
+					});
+					for(var i=1; 12>=i; i++){
+						chrome.bookmarks.create({
+							parentId: settingsNodeId,
+							title: "null",
+							url:'data:image/png;base64,',
+							index: i
+						});
+						slots[i]={
+							url:null,
+							thumb:null
+						}
+					}
+					announce();
+				//TODO Add Cols&Rows parameters bookmark.
+				});
+			});
+		} else {
+			settingsNodeId=slotsAnchor[0].parentId;
+			load();
+		};
+	});
+}
+function load(){
+	try{
+		chrome.bookmarks.getChildren(settingsNodeId, function(settingsList){
+			//TODO Valid count parameter.
+			for(var i=1; 12>=i; i++){
+				if("null" == settingsList[i].title){
+					slots[i] = {bookmark_id:settingsList[i].id,url:null,thumb:null};
+				}
+				else {
+					slots[i] = {
+						bookmark_id:settingsList[i].id,
+						url:settingsList[i].title,
+						thumb:settingsList[i].url
+					};
+				}
+			}
+			announce();
+		});
+	}
+	catch(e){
+		console.log(e);
+	}
+}
+// subscribe and announce added for that case when browser just runed with saved tabs
+// and 'slots' is empty (have not loaded in time). So at the place 'slots' was demand (newtab or content-script),
+// execution can be restored.
+function subscribe(callback){
+	callbacks.push(callback);
+}
+function announce(){
+	for (var i in callbacks){
+		callbacks[i]();
+	}
+	callbacks = null;
+}
+function save(slotId){
+try{
+	if(null==slots[slotId].url){
+		chrome.bookmarks.update(slots[slotId].bookmark_id, {title:"null",url:'data:image/png;base64,'})
+	}
+	else
+		chrome.bookmarks.update(slots[slotId].bookmark_id, {title:slots[slotId].url,url:slots[slotId].thumb});
+}catch(e){
+	console.log(e);
+}
+}
+function editPage(tabId, slot_index){
+	try{
+		chrome.tabs.getSelected(null,function (currentTab){
+			var NewTabIdReturnTo = currentTab.id
+			chrome.tabs.update(tabId, {selected: true, pinned:false}, function(tab){
+				createThumb(function(thumb){
+					slots[slot_index].url = tab.url;
+					slots[slot_index].thumb = thumb;
+					save(slot_index);
+					chrome.tabs.sendRequest(NewTabIdReturnTo, {
+						action: "updatePageThumb",
+						params: {index:slot_index}//, url:slots[slot_id].url, thumb: slots[slot_id].thumb}
+					});
+				});
+				chrome.tabs.update(NewTabIdReturnTo, {selected: true, pinned:false});
+			});
+		});
+	}catch(e){
+		console.log(e);
+	}
+}
+function remove(index){
+	slots[index].url = null;
+	slots[index].thumb = null;
+	save(index)
+}
+function swap(old_index, new_index){
+	chrome.bookmarks.move( slots[old_index].bookmark_id, {
+		parentId : settingsNodeId,
+		index : old_index < new_index ? new_index+1 : new_index
+	});
+	slots.splice(new_index, 0, slots.splice(old_index, 1)[0]);
+}
+function getSlots(){
+	return slots;
+}
+function refreshNewTabPages(slot_index){
+	chrome.windows.getAll({populate:true},function(windows){
+		for (var i in windows){
+			for (var j in windows[i].tabs){
+				if ( "chrome://newtab/" == windows[i].tabs[j].url ){
+					chrome.tabs.sendRequest(windows[i].tabs[j].id, {
+						action: "updatePageThumb",
+						params: {index: slot_index}//, url:slots[slot_id].url, thumb: slots[slot_id].thumb}
+					});
+				}
+			}
+		}
+	});
+}
+function createThumb(callback){
+try{
+	chrome.tabs.captureVisibleTab(null,{format:"png"},function(dataurl){
+			callback(dataurl);
+	});
+}catch(e){
+	console.log(e);
+}
+}
+</script>

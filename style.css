@@ -1,0 +1,221 @@
+﻿.logo{
+	position:absolute;
+	width:100%;
+	height:100%;
+	background:url(images/logo_inactive.png) no-repeat center center;
+	background-size:20%;
+}
+#container{
+	display:table;
+	height: 100%;
+	width: 100%;
+}
+#main{
+	display:table-cell;
+	vertical-align:middle;
+}
+#set{
+	position:relative;
+	margin:auto;
+}
+.page{
+	position:absolute;
+	background-color:transparent;
+	border-radius:6px;
+	box-shadow: 0px 0px 0px;
+	-webkit-transition-property: left, top, width, height, box-shadow;
+	-webkit-transition-duration: 0.3s;
+	-webkit-transition-timing-function: ease-out;
+}
+.page:hover{
+	box-shadow: 0px 0px 15px #00C0FF;
+}
+.page.draged{
+	box-shadow: 15px 15px 15px #000;
+	-webkit-transition-property: -webkit-transform;
+}
+.fliper{
+	width:100%;
+	height:100%;
+	position:absolute;
+	-webkit-transition-property: -webkit-transform;
+	-webkit-transition-duration: 1.0s;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transform: rotate3d(0, 1, 0, 0deg);
+	-webkit-backface-visibility: hidden;
+}
+.page.turned .fliper{
+	-webkit-transform: rotate3d(0, 1, 0, 180deg) perspective(800);
+}
+.page.turned #edit{
+	-webkit-transform: rotate3d(0, 1, 0, 0deg) perspective(800);
+}
+.backgradient{
+	width:100%;
+	height:100%;
+	background-size:100% 100%;
+	border-radius:6;
+	position:absolute;
+}
+.thumbnail{
+	width:100%;
+	height:100%;
+	background-size:100% 100%;
+	border-radius:6px;
+	position:absolute;
+}
+#edit{
+	position:absolute;
+	background-color:#E5E5E5;
+	text-align:center;
+	border-radius:6;
+	box-shadow: 15px 15px 15px #000;
+	-webkit-transition-property: -webkit-transform;
+	-webkit-transition-duration: 1.0s;
+	-webkit-transform: rotate3d(0, 1, 0, 180deg);
+	-webkit-backface-visibility: hidden;
+}
+#edit>div:first-child{
+	position:absolute;
+	top:7;
+	left:7;
+	right:7;
+	bottom:68;
+	overflow:auto;
+	border:1 solid #1544AD;
+	background-color:#FFF;
+	text-align:left;
+	cursor:default;
+}
+#edit .node{
+	font-weight:bold;
+	font-size:1.2em;
+}
+#edit .tree{
+	margin-left:30;
+	max-width:620;
+}
+#edit .item{
+	background-position:top left;
+	background-repeat:no-repeat;
+	background-size:16px;
+	padding-left:20;
+	margin-top:3;
+	text-overflow:ellipsis;
+}
+#edit .selected{
+	border:dotted 1px grey;
+	background-color:lightblue;
+}
+input[type="button"]{
+	margin-top:7;
+	width:77;
+	height:23;
+}
+#tabs{
+	background:URL(images/tabIcon.png) no-repeat top left;
+	padding-left:20;
+	margin:5;
+}
+#bookmarks{
+	background:URL(images/bookmarkIcon.png) no-repeat top left;
+	padding-left:20;
+	margin:5;
+}
+#history{
+	background:URL(images/historyIcon.png) no-repeat top left;
+	padding-left:20;
+	margin:5;
+}
+#link_url{
+	border:1 solid #1544AD;
+	width:100%;
+}
+#footer{
+	position:absolute;
+	bottom:10;
+	width:100%;
+	text-align: center;
+}
+#footer>div{
+	display:inline-block;
+	margin:auto;
+	padding:7 10;
+	border-radius: 6;
+	background:#fff299;
+	-webkit-border-radius: 6;
+	border: 1 solid lightGrey;
+	color:red;
+	font-weight: bold;
+	max-width:700;
+}
+.link{
+	text-decoration:none;
+	cursor:default;
+}
+#optionsbutton{
+	display: none;
+	background: url('images/rub.png') 0 0 no-repeat;
+	position:absolute;
+	right:15;
+	bottom:15;
+	z-index:10;
+	width: 43;
+	height:24;
+	background-color:#000050;
+	-webkit-border-radius: 4;
+}
+#optionsbutton:hover{
+	background-color:#053fd5;
+}
+#options{
+	z-index:10;
+	position:absolute;
+	right:15;
+	bottom:40;
+	display:none;
+	border:1 solid #d7d7d7;
+	background-color:#000050;
+	color:grey;
+	padding:10;
+	-webkit-border-radius: 7;
+}
+#options > div{
+	width:130;
+	margin-top:5;
+	maring-left:10;
+}
+select{
+	float:right;
+}
+#menu{
+	position:absolute;
+	left:0;
+	top:0;
+	padding:3;
+	visibility: hidden;
+	z-index:1000;
+	background-color:#f0f0f0;
+	-webkit-box-shadow: 2px 2px 5px #2a2a2a;
+	border:1 solid #5b5b5b;
+}
+#menu :first-child{
+	font-weight:bold;
+}
+#menu .item{
+	font-family:arial;
+	color:#2c2929;
+	padding:2 19 2 9;
+	border:1 solid #f0f0f0;
+	cursor:pointer;
+}
+#menu .item:hover{
+	color:white;
+	background-color:#447ECF;
+	border:1 solid #1544AD;
+}
+#menu .separator{
+	margin:3;
+	height:1;
+	background-color:#d0d0d0;
+}

@@ -1,0 +1,50 @@
+﻿{
+	"descript":{
+		"message":"Sexy NewTab замемняет Новую Вкладку Chrome страницей подобной Top Sites в Safari и Экспресс-панели в Opera. И синхронизируется через закладки."
+	},
+	"window_size":{
+		"message":"Сработал костыль от бага хрома (возвращает ложные размеры окна)! Смотрите в Console."
+	},
+	"fn_tabs":{
+		"message":"Открытые вкладки"
+	},
+	"fn_bookmarks":{
+		"message":"Закладки"
+	},
+	"fn_history":{
+		"message":"История"
+	},
+	"m_open":{
+		"message":"Открыть"
+	},
+	"m_edit":{
+		"message":"Редактировать…"
+	},
+	"m_upd":{
+		"message":"Обновить эскиз"
+	},
+	"m_copy":{
+		"message":"Копировать ссылку"
+	},
+	"m_clear":{
+		"message":"Удалить"
+	},
+	"o_header":{
+		"message":"Число ячеек:"
+	},
+	"o_row":{
+		"message":"Строк:"
+	},
+	"o_col":{
+		"message":"Столбцов:"
+	},
+	"ob_save":{
+		"message":"Сохранить"
+	},
+	"pa_add":{
+		"message":"Добавить текущую страницу"
+	},
+	"mb_cancal":{
+		"message":"Отмена"
+	}
+}
