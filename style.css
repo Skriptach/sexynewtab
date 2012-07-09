@@ -44,10 +44,13 @@
 	-webkit-transform: rotate3d(0, 1, 0, 0deg);
 	-webkit-backface-visibility: hidden;
 }
-.page.turned .fliper{
+.page.turned {
+	z-index: 100;
+}
+.page.turned .fliper {
 	-webkit-transform: rotate3d(0, 1, 0, 180deg) perspective(800);
 }
-.page.turned #edit{
+.page.turned #edit {
 	-webkit-transform: rotate3d(0, 1, 0, 0deg) perspective(800);
 }
 .backgradient{

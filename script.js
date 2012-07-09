@@ -99,9 +99,9 @@ function removePage(page){
 	page.style.webkitTransform="scale(0.3)";
 	var hold=setTimeout(function(){
 		//page.thumb=null;
-		page.firstElementChild.lastElementChild.removeAttribute('href');
+		page.firstElementChild.firstElementChild.removeAttribute('href');
 		//page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-		page.firstElementChild.lastElementChild.lastElementChild.style['background']='';
+		page.firstElementChild.firstElementChild.lastElementChild.style['background']='';
 		page.onclick=function(e){
 					if(e.button===0){
 						toggleEditForm(e.currentTarget);
@@ -244,7 +244,7 @@ function pageClickHandler(event){
 		try{
 			page = event.target.parentElement.parentElement.parentElement;
 		} catch(error){
-			//do nothing. because it seems just was clicked any of top elements
+			//do nothing. because it seems just any of top elements was clicked.
 		}
 		if (event.target.hasAttribute('style')){
 			_left=set.offsetLeft;
@@ -255,18 +255,16 @@ function pageClickHandler(event){
 			page.style.width=window.innerWidth;
 			page.style.height=window.innerHeight;
 			event.target.style['-webkit-border-radius']='0';
-		} else {toggleEditForm(page);}
+		} else if (page.className === 'page' ) {toggleEditForm(page);}
 	}
 }
 function showEditForm(page){
 	page.appendChild(edit);
-	//edit.style.display="block"
-	page.className = 'page turned';
-	//edit.style.left=parseInt(page.style.left)+set.offsetLeft;
-	//edit.style.top=parseInt(page.style.top)+set.offsetTop;
+	var hold=setTimeout(function(){
+		page.className = 'page turned';
+		}, 10);
 }
 function hideEditForm(page){
-	//edit.style.display=null;
 	page.className = 'page';
 	currentEditPage=null;
 }
@@ -275,25 +273,26 @@ function toggleEditForm(page){
 		currentEditPage = page;
 		editPageId=page.index;
 		showEditForm(currentEditPage);
+		return
 	}
-	if( currentEditPage && page != currentEditPage ){
+	if( currentEditPage && page !== currentEditPage ){
 		hideEditForm(currentEditPage);
 		currentEditPage = page;
 		editPageId=page.index;
 		var hold=setTimeout(function(){
 			showEditForm(currentEditPage);
-			}, 1000);
+		}, 300);
 	}
 }
 function updatePageThumb(slotIndex, page){
-	if (null === page){
+	if (!page){
 		page = d('page'+slotIndex);
 	}
-	if (null!==slots[slotIndex].url){
+	if (!!slots[slotIndex].url){
 		page.oncontextmenu=oncontextpage;
-		page.firstElementChild.lastElementChild.setAttribute('href',slots[slotIndex].url);
+		page.firstElementChild.firstElementChild.setAttribute('href',slots[slotIndex].url);
 		//page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-		page.firstElementChild.lastElementChild.lastElementChild.style['background']='URL('+slots[slotIndex].thumb+')';
+		page.firstElementChild.firstElementChild.lastElementChild.style['background']='URL('+slots[slotIndex].thumb+')';
 	}
 }
 function setPagesSize(){
