@@ -14,17 +14,11 @@
 	"fn_history":{
 		"message":"History"
 	},
-	"m_open":{
-		"message":"Open"
-	},
 	"m_edit":{
 		"message":"Edit…"
 	},
 	"m_upd":{
 		"message":"Update thumb"
-	},
-	"m_copy":{
-		"message":"Copy link"
 	},
 	"m_clear":{
 		"message":"Clear"

@@ -14,17 +14,11 @@
 	"fn_history":{
 		"message":"История"
 	},
-	"m_open":{
-		"message":"Открыть"
-	},
 	"m_edit":{
 		"message":"Редактировать…"
 	},
 	"m_upd":{
 		"message":"Обновить эскиз"
-	},
-	"m_copy":{
-		"message":"Копировать ссылку"
 	},
 	"m_clear":{
 		"message":"Удалить"

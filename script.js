@@ -47,11 +47,6 @@
             localStorage.col = COLUMNS_COUNT;
         }
     }
-    function hideContextMenu() {
-        document.onmousedown = null;
-        menu.style.visibility = 'hidden';
-        menuSelectedPage = null;
-    }
     function onDrag(e) {
         if (e.screenX > 0 || e.screenY > 0) {
             var TargetPosX,
@@ -110,7 +105,6 @@
         lastPosition = null;
     }
     function PrepareDrag(e) {
-        hideContextMenu();
         dragPage = e.target.parentElement.parentElement;
         if (dragPage.getAttribute('class') === 'page') {
             lastPosition = dragPage.index;
@@ -165,32 +159,8 @@
                     toggleEditForm(e.currentTarget);
                 }
             };
-            page.oncontextmenu = null;
             page.style.webkitTransform = "scale(1)";
         }, 200);
-    }
-    function menuClick(id) {
-        if (id === 0) {
-            //Edit
-            toggleEditForm(menuSelectedPage);
-        } else if (id === 1) {
-            //chrome.tabs.create({url: menuSelectedPage.thumb.url, selected:true})
-        } else if (id === 2) {
-            removePage(menuSelectedPage);
-        }
-        hideContextMenu();
-    }
-    function oncontextpage(e) {
-        menuSelectedPage = e.currentTarget;
-        var _left = e.x + 1,
-            _top = e.y + 1;
-        if (_left + menu.offsetWidth > window.innerWidth) {_left -= menu.offsetWidth; }
-        if (_top + menu.offsetHeight > window.innerHeight) {_top -= menu.offsetHeight; }
-        menu.style.left = _left;
-        menu.style.top = _top;
-        menu.style.visibility = 'visible';
-        document.onmousedown = hideContextMenu;
-        e.preventDefault();
     }
     function calcSize() {
         var _width = window.innerWidth,
@@ -215,7 +185,6 @@
             page = d('page' + slotIndex);
         }
         if (!!slots[slotIndex].url) {
-            page.oncontextmenu = oncontextpage;
             page.firstElementChild.firstElementChild.setAttribute('href', slots[slotIndex].url);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + slots[slotIndex].thumb + ')';
