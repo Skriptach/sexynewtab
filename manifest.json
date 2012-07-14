@@ -1,8 +1,12 @@
 {
+	"manifest_version": 2,
 	"name": "Sexy New Tab",
 	"description":"__MSG_descript__",
-	"permissions": ["tabs", "bookmarks", "http://*/*", "https://*/*"],
-	"background_page": "background.html",
+	"permissions": ["tabs", "bookmarks", "http://*/*", "https://*/*", "storage"],
+	"optional_permissions": ["unlimitedStorage"],
+	"background": {
+		"scripts":["background.js"]
+	},
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
 	},

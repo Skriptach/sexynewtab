@@ -1,5 +1,5 @@
 ﻿/*jslint sloppy:true, nomen:true, browser:true, plusplus :true */
-/*globals chrome:true, console:true, localStorage:true, menu:true, set:true, optionsbutton:true, selectRows:true, selectCols:true, options:true, edit:true, link_url:true, footer:true */
+/*globals chrome console localStorage set optionsbutton selectRows selectCols options edit link_url footer */
 (function () {
     var COLUMNS_COUNT = 4,
         ROWS_COUNT = 3,
@@ -10,7 +10,8 @@
         currentEditPage = null,
         OptionsMenu = false,
         reports = null,
-        slots,
+        urls,
+        thumbs,
         dragPage = null,
         lastPosition = null,
         pagePosX,
@@ -18,7 +19,6 @@
         _offsetX,
         _offsetY,
         grad_radius,
-        editPageId,
         currentItem;
 
     function d(id) {
@@ -26,7 +26,8 @@
     }
 
     try {
-        slots = chrome.extension.getBackgroundPage().slots;
+        urls = chrome.extension.getBackgroundPage().urls;
+        thumbs = chrome.extension.getBackgroundPage().thumbs;
     } catch (e) {
         console.log(e);
         return;
@@ -61,10 +62,10 @@
                 p_top = e.y - _offsetY,
                 col = Math.floor((p_left + PAGE_WIDTH / 2 + DELTA) / (PAGE_WIDTH + DELTA)),
                 row = Math.floor((p_top + PAGE_HEIGHT / 2 + DELTA) / (PAGE_HEIGHT + DELTA)),
-                position = row * COLUMNS_COUNT + col + 1;
+                position = row * COLUMNS_COUNT + col;
             dragPage.style.left = p_left;
             dragPage.style.top = p_top;
-            if ((position > 0) && (position <= ROWS_COUNT * COLUMNS_COUNT) && (position !== dragPage.index)) {
+            if ((position >= 0) && (position < ROWS_COUNT * COLUMNS_COUNT) && (position !== dragPage.index)) {
                 if (Math.abs(p_left - col * (PAGE_WIDTH + DELTA)) < PAGE_WIDTH / 2) {
                     TargetPosX = pagePosX;
                     TargetPosY = pagePosY;
@@ -80,7 +81,7 @@
                         moved.style.top = TargetPosY;
                         TargetPosX = tmpPosX;
                         TargetPosY = tmpPosY;
-                        moved.setAttribute('id', 'page' + String(i - modificator));
+                        moved.setAttribute('id', 'page' + (i - modificator));
                         moved.index = i - modificator;
                     } while (i !== position);
                     pagePosX = TargetPosX;
@@ -120,27 +121,25 @@
             document.ondragend = stopDrag;
         }
     }
-    function showEditForm(page) {
-        page.appendChild(edit);
-        var hold = setTimeout(function () {
-            page.className = 'page turned';
+    function showEditForm() {
+        currentEditPage.appendChild(edit);
+        setTimeout(function () {
+            currentEditPage.className = 'page turned';
         }, 10);
     }
-    function hideEditForm(page) {
-        page.className = 'page';
+    function hideEditForm() {
+        currentEditPage.className = 'page';
         currentEditPage = null;
     }
     function toggleEditForm(page) {
         if (!currentEditPage) {
             currentEditPage = page;
-            editPageId = page.index;
-            showEditForm(currentEditPage);
+            showEditForm();
             return;
         }
         if (currentEditPage && page !== currentEditPage) {
-            hideEditForm(currentEditPage);
+            hideEditForm();
             currentEditPage = page;
-            editPageId = page.index;
             var hold = setTimeout(function () {
                 showEditForm(currentEditPage);
             }, 300);
@@ -148,10 +147,9 @@
     }
     function removePage(page) {
         chrome.extension.getBackgroundPage().remove(page.index);
+        page.firstElementChild.firstElementChild.removeAttribute('href');
         page.style.webkitTransform = "scale(0.3)";
         var hold = setTimeout(function () {
-            //page.thumb=null;
-            page.firstElementChild.firstElementChild.removeAttribute('href');
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style.background = '';
             page.onclick = function (e) {
@@ -184,10 +182,10 @@
         if (!page) {
             page = d('page' + slotIndex);
         }
-        if (!!slots[slotIndex].url) {
-            page.firstElementChild.firstElementChild.setAttribute('href', slots[slotIndex].url);
+        if (!!urls[slotIndex]) {
+            page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-            page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + slots[slotIndex].thumb + ')';
+            page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + thumbs[urls[slotIndex]] + ')';
         }
     }
     function pageClickHandler(event) {
@@ -198,7 +196,7 @@
             } catch (error) {
                 //do nothing. because it seems just any of top elements was clicked.
             }
-            if (event.target.hasAttribute('style')) {
+            if (event.target.className === 'thumbnail' && event.target.hasAttribute('style')) {
                 _left = set.offsetLeft;
                 _top = set.offsetTop;
                 page.style.zIndex = 1000;
@@ -242,7 +240,7 @@
                     grad_radius + ', from(#000065), to(#000010))';
             }
         }
-        index = 1;
+        index = 0;
         for (i = 0; i < ROWS_COUNT; i++) {
             for (j = 0; j < COLUMNS_COUNT; j++) {
                 leftPos = (j * (PAGE_WIDTH + DELTA));
@@ -255,16 +253,14 @@
                 page.style.top = topPos;
                 page.index = index;
                 set.appendChild(page);
-                //page.draggable=true;
                 updatePageThumb(index, page);
                 index++;
             }
         }
-        index--;
-        d('page' + index).firstElementChild.appendChild(edit);
+        page.firstElementChild.appendChild(edit);
         edit.onclick = function (e) { e.stopPropagation(); };
         edit_cancel.onclick = function (e) {
-            hideEditForm(currentEditPage);
+            hideEditForm();
         };
         edit_ok.onclick = editPage;
         tabs.onclick = expandNode;
@@ -337,12 +333,16 @@
         }
     }
     function editPage(e) {
-        chrome.extension.getBackgroundPage().editPage(currentItem.tabId, editPageId);
-        hideEditForm(currentEditPage);
+        chrome.extension.getBackgroundPage().editPage(currentItem.tabId, currentEditPage.index);
+        hideEditForm();
     }
     window.onload = function () {
         var _width = window.innerWidth,
             _height = window.innerHeight;
+        tabs.innerText = chrome.i18n.getMessage("fn_tabs");
+        bookmarks.innerText = chrome.i18n.getMessage("fn_bookmarks");
+        d('history').innerText = chrome.i18n.getMessage("fn_history");
+        edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
         function hacks() {
             window.onresize = function () {
                 if (!set.hasChildNodes()) {
@@ -356,7 +356,7 @@
             } else { createPages(); }
         }
         try {
-            if (!slots.length) {
+            if (!urls.length) {
                 chrome.extension.getBackgroundPage().subscribe(hacks);
             } else { hacks(); }
         } catch (e) {

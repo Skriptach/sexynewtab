@@ -24,22 +24,24 @@ html,body {
 	</div>
 	<div id="edit">
 		<div>
-			<div id="tabs" class="Node"><script>document.write(chrome.i18n.getMessage("fn_tabs"))</script></div>
+			<div id="tabs" class="Node"></div>
 			<div class="Tree"></div>
-			<div id="bookmarks" class="Node"><script>document.write(chrome.i18n.getMessage("fn_bookmarks"))</script></div>
+			<div id="bookmarks" class="Node"></div>
 			<div class="Tree"></div>
-			<div id="history" class="Node"><script>document.write(chrome.i18n.getMessage("fn_history"))</script></div>
+			<div id="history" class="Node"></div>
 			<div class="Tree"></div>
 		</div>
 		<div style="position:absolute;bottom:7;left:7;right:7">
 			<input id="link_url" type="edit">
-			<input id="edit_ok" type="button" value="Ok"><script>document.write('<input id="edit_cancel" type="button" value="'+chrome.i18n.getMessage("mb_cancal")+'">')</script>
+			<input id="edit_ok" type="button" value="Ok">
+			<input id="edit_cancel" type="button" value="">
 		</div>
 	</div>
 </div>
 	<div id="footer">
 	</div>
 	<div id="optionsbutton"></div>
+	<!--
 	<div id="options">
 		<div>
 			<font style="font-size:1.7em;font-weigh:bold"><script>document.write(chrome.i18n.getMessage("o_header"))</script></font>
@@ -68,7 +70,7 @@ html,body {
 		<div style="margin-top:10;maring-left:10;">
 			<script>document.write('<input type="button" value="'+chrome.i18n.getMessage("ob_save")+'" onClick="openOptions();"/>')</script>
 		</div>
-	</div>
+	</div> -->
 </body>
 <script type="text/javascript" language="javascript1.7" src="script.js"></script>
 </html>

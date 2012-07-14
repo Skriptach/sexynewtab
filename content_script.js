@@ -1,8 +1,9 @@
-﻿var slots = [];
+﻿var urls = [], thumbs;
 try{
 	chrome.extension.sendRequest({action: "getSlots"}, function(response) {
-		slots = response.slots;
-		if(!slots.length){
+		urls = response.urls;
+		thumbs = response.thumbs;
+		if(!urls.length){
 			chrome.extension.sendRequest({action:"subscribe", callback: shotScreen}, function(){});
 		}
 		else shotScreen();
@@ -18,7 +19,7 @@ function shotScreen(){
 		return (document.URL == element.url);
 	}
 	
-	if( slots.length && "complete" == document.readyState && slots.slice(1,-1).filter(by_URL).length ){
+	if( urls.length && "complete" == document.readyState && urls.indexOf(document.URL) !== -1 ){
 		try{
 			chrome.extension.sendRequest({action: "refreshThumb"}, function(response) {});
 		}
