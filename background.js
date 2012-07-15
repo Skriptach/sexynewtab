@@ -28,30 +28,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 			var i = urls.indexOf(sender.tab.url);
 			// check if sender tab url really added to fav pages
 			if (i !== -1) {
-				// save sender tab id we could use it inside callback
-				var senderTabId = sender.tab.id;
 				try {
-					chrome.tabs.getSelected(null, function(currentTab) {
-						// save current tab id in case user have changed tab and sender is inactive
-						var TabIdReturnTo = currentTab.id;
-						// switch to sender tab
-						chrome.tabs.update(senderTabId, {
-							selected: true,
-							pinned: false
-						}, function(tab) {
-							// take screenshot
-							createThumb(function(thumb) {
-								// save it
-								thumbs[urls[i]] = thumb;
-								//save();
-								refreshNewTabPages(i);
-							});
-							// switch back
-							chrome.tabs.update(TabIdReturnTo, {
-								selected: true,
-								pinned: false
-							});
-						});
+					createThumbOfTab(sender.tab, function(thumb) {
+						// save it
+						thumbs[urls[i]] = thumb;
+						refreshNewTabPages(i);
+						saveLocal();
 					});
 				} catch (e) {
 					console.log(e);
@@ -158,46 +140,30 @@ function announce() {
 	callbacks = null;
 }
 
-function save(slotId) {
+function saveLocal() {
 	try {
-		if (null === slots[slotId].url) {
-			chrome.bookmarks.update(slots[slotId].bookmark_id, {
-				title: "null",
-				url: 'data:image/png;base64,'
-			});
-		} else chrome.bookmarks.update(slots[slotId].bookmark_id, {
-			title: slots[slotId].url,
-			url: slots[slotId].thumb
-		});
+		chrome.storage.local.set({'thumbs': thumbs});
 	} catch (e) {
 		console.log(e);
 	}
 }
 
-function editPage(tabId, slot_index) {
+function saveSync(){
 	try {
-		chrome.tabs.getSelected(null, function(currentTab) {
-			var NewTabIdReturnTo = currentTab.id;
-			chrome.tabs.update(tabId, {
-				selected: true,
-				pinned: false
-			}, function(tab) {
-				createThumb(function(thumb) {
-					urls[slot_index] = tab.url;
-					thumbs[urls[slot_index]] = thumb;
-					//save();
-					chrome.tabs.sendRequest(NewTabIdReturnTo, {
-						action: "updatePageThumb",
-						params: {
-							index: slot_index
-						}
-					});
-				});
-				chrome.tabs.update(NewTabIdReturnTo, {
-					selected: true,
-					pinned: false
-				});
-			});
+		chrome.storage.sync.set({'urls': urls});
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+function editPage(requestedTab, slot_index) {
+	try {
+		createThumbOfTab(requestedTab,function(thumb) {
+			urls[slot_index] = requestedTab.url;
+			thumbs[urls[slot_index]] = thumb;
+			refreshNewTabPages(slot_index);
+			saveSync();
+			saveLocal();
 		});
 	} catch (e) {
 		console.log(e);
@@ -207,12 +173,13 @@ function editPage(tabId, slot_index) {
 function remove(index) {
 	urls[index] = null;
 	delete thumbs[urls[index]];
-	//save();
+	saveSync();
+	saveLocal();
 }
 
 function swap(old_index, new_index) {
 	urls.splice(new_index, 0, urls.splice(old_index, 1)[0]);
-	//save();
+	saveSync();
 }
 
 function refreshNewTabPages(slot_index) {
@@ -234,11 +201,30 @@ function refreshNewTabPages(slot_index) {
 	});
 }
 
-function createThumb(callback) {
+function createThumbOfTab(tab, callback) {
 	try {
-		chrome.tabs.captureVisibleTab(null, {
-			format: "png"
-		}, callback);
+		//get current tab
+		chrome.tabs.getSelected(null, function(currentTab) {
+			// switch to requested tab
+			chrome.tabs.update(tab.id, {
+				active: true,
+				selected: true,
+				pinned: tab.pinned
+			}, function(tab) {
+				// take screenshot
+				chrome.tabs.captureVisibleTab(tab.windowId, {
+					format: "png"
+				}, function(thumb){
+					// switch back
+					chrome.tabs.update(currentTab.id, {
+						active: true,
+						selected: true,
+						pinned: currentTab.pinned
+					});
+					callback(thumb);
+				});
+			});
+		});
 	} catch (e) {
 		console.log(e);
 	}

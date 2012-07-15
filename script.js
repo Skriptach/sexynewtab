@@ -278,7 +278,7 @@
                     grad_radius + ', from(#000065), to(#000010))';
             }
         }
-        index = 1;
+        index = 0;
         for (i = 0; i < ROWS_COUNT; i++) {
             for (j = 0; j < COLUMNS_COUNT; j++) {
                 leftPos = j * (PAGE_WIDTH + DELTA);
@@ -310,7 +310,7 @@
                             item = document.createElement('div');
                             item.style['background-image'] = "URL(" + tabs[j].favIconUrl + ")";
                             item.setAttribute("class", "item");
-                            item.tabId = tabs[j].id;
+                            item.tab = tabs[j];
                             item.url = tabs[j].url;
                             item.innerHTML = "<nobr>" + tabs[j].title + "</nobr>";
                             // TODO: delegate
@@ -333,7 +333,7 @@
         }
     }
     function editPage(e) {
-        chrome.extension.getBackgroundPage().editPage(currentItem.tabId, currentEditPage.index);
+        chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
         hideEditForm();
     }
     window.onload = function () {
@@ -355,14 +355,14 @@
                 reportError("window_size");
             } else { createPages(); }
         }
-        try {
-            if (!urls.length) {
+        if (!urls.length) {
+            try {
                 chrome.extension.getBackgroundPage().subscribe(hacks);
-            } else { hacks(); }
-        } catch (e) {
-            console.log(e);
-            return;
-        }
+            } catch (e) {
+                console.log(e);
+                return;
+            }
+        } else { hacks(); }
     };
     optionsbutton.onclick = function () {
         if (!OptionsMenu) {
