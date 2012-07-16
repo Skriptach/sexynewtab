@@ -21,7 +21,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, object , tab) {
 });
 */
 //chrome.tabs.onSelectionChanged.addListener(function(tabId, object) {});
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
 	switch (request.action) {
 	case "refreshThumb":
 		if (sender.tab) {
@@ -29,7 +29,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 			// check if sender tab url really added to fav pages
 			if (i !== -1) {
 				try {
-					createThumbOfTab(sender.tab, function(thumb) {
+					createThumbOfTab(sender.tab, function (thumb) {
 						// save it
 						thumbs[urls[i]] = thumb;
 						refreshNewTabPages(i);
@@ -62,68 +62,35 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 });
 
 function init() {
-	chrome.bookmarks.search('$Sexy NewTab$', function(slotsAnchor) {
-		if (0 === slotsAnchor.length) {
-			chrome.bookmarks.getTree(function(Tree) {
-				var tmpOtherBookmarksId = Tree[0].children[1].id;
-				chrome.bookmarks.create({
-					parentId: tmpOtherBookmarksId,
-					title: "$Sexy NewTab$"
-				}, function(parentFolder) {
-					settingsNodeId = parentFolder.id;
-					chrome.bookmarks.create({
-						parentId: settingsNodeId,
-						title: "$Sexy NewTab$ !do not edit!",
-						url: "https://chrome.google.com/webstore/detail/cbmkldolpdkljfjhghoaeehelhbiimbh",
-						index: 0
-					});
-					for (var i = 1; 12 >= i; i++) {
-						chrome.bookmarks.create({
-							parentId: settingsNodeId,
-							title: "null",
-							url: 'data:image/png;base64,',
-							index: i
-						});
-						slots[i] = {
-							url: null,
-							thumb: null
-						};
-					}
-					announce();
-					//TODO Add Cols&Rows parameters bookmark.
-				});
-			});
-		} else {
-			settingsNodeId = slotsAnchor[0].parentId;
-			load();
+	var urls_ready = false, thumbs_ready = false;
+
+	function loaded() {
+		if (urls_ready && thumbs_ready) {
+			announce();
 		}
+	}
+
+	chrome.storage.sync.get("urls", function(res){
+		console.log(res);
+		if (res.urls){
+			urls = res.urls;
+		} else {
+			urls = [null, null, null, null, null, null, null, null, null, null, null, null];
+			saveSync();
+		}
+		urls_ready = true;
+		loaded();
+	});
+
+	chrome.storage.local.get("thumbs", function(res){
+		if (res.thumbs) {
+			thumbs = res.thumbs;
+		}
+		thumbs_ready = true;
+		loaded();
 	});
 }
 
-function load() {
-	try {
-		chrome.bookmarks.getChildren(settingsNodeId, function(settingsList) {
-			//TODO Valid count parameter.
-			for (var i = 1; 12 >= i; i++) {
-				if ("null" == settingsList[i].title) {
-					//slots[i] = {bookmark_id:settingsList[i].id,url:null,thumb:null};
-					urls.push(null);
-				} else {
-					/* slots[i] = {
-						bookmark_id:settingsList[i].id,
-						url:settingsList[i].title,
-						thumb:settingsList[i].url
-					}; */
-					urls.push(settingsList[i].title);
-					thumbs[settingsList[i].title] = settingsList[i].url;
-				}
-			}
-			announce();
-		});
-	} catch (e) {
-		console.log(e);
-	}
-}
 // subscribe and announce added for that case when browser just runed with saved tabs
 // and 'slots' is empty (have not loaded in time). So at the place 'slots' was demand (newtab or content-script),
 // execution can be restored.

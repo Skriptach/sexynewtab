@@ -97,7 +97,7 @@
         document.ondragend = null;
         dragPage.ondragover = null;
         dragPage.style.zIndex = null;
-        dragPage.className = 'page';
+        dragPage.classList.remove("draged");
         dragPage.style.left = pagePosX;
         dragPage.style.top = pagePosY;
         dragPage.style.width = parseFloat(dragPage.style.width) - 15;
@@ -107,9 +107,9 @@
     }
     function PrepareDrag(e) {
         dragPage = e.target.parentElement.parentElement;
-        if (dragPage.getAttribute('class') === 'page') {
+        if (dragPage.classList.contains('page')) {
             lastPosition = dragPage.index;
-            dragPage.className = 'page draged';
+            dragPage.classList.add('draged');
             dragPage.style.zIndex = 1000;
             pagePosX = parseFloat(dragPage.style.left);
             pagePosY = parseFloat(dragPage.style.top);
@@ -124,11 +124,11 @@
     function showEditForm() {
         currentEditPage.appendChild(edit);
         setTimeout(function () {
-            currentEditPage.className = 'page turned';
+            currentEditPage.classList.add('turned');
         }, 10);
     }
     function hideEditForm() {
-        currentEditPage.className = 'page';
+        currentEditPage.classList.remove('turned');
         currentEditPage = null;
     }
     function toggleEditForm(page) {
@@ -185,7 +185,10 @@
         if (!!urls[slotIndex]) {
             page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-            page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + thumbs[urls[slotIndex]] + ')';
+            page.classList.add('active');
+            if (thumbs[urls[slotIndex]]) {
+                page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + thumbs[urls[slotIndex]] + ')';
+            }
         }
     }
     function pageClickHandler(event) {
@@ -205,7 +208,7 @@
                 page.style.width = window.innerWidth;
                 page.style.height = window.innerHeight;
                 event.target.style['-webkit-border-radius'] = '0';
-            } else if (page.className === 'page') { toggleEditForm(page); }
+            } else if (page.classList.contains('page')) { toggleEditForm(page); }
         }
     }
     function createPages() {

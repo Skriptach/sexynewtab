@@ -5,6 +5,9 @@
 	background:url(images/logo_inactive.png) no-repeat center center;
 	background-size:20%;
 }
+.page.active .logo {
+	background-image: url(images/logo_active.png);
+}
 #container{
 	display:table;
 	height: 100%;
