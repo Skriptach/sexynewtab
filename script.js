@@ -391,7 +391,7 @@
     }
     chrome.extension.onRequest.addListener(
         function (request, sender, sendResponse) {
-            if (sender.id) {
+            if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
                 switch (request.action) {
                 case "updatePageThumb":
                     updatePageThumb(request.params.index);

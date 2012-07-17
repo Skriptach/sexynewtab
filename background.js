@@ -71,7 +71,6 @@ function init() {
 	}
 
 	chrome.storage.sync.get("urls", function(res){
-		console.log(res);
 		if (res.urls){
 			urls = res.urls;
 		} else {
@@ -150,22 +149,7 @@ function swap(old_index, new_index) {
 }
 
 function refreshNewTabPages(slot_index) {
-	chrome.windows.getAll({
-		populate: true
-	}, function(windows) {
-		for (var i in windows) {
-			for (var j in windows[i].tabs) {
-				if ("chrome://newtab/" == windows[i].tabs[j].url) {
-					chrome.tabs.sendRequest(windows[i].tabs[j].id, {
-						action: "updatePageThumb",
-						params: {
-							index: slot_index
-						}
-					});
-				}
-			}
-		}
-	});
+	chrome.extension.sendRequest({action: "updatePageThumb", params: {index: slot_index}});
 }
 
 function createThumbOfTab(tab, callback) {
