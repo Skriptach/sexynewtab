@@ -70,6 +70,43 @@ function init() {
 		}
 	}
 
+	function oncontextEdit(info, tab) {
+		var i = urls.indexOf(info.linkUrl);
+		if (i !== -1) {
+			chrome.tabs.sendRequest(tab.id, {
+				action: "showEditForm",
+				params: {
+					index: i
+				}
+			});
+		}
+	}
+
+	function oncontextRemove(info, tab) {
+		var i = urls.indexOf(info.linkUrl);
+		if (i !== -1) {
+			urls[i] = null;
+			delete thumbs[urls[i]];
+			saveSync();
+			saveLocal();
+			chrome.extension.sendRequest({
+				action: "remove",
+				params: {
+					index: i
+				}
+			});
+		}
+	}
+
+	chrome.contextMenus.create({title: chrome.i18n.getMessage("m_edit"),
+							contexts: ["link"],
+							documentUrlPatterns: ['chrome-extension://' + chrome.i18n.getMessage('@@extension_id') + '/layout.html'],
+							onclick: oncontextEdit });
+	chrome.contextMenus.create({title: chrome.i18n.getMessage("m_clear"),
+							contexts: ["link"],
+							documentUrlPatterns: ['chrome-extension://' + chrome.i18n.getMessage('@@extension_id') + '/layout.html'],
+							onclick: oncontextRemove
+							});
 	chrome.storage.sync.get("urls", function(res){
 		if (res.urls){
 			urls = res.urls;
@@ -134,13 +171,6 @@ function editPage(requestedTab, slot_index) {
 	} catch (e) {
 		console.log(e);
 	}
-}
-
-function remove(index) {
-	urls[index] = null;
-	delete thumbs[urls[index]];
-	saveSync();
-	saveLocal();
 }
 
 function swap(old_index, new_index) {

@@ -146,17 +146,12 @@
         }
     }
     function removePage(page) {
-        chrome.extension.getBackgroundPage().remove(page.index);
         page.firstElementChild.firstElementChild.removeAttribute('href');
+        page.classList.remove('active');
         page.style.webkitTransform = "scale(0.3)";
         var hold = setTimeout(function () {
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style.background = '';
-            page.onclick = function (e) {
-                if (e.button === 0) {
-                    toggleEditForm(e.currentTarget);
-                }
-            };
             page.style.webkitTransform = "scale(1)";
         }, 200);
     }
@@ -395,6 +390,12 @@
                 switch (request.action) {
                 case "updatePageThumb":
                     updatePageThumb(request.params.index);
+                    break;
+                case "showEditForm":
+                    toggleEditForm(d('page'+request.params.index));
+                    break;
+                case "remove":
+                    removePage(d('page'+request.params.index));
                     break;
                 }
             }
