@@ -88,6 +88,7 @@
                     pagePosY = TargetPosY;
                     dragPage.index = position;
                     dragPage.setAttribute('id', 'page' + position);
+                    set.insertBefore(dragPage, d('page' + (position + 1)));
                 }
             }
         }
@@ -100,8 +101,8 @@
         dragPage.classList.remove("draged");
         dragPage.style.left = pagePosX;
         dragPage.style.top = pagePosY;
-        dragPage.style.width = parseFloat(dragPage.style.width) - 15;
-        dragPage.style.height = parseFloat(dragPage.style.height) - 15;
+        dragPage.style.width = '';
+        dragPage.style.height = '';
         chrome.extension.getBackgroundPage().swap(lastPosition, dragPage.index);
         lastPosition = null;
     }
@@ -111,12 +112,12 @@
             lastPosition = dragPage.index;
             dragPage.classList.add('draged');
             dragPage.style.zIndex = 1000;
-            pagePosX = parseFloat(dragPage.style.left);
-            pagePosY = parseFloat(dragPage.style.top);
+            pagePosX = dragPage.offsetLeft;
+            pagePosY = dragPage.offsetTop;
             _offsetX = e.x - pagePosX;
             _offsetY = e.y - pagePosY;
-            dragPage.style.width = parseFloat(dragPage.style.width) + 15;
-            dragPage.style.height = parseFloat(dragPage.style.height) + 15;
+            dragPage.style.width = PAGE_WIDTH + 15;
+            dragPage.style.height = PAGE_HEIGHT + 15;
             document.ondrag = onDrag;
             document.ondragend = stopDrag;
         }
@@ -147,11 +148,11 @@
     }
     function removePage(page) {
         page.firstElementChild.firstElementChild.removeAttribute('href');
-        page.classList.remove('active');
+        page.classList.add('inactive');
         page.style.webkitTransform = "scale(0.3)";
         var hold = setTimeout(function () {
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-            page.firstElementChild.firstElementChild.lastElementChild.style.background = '';
+            page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
             page.style.webkitTransform = "scale(1)";
         }, 200);
     }
@@ -180,9 +181,9 @@
         if (!!urls[slotIndex]) {
             page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
-            page.classList.add('active');
+            page.classList.remove('inactive');
             if (thumbs[urls[slotIndex]]) {
-                page.firstElementChild.firstElementChild.lastElementChild.style.background = 'URL(' + thumbs[urls[slotIndex]] + ')';
+                page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumbs[urls[slotIndex]] + ')';
             }
         }
     }
@@ -207,54 +208,40 @@
         }
     }
     function createPages() {
-        calcSize();
-        var link = document.createElement("a"),
-            bgradient = document.createElement("div"),
-            logo = document.createElement("div"),
-            thumbnail = document.createElement("div"),
-            pagefliper = document.createElement("div"),
-            thumbnailnode = document.createElement("div"),
-            styles = document.styleSheets[1],
+        var thumbnailnode = document.createElement("div"),
+            pages = document.createDocumentFragment(),
             i,
             j,
             index,
             leftPos,
             topPos,
-            page;
-        link.setAttribute("class", "link");
-        bgradient.setAttribute("class", "backgradient");
-        link.appendChild(bgradient);
-        logo.setAttribute("class", "logo");
-        link.appendChild(logo);
-        thumbnail.setAttribute("class", "thumbnail");
-        link.appendChild(thumbnail);
-        pagefliper.setAttribute("class", "fliper");
-        pagefliper.appendChild(link);
-        thumbnailnode.setAttribute("class", "page");
-        thumbnailnode.appendChild(pagefliper);
-        for (i = 0; i < styles.cssRules.length; i++) {
-            if (styles.cssRules[i].selectorText.indexOf(".backgradient") > -1) {
-                styles.cssRules[i].style.background = '-webkit-gradient(radial, center top, 5, center 30%, ' +
-                    grad_radius + ', from(#000065), to(#000010))';
-            }
-        }
+            page,
+            innerHtml =
+            '<div class="flipper">'+
+                '<a class="link">'+
+                    '<div class="backgradient"></div>'+
+                    '<div class="logo"></div>'+
+                    '<div class="thumbnail"></div>'+
+                '</a>'+
+            '</div>';
+        thumbnailnode.setAttribute("class", "page inactive");
+        thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
         index = 0;
         for (i = 0; i < ROWS_COUNT; i++) {
             for (j = 0; j < COLUMNS_COUNT; j++) {
-                leftPos = (j * (PAGE_WIDTH + DELTA));
-                topPos = (i * (PAGE_HEIGHT + DELTA));
                 page = thumbnailnode.cloneNode(true);
                 page.setAttribute('id', 'page' + index);
-                page.style.width = PAGE_WIDTH;
-                page.style.height = PAGE_HEIGHT;
+                page.index = index;
+                leftPos = j * (PAGE_WIDTH + DELTA);
+                topPos = i * (PAGE_HEIGHT + DELTA);
                 page.style.left = leftPos;
                 page.style.top = topPos;
-                page.index = index;
-                set.appendChild(page);
+                pages.appendChild(page);
                 updatePageThumb(index, page);
                 index++;
             }
         }
+        set.appendChild(pages);
         page.firstElementChild.appendChild(edit);
         edit.onclick = function (e) { e.stopPropagation(); };
         edit_cancel.onclick = function (e) {
@@ -269,24 +256,31 @@
     }
     function setPagesSize() {
         calcSize();
-        var styles = document.styleSheets[1], i, j, index, leftPos, topPos, pagestyle;
-        for (i = 0; i < styles.cssRules.length; i++) {
-            if (styles.cssRules[i].selectorText.indexOf(".backgradient") > -1) {
-                styles.cssRules[i].style.background = '-webkit-gradient(radial, center top, 5, center 30%, ' +
-                    grad_radius + ', from(#000065), to(#000010))';
-            }
-        }
+        var i, j, index, leftPos, topPos, page, rules = '';
+        backgradient.innerHTML =
+        '.backgradient {\n' +
+            '\tbackground-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
+                    grad_radius + ', from(#000065), to(#000010))\n' +
+            '\t}';
+        rules +=
+        '.page {' +
+            '\twidth: ' + PAGE_WIDTH + ';\n' +
+            '\theight: ' + PAGE_HEIGHT + ';\n' +
+            '\t}\n';
         index = 0;
+        tile_style.innerHTML = rules;
         for (i = 0; i < ROWS_COUNT; i++) {
             for (j = 0; j < COLUMNS_COUNT; j++) {
                 leftPos = j * (PAGE_WIDTH + DELTA);
                 topPos = i * (PAGE_HEIGHT + DELTA);
-                pagestyle = d('page' + index).style;
-                pagestyle.left = leftPos;
-                pagestyle.top = topPos;
-                pagestyle.width = PAGE_WIDTH;
-                pagestyle.height = PAGE_HEIGHT;
-                index++;
+                page = d('page' + index);
+                if (page) {
+                    page.style.left = leftPos;
+                    page.style.top = topPos;
+                    index++;
+                } else {
+                    return;
+                }
             }
         }
     }
@@ -336,22 +330,26 @@
     }
     window.onload = function () {
         var _width = window.innerWidth,
-            _height = window.innerHeight;
+            _height = window.innerHeight,
+            styles = document.createElement("style");
+        document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
+        document.head.appendChild(styles.cloneNode(true)).setAttribute('id','tile_style');
         tabs.innerText = chrome.i18n.getMessage("fn_tabs");
         bookmarks.innerText = chrome.i18n.getMessage("fn_bookmarks");
         d('history').innerText = chrome.i18n.getMessage("fn_history");
         edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
         function hacks() {
+            var wait = null;
+            setPagesSize();
+            createPages();
             window.onresize = function () {
-                if (!set.hasChildNodes()) {
-                    createPages();
-                } else { setPagesSize(); }
+                if (_width !== window.innerWidth || _height !== window.innerHeight) {
+                    _width = window.innerWidth;
+                    _height = window.innerHeight;
+                    clearTimeout(wait);
+                    wait = setTimeout(setPagesSize, 100);
+                }
             };
-            if (_width <= 1 || _height <= 1) {
-                console.log("Hack is here!");// Ещё иногда, при открытии таба, объект window имеет неправильный размер
-                //window.onresize();                // <- Поэтому используем "костыль".
-                reportError("window_size");
-            } else { createPages(); }
         }
         if (!urls.length) {
             try {
