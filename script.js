@@ -167,12 +167,7 @@
             PAGE_HEIGHT = (_height - (DELTA * (ROWS_COUNT + 1))) / ROWS_COUNT;
             PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
         }
-        setstyle = set.style;
-        setstyle.width = (PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA;
-        setstyle.height = (PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA;
         grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
-        edit.style.width = PAGE_WIDTH;
-        edit.style.height = PAGE_HEIGHT;
     }
     function updatePageThumb(slotIndex, page) {
         if (!page) {
@@ -204,7 +199,7 @@
                 page.style.width = window.innerWidth;
                 page.style.height = window.innerHeight;
                 event.target.style['-webkit-border-radius'] = '0';
-            } else if (page.classList.contains('page')) { toggleEditForm(page); }
+            } else if (page && page.classList.contains('page')) { toggleEditForm(page); }
         }
     }
     function createPages() {
@@ -262,10 +257,16 @@
             '\tbackground-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
                     grad_radius + ', from(#000065), to(#000010))\n' +
             '\t}';
+        edit.style.width = PAGE_WIDTH;
+        edit.style.height = PAGE_HEIGHT;
         rules +=
-        '.page {' +
-            '\twidth: ' + PAGE_WIDTH + ';\n' +
-            '\theight: ' + PAGE_HEIGHT + ';\n' +
+        '#set {\n' +
+            '\twidth: ' + ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA) + 'px;\n' +
+            '\theight: ' + ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA) + 'px;\n' +
+        '}\n'+
+        '.page {\n' +
+            '\twidth: ' + PAGE_WIDTH + 'px;\n' +
+            '\theight: ' + PAGE_HEIGHT + 'px;\n' +
             '\t}\n';
         index = 0;
         tile_style.innerHTML = rules;
@@ -328,6 +329,64 @@
         chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
         hideEditForm();
     }
+    function toggleDisplay() {
+        var first_flow_page, current_flow_page;
+
+        function getNextActivePage() {
+            var tmp;
+            if (first_flow_page){
+                tmp = current_flow_page;
+            } else {
+                tmp = set.firstElementChild;
+                if (!tmp.classList.contains('inactive')){
+                    return tmp;
+                }
+            }
+            while (tmp = tmp.nextElementSibling){
+                if (!tmp.classList.contains('inactive')){
+                    return tmp;
+                }
+            }
+        }
+        function getPrevActivePage(){
+            var tmp = current_flow_page;
+            while (tmp = tmp.previousElementSibling){
+                if (!tmp.classList.contains('inactive')){
+                    return tmp;
+                }
+            }
+        }
+        function flowNext(nearest) {
+            var tmp = nearest();
+            if(tmp){
+                current_flow_page.classList.remove('current');
+                current_flow_page = tmp;
+                current_flow_page.classList.add('current');
+                first_flow_page.style['margin-left'] = (first_flow_page.index - current_flow_page.index + 1) * 10 - 50*(first_flow_page != current_flow_page) + '%';
+            }
+        }
+        function scrollFlow(e) {
+            if (e.wheelDelta < 0) {
+                flowNext(getNextActivePage);
+            } else if (e.wheelDelta > 0) {
+                flowNext(getPrevActivePage);
+            }
+        }
+
+        if (main.classList.contains('flow')){
+            main.classList.remove('flow');
+            current_flow_page.classList.remove('current');
+            document.onmousewheel = null;
+            first_flow_page = current_flow_page = null;
+        } else {
+            first_flow_page = current_flow_page = getNextActivePage();
+            current_flow_page.classList.add('current');
+            first_flow_page.style['margin-left'] = '0';
+            document.onmousewheel = scrollFlow;
+            current_index = 0;
+            main.classList.add('flow');
+        }
+    }
     window.onload = function () {
         var _width = window.innerWidth,
             _height = window.innerHeight,
@@ -338,6 +397,7 @@
         bookmarks.innerText = chrome.i18n.getMessage("fn_bookmarks");
         d('history').innerText = chrome.i18n.getMessage("fn_history");
         edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
+        toggle_button.onclick = toggleDisplay;
         function hacks() {
             var wait = null;
             setPagesSize();

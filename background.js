@@ -109,7 +109,9 @@ function init() {
 							});
 	chrome.storage.sync.get("urls", function(res){
 		if (res.urls){
-			urls = res.urls;
+			res.urls.forEach(function(element, index){
+				urls.push(element);
+			});
 		} else {
 			urls = [null, null, null, null, null, null, null, null, null, null, null, null];
 			saveSync();
@@ -119,8 +121,13 @@ function init() {
 	});
 
 	chrome.storage.local.get("thumbs", function(res){
+		var i;
 		if (res.thumbs) {
-			thumbs = res.thumbs;
+			for (i in res.thumbs) {
+				if (res.thumbs.hasOwnProperty(i)) {
+					thumbs[i] = res.thumbs[i];
+				}
+			}
 		}
 		thumbs_ready = true;
 		loaded();
