@@ -225,6 +225,9 @@ select {
 	-webkit-transition-duration: 0.5s;
 	-webkit-transform: rotateY(45deg) translateZ(-100px);
 	}
+#main.flow .page .flipper {
+	-webkit-box-reflect: below 0px -webkit-linear-gradient(transparent, transparent 50%, #FFF);
+	}
 #main.flow .page.current {
 	margin-left: -50%;
 	-webkit-transform: translateZ(350px);

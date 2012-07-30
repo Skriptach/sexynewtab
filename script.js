@@ -373,18 +373,21 @@
             }
         }
 
-        if (main.classList.contains('flow')){
-            main.classList.remove('flow');
-            current_flow_page.classList.remove('current');
-            document.onmousewheel = null;
-            first_flow_page = current_flow_page = null;
-        } else {
-            first_flow_page = current_flow_page = getNextActivePage();
-            current_flow_page.classList.add('current');
-            first_flow_page.style['margin-left'] = '0';
-            document.onmousewheel = scrollFlow;
-            current_index = 0;
-            main.classList.add('flow');
+        return function(){
+            if (main.classList.contains('flow')){
+                main.classList.remove('flow');
+                current_flow_page.classList.remove('current');
+                first_flow_page.style['margin-left'] = '';
+                document.onmousewheel = null;
+                first_flow_page = current_flow_page = null;
+            } else {
+                first_flow_page = current_flow_page = getNextActivePage();
+                current_flow_page.classList.add('current');
+                first_flow_page.style['margin-left'] = '0';
+                document.onmousewheel = scrollFlow;
+                current_index = 0;
+                main.classList.add('flow');
+            }
         }
     }
     window.onload = function () {
@@ -397,7 +400,7 @@
         bookmarks.innerText = chrome.i18n.getMessage("fn_bookmarks");
         d('history').innerText = chrome.i18n.getMessage("fn_history");
         edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
-        toggle_button.onclick = toggleDisplay;
+        toggle_button.onclick = toggleDisplay();
         function hacks() {
             var wait = null;
             setPagesSize();
