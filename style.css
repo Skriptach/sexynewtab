@@ -24,14 +24,14 @@
 .page {
 	position:absolute;
 	background-color:transparent;
-	border-radius:6px;
-	box-shadow: 0px 0px 0px;
+	border-radius:7px;
+	box-shadow: 0 0 0;
 	-webkit-transition-property: left, top, width, height, box-shadow;
 	-webkit-transition-duration: 0.3s;
 	-webkit-transition-timing-function: ease-out;
 	}
 .page:hover {
-	box-shadow: 0px 0px 15px #00C0FF;
+	box-shadow: 0px 0px 15px 3px #00C0FF;
 	}
 .page.draged {
 	box-shadow: 15px 15px 25px #222;
@@ -60,7 +60,7 @@
 	width:100%;
 	height:100%;
 	background-size:100% 100%;
-	border-radius:6;
+	border-radius:6px;
 	position:absolute;
 	}
 .thumbnail {
@@ -74,7 +74,7 @@
 	position:absolute;
 	background-color:#E5E5E5;
 	text-align:center;
-	border-radius:6;
+	border-radius:6px;
 	box-shadow: 15px 15px 15px #000;
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 1.0s;
@@ -147,9 +147,8 @@ input[type="button"] {
 	display:inline-block;
 	margin:auto;
 	padding:7 10;
-	border-radius: 6;
+	border-radius:6px;
 	background:#fff299;
-	-webkit-border-radius: 6;
 	border: 1 solid lightGrey;
 	color:red;
 	font-weight: bold;
@@ -169,19 +168,27 @@ input[type="button"] {
 	width: 43;
 	height:24;
 	background-color:#000050;
-	-webkit-border-radius: 4;
+	border-radius: 4px;
 	}
 #optionsbutton:hover {
 	background-color:#053fd5;
 	}
 #toggle_button {
-	position:absolute;
+	position:fixed;
 	color: white;
-	right:15;
-	bottom:15;
-	border-color: navy;
-	background:#000050;  /* -webkit-gradient(liner, );*/
-	-webkit-border-radius: 4px;
+	right:15px;
+	bottom:15px;
+	width:48px;
+	height:32px;
+	padding: 0;
+	border-width: 1px;
+	border-radius: 4px;
+	border-color: #122;
+	background: -webkit-linear-gradient(#233, black);
+	}
+#toggle_button:active {
+	background: -webkit-linear-gradient(black, #122);
+	padding: 1px 0 0 1px;
 	}
 #options {
 	z-index:10;
@@ -193,7 +200,7 @@ input[type="button"] {
 	background-color:#000050;
 	color:grey;
 	padding:10;
-	-webkit-border-radius: 7;
+	border-radius: 7px;
 	}
 #options > div {
 	width:130;
@@ -225,14 +232,23 @@ select {
 	-webkit-transition-duration: 0.5s;
 	-webkit-transform: rotateY(45deg) translateZ(-100px);
 	}
+#main.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
+	content: '';
+	width: 100%;
+	height: 100%;
+	border-radius:7px;
+	background-color: #000;
+	position: absolute;
+	top: 100%;
+	}
 #main.flow .page .flipper {
-	-webkit-box-reflect: below 0px -webkit-linear-gradient(transparent, transparent 50%, #FFF);
+	-webkit-box-reflect: below 0px -webkit-linear-gradient(transparent, transparent 50%, rgba(255, 255, 255, 0.5));
 	}
 #main.flow .page.current {
 	margin-left: -50%;
 	-webkit-transform: translateZ(350px);
 	}
-#main.flow .page.current + .page {
+#main.flow .page.current + .page, #main.flow .page.current ~ .inactive + .page:not(.inactive) {
 	margin-left: -50%;
 }
 #main.flow .current ~ .page {
@@ -243,4 +259,7 @@ select {
 	}
 #main.flow .page.inactive {
 	display:none;
+	}
+#main.flow #flow_icon {
+	margin-top: -100%
 	}

@@ -3,7 +3,7 @@
 (function () {
     var COLUMNS_COUNT = 4,
         ROWS_COUNT = 3,
-        DELTA = 8,
+        DELTA = 10,
         PAGE_WIDTH,
         PAGE_HEIGHT,
         menuSelectedPage = null,
@@ -153,6 +153,7 @@
         var hold = setTimeout(function () {
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
+            page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
             page.style.webkitTransform = "scale(1)";
         }, 200);
     }
@@ -330,7 +331,7 @@
         hideEditForm();
     }
     function toggleDisplay() {
-        var first_flow_page, current_flow_page;
+        var first_flow_page, current_flow_page, current_index;
 
         function getNextActivePage() {
             var tmp;
@@ -344,6 +345,7 @@
             }
             while (tmp = tmp.nextElementSibling){
                 if (!tmp.classList.contains('inactive')){
+                    current_index++;
                     return tmp;
                 }
             }
@@ -352,6 +354,7 @@
             var tmp = current_flow_page;
             while (tmp = tmp.previousElementSibling){
                 if (!tmp.classList.contains('inactive')){
+                    current_index--;
                     return tmp;
                 }
             }
@@ -362,7 +365,7 @@
                 current_flow_page.classList.remove('current');
                 current_flow_page = tmp;
                 current_flow_page.classList.add('current');
-                first_flow_page.style['margin-left'] = (first_flow_page.index - current_flow_page.index + 1) * 10 - 50*(first_flow_page != current_flow_page) + '%';
+                first_flow_page.style['margin-left'] = (first_flow_page.index - current_index) * 10 - 40*(first_flow_page != current_flow_page) + '%';
             }
         }
         function scrollFlow(e) {
@@ -385,7 +388,7 @@
                 current_flow_page.classList.add('current');
                 first_flow_page.style['margin-left'] = '0';
                 document.onmousewheel = scrollFlow;
-                current_index = 0;
+                current_index = first_flow_page.index;
                 main.classList.add('flow');
             }
         }
