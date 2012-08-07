@@ -5,7 +5,7 @@
 	"permissions": ["tabs", "bookmarks", "http://*/*", "https://*/*", "storage", "topSites", "contextMenus", "history"],
 	"optional_permissions": ["unlimitedStorage"],
 	"background": {
-		"scripts":["background.js"]
+		"scripts":["background.js", "MD5.js"]
 	},
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
@@ -23,5 +23,5 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.6"
+	"version": "0.7"
 }

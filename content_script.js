@@ -7,7 +7,7 @@ try{
 			chrome.extension.sendRequest({action:"subscribe", callback: shotScreen}, function(){});
 		}
 		else shotScreen();
-	});	
+	});
 }
 catch(e){
 	console.log(e);

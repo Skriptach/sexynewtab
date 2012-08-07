@@ -178,7 +178,9 @@
             page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.classList.remove('inactive');
+            console.log(thumbs, urls[slotIndex]);
             if (thumbs[urls[slotIndex]]) {
+                page.classList.remove('fresh');
                 page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumbs[urls[slotIndex]] + ')';
             }
         }
@@ -391,7 +393,7 @@
                 current_index = first_flow_page.index;
                 main.classList.add('flow');
             }
-        }
+        };
     }
     window.onload = function () {
         var _width = window.innerWidth,
@@ -405,6 +407,8 @@
         edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
         toggle_button.onclick = toggleDisplay();
         function hacks() {
+            console.dir(urls);
+            console.dir(thumbs);
             var wait = null;
             setPagesSize();
             createPages();
@@ -460,6 +464,11 @@
                     break;
                 case "remove":
                     removePage(d('page'+request.params.index));
+                    break;
+                case "pageIsFresh":
+                    request.params.indexes.forEach(function(el, i){
+                        d('page'+el).classList.add('fresh');
+                    });
                     break;
                 }
             }

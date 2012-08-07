@@ -23,7 +23,6 @@
 	}
 .page {
 	position:absolute;
-	background-color:transparent;
 	border-radius:7px;
 	box-shadow: 0 0 0;
 	-webkit-transition-property: left, top, width, height, box-shadow;
@@ -70,6 +69,20 @@
 	border-radius:6px;
 	position:absolute;
 	}
+
+.page.fresh .thumbnail:after {
+	content: '';
+	display: block;
+	position: absolute;
+	width: 50px;
+	height: 70px;
+	right: 0;
+	border-top-right-radius: 6px;
+	background: URL(/images/fresh.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	}
+
 #edit {
 	position:absolute;
 	background-color:#E5E5E5;
