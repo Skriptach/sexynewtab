@@ -230,7 +230,6 @@ select {
 	width: 50% !important;
 	height: 50% !important;
 	white-space: nowrap;
-	-webkit-transform: translateZ(-300px);
 	-webkit-transform-style: preserve-3d;
 	}
 #main.flow .page {
@@ -241,9 +240,10 @@ select {
 	display: inline-block;
 	position: relative;
 	margin-left: -90%;
-	-webkit-transition-property: margin, -webkit-transform;
+	-webkit-transition-property: margin, -webkit-transform, -webkit-transform-origin;
 	-webkit-transition-duration: 0.5s;
-	-webkit-transform: rotateY(45deg) translateZ(-100px);
+	-webkit-transform: rotateY(45deg) translateZ(-400px);
+	-webkit-transform-origin: 0%;
 	}
 #main.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
 	content: '';
@@ -258,14 +258,16 @@ select {
 	-webkit-box-reflect: below 0px -webkit-linear-gradient(transparent, transparent 50%, rgba(255, 255, 255, 0.5));
 	}
 #main.flow .page.current {
-	margin-left: -50%;
-	-webkit-transform: translateZ(350px);
+	margin-left: -70%;
+	-webkit-transform: translateZ(0px);
+	webkit-transform-origin: 50%;
 	}
 #main.flow .page.current + .page, #main.flow .page.current ~ .inactive + .page:not(.inactive) {
-	margin-left: -50%;
-}
+	margin-left: -70%;
+	}
 #main.flow .current ~ .page {
-	-webkit-transform: rotateY(-45deg) translateZ(-100px);
+	-webkit-transform: rotateY(-45deg) translateZ(-400px);
+	-webkit-transform-origin: 100%;
 	}
 #main.flow .page:hover {
 	box-shadow: none;
@@ -275,4 +277,11 @@ select {
 	}
 #main.flow #flow_icon {
 	margin-top: -100%
+	}
+#main.flow .current.full .flipper {
+	top: -50%;
+	left: -50%;
+	width: 200%;
+	height: 200%;
+	border-radius: 0;
 	}

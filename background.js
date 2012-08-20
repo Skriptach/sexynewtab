@@ -12,6 +12,7 @@
 	var hashes = {},
 		timers = {},
 		callbacks = [],
+		redirectUrls = {},
 		req = new XMLHttpRequest();
 
 	// subscribe and announce added for that case when browser just runed with saved tabs
@@ -230,45 +231,54 @@
 	};
 
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
-		switch (request.action) {
-		case 'refreshThumb':
-			if (sender.tab) {
-				var i = urls.indexOf(sender.tab.url);
+		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){
+			switch (request.action) {
+			case 'refreshThumb':
+				var url, i = urls.indexOf(sender.tab.url);
 				// check if sender tab url really added to fav pages
-				if (i !== -1) {
+				if (i !== -1){
+					url = sender.tab.url;
+				} else {
+					url = redirectUrls[sender.tab.url];
+				}
+				if (url) {
+					i = urls.indexOf(url);
 					try {
 						createThumbOfTab(sender.tab, function (thumb) {
 							// save it
-							thumbs[urls[i]] = thumb;
-							getHash(urls[i], true);
+							thumbs[url] = thumb;
+							getHash(url, true);
 							refreshNewTabPages(i);
 							saveLocal();
 						});
 					} catch (e) {
 						console.log(e);
 					}
-					break;
 				}
-			}
-			break;
-		case 'getSlots':
-			if (sender.tab) {
-				sendResponse({
-					urls: urls,
-					thumbs: thumbs
-				});
-			}
-			break;
-		case 'subscribe':
-			if (sender.tab) {
+				break;
+			case 'subscribe':
 				subscribe(request.callback);
 				sendResponse({});
+				break;
+			default:
+				sendResponse({}); // snub them.
 			}
-			break;
-		default:
-			sendResponse({}); // snub them.
+		} else {
+			sendResponse({});
 		}
 	});
+
+	chrome.webRequest.onBeforeRedirect.addListener(
+		function(details){
+			if (urls.indexOf(details.url) !== -1){
+				redirectUrls[details.redirectUrl] = (details.url);
+			}
+		},
+		{
+			urls: ["<all_urls>"],
+			types: ["main_frame"]
+		},
+		['responseHeaders']);
 
 	function sendFresh(tabId) {
 		var i, indexes = [];

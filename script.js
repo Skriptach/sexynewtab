@@ -19,7 +19,8 @@
         _offsetX,
         _offsetY,
         grad_radius,
-        currentItem;
+        currentItem,
+        flowNext;
 
     function d(id) {
         return document.getElementById(id);
@@ -178,7 +179,6 @@
             page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.classList.remove('inactive');
-            console.log(thumbs, urls[slotIndex]);
             if (thumbs[urls[slotIndex]]) {
                 page.classList.remove('fresh');
                 page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumbs[urls[slotIndex]] + ')';
@@ -193,15 +193,26 @@
             } catch (error) {
                 //do nothing. because it seems just any of top elements was clicked.
             }
-            if (event.target.className === 'thumbnail' && event.target.hasAttribute('style')) {
-                _left = set.offsetLeft;
-                _top = set.offsetTop;
-                page.style.zIndex = 1000;
-                page.style.left = -_left;
-                page.style.top = -_top;
-                page.style.width = window.innerWidth;
-                page.style.height = window.innerHeight;
-                event.target.style['-webkit-border-radius'] = '0';
+            if (event.target.className === 'thumbnail' && !page.classList.contains('inactive')) {
+                if (main.classList.contains('flow')){
+                    if (!page.contains('current')){
+                        flowNext(function(){
+                            return page;
+                        });
+                    }
+                    setTimeout(function(){
+                        page.classList.add('full');
+                    }, 10);
+                } else {
+                        _left = set.offsetLeft;
+                        _top = set.offsetTop;
+                        page.style.zIndex = 1000;
+                        page.style.left = -_left;
+                        page.style.top = -_top;
+                        page.style.width = window.innerWidth;
+                        page.style.height = window.innerHeight;
+                        event.target.style['border-radius'] = '0';
+                }
             } else if (page && page.classList.contains('page')) { toggleEditForm(page); }
         }
     }
@@ -333,7 +344,18 @@
         hideEditForm();
     }
     function toggleDisplay() {
-        var first_flow_page, current_flow_page, current_index;
+        var first_flow_page, current_flow_page;
+
+        function current_index(){
+            var i = first_flow_page.index,
+                res = current_flow_page.index - first_flow_page.index;
+            for (; i<current_flow_page.index; i++) {
+                if (d('page'+i).classList.contains('inactive')) {
+                    res--;
+                }
+            }
+            return res;
+        }
 
         function getNextActivePage() {
             var tmp;
@@ -347,7 +369,7 @@
             }
             while (tmp = tmp.nextElementSibling){
                 if (!tmp.classList.contains('inactive')){
-                    current_index++;
+                    //current_index++;
                     return tmp;
                 }
             }
@@ -356,20 +378,19 @@
             var tmp = current_flow_page;
             while (tmp = tmp.previousElementSibling){
                 if (!tmp.classList.contains('inactive')){
-                    current_index--;
                     return tmp;
                 }
             }
         }
-        function flowNext(nearest) {
+        flowNext = function (nearest) {
             var tmp = nearest();
             if(tmp){
                 current_flow_page.classList.remove('current');
                 current_flow_page = tmp;
                 current_flow_page.classList.add('current');
-                first_flow_page.style['margin-left'] = (first_flow_page.index - current_index) * 10 - 40*(first_flow_page != current_flow_page) + '%';
+                first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
             }
-        }
+        };
         function scrollFlow(e) {
             if (e.wheelDelta < 0) {
                 flowNext(getNextActivePage);
@@ -390,7 +411,6 @@
                 current_flow_page.classList.add('current');
                 first_flow_page.style['margin-left'] = '0';
                 document.onmousewheel = scrollFlow;
-                current_index = first_flow_page.index;
                 main.classList.add('flow');
             }
         };
@@ -407,8 +427,6 @@
         edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
         toggle_button.onclick = toggleDisplay();
         function hacks() {
-            console.dir(urls);
-            console.dir(thumbs);
             var wait = null;
             setPagesSize();
             createPages();
