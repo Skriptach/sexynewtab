@@ -9,4 +9,4 @@
 
 if("complete" == document.readyState){
 	shotScreen();
-} else window.onload = shotScreen;
+} else window.addEventListener('load', shotScreen);
