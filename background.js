@@ -46,29 +46,38 @@
 		chrome.extension.sendRequest({action: 'updatePageThumb', params: {index: slot_index}});
 	}
 
-	function createThumbOfTab(tab, callback) {
+	function createThumbOf(requestedTab, callback) {
+		var takeScreenshot = function() {
+			// take screenshot
+			chrome.tabs.captureVisibleTab(requestedTab.windowId, {
+				format: 'png'
+			}, function(thumb){
+				callback(thumb);
+				if (savedTab){
+					// switch back
+					chrome.tabs.update(savedTab.id, {
+						active: true,
+						selected: true,
+						pinned: savedTab.pinned
+					});
+				}
+			});
+		},
+		savedTab;
 		try {
 			//get current tab
 			chrome.tabs.getSelected(null, function(currentTab) {
-				// switch to requested tab
-				chrome.tabs.update(tab.id, {
-					active: true,
-					selected: true,
-					pinned: tab.pinned
-				}, function(tab) {
-					// take screenshot
-					chrome.tabs.captureVisibleTab(tab.windowId, {
-						format: 'png'
-					}, function(thumb){
-						// switch back
-						chrome.tabs.update(currentTab.id, {
-							active: true,
-							selected: true,
-							pinned: currentTab.pinned
-						});
-						callback(thumb);
-					});
-				});
+				if (currentTab.id === requestedTab.id){
+					takeScreenshot();
+				} else {
+					savedTab = currentTab;
+					// switch to requested tab
+					chrome.tabs.update(requestedTab.id, {
+						active: true,
+						selected: true,
+						pinned: requestedTab.pinned
+					}, takeScreenshot);
+				}
 			});
 		} catch (e) {
 			console.log(e);
@@ -217,7 +226,7 @@
 	//TODO by URL also
 	editPage = function (requestedTab, slot_index) {
 		try {
-			createThumbOfTab(requestedTab,function(thumb) {
+			createThumbOf(requestedTab,function(thumb) {
 				urls[slot_index] = requestedTab.url;
 				thumbs[urls[slot_index]] = thumb;
 				getHash(requestedTab.url, true);
@@ -244,7 +253,7 @@
 				if (url) {
 					i = urls.indexOf(url);
 					try {
-						createThumbOfTab(sender.tab, function (thumb) {
+						createThumbOf(sender.tab, function (thumb) {
 							// save it
 							thumbs[url] = thumb;
 							getHash(url, true);
