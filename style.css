@@ -70,17 +70,13 @@
 	position:absolute;
 	}
 
-.page.fresh .thumbnail:after {
-	content: '';
+.page.fresh .thumbnail:before {
+	content: '\2605';
+	font-size: 2.5em;
+	color: #FFD600;
 	display: block;
 	position: absolute;
-	width: 50px;
-	height: 70px;
-	right: 0;
-	border-top-right-radius: 6px;
-	background: URL(/images/fresh.png);
-	background-repeat: no-repeat;
-	background-size: contain;
+	left: 10px;
 	}
 
 #edit {
