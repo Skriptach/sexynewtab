@@ -6,6 +6,7 @@
         DELTA = 10,
         PAGE_WIDTH,
         PAGE_HEIGHT,
+        FLOW = false,
         menuSelectedPage = null,
         currentEditPage = null,
         OptionsMenu = false,
@@ -18,7 +19,6 @@
         pagePosY,
         _offsetX,
         _offsetY,
-        grad_radius,
         currentItem,
         flowNext;
 
@@ -163,13 +163,12 @@
             _height = window.innerHeight,
             PROPORTION = _height / _width,
             setstyle;
-        PAGE_WIDTH = (_width - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
-        PAGE_HEIGHT = PAGE_WIDTH * PROPORTION;
-        if (PAGE_HEIGHT * ROWS_COUNT + ((ROWS_COUNT + 1) * DELTA) > _height) {
+        PAGE_WIDTH = FLOW ? _width / 2 : (_width - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
+        PAGE_HEIGHT = FLOW ? _height / 2 : PAGE_WIDTH * PROPORTION;
+        if (!FLOW && PAGE_HEIGHT * ROWS_COUNT + ((ROWS_COUNT + 1) * DELTA) > _height) {
             PAGE_HEIGHT = (_height - (DELTA * (ROWS_COUNT + 1))) / ROWS_COUNT;
             PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
         }
-        grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
     }
     function updatePageThumb(slotIndex, page) {
         if (!page) {
@@ -263,14 +262,18 @@
         document.onclick = pageClickHandler;
         document.ondragstart = PrepareDrag;
     }
-    function setPagesSize() {
-        calcSize();
-        var i, j, index, leftPos, topPos, page, rules = '';
+    function setBackGradient () {
+        var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
         backgradient.innerHTML =
         '.backgradient {\n' +
             '\tbackground-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
                     grad_radius + ', from(#000065), to(#000010))\n' +
             '\t}';
+    }
+    function setPagesSize() {
+        var i, j, index, leftPos, topPos, page, rules = '';
+        calcSize();
+        setBackGradient();
         edit.style.width = PAGE_WIDTH;
         edit.style.height = PAGE_HEIGHT;
         rules +=
@@ -400,7 +403,7 @@
         }
 
         return function(){
-            if (main.classList.contains('flow')){
+            if (FLOW){
                 main.classList.remove('flow');
                 current_flow_page.classList.remove('current');
                 first_flow_page.style['margin-left'] = '';
@@ -413,6 +416,9 @@
                 document.onmousewheel = scrollFlow;
                 main.classList.add('flow');
             }
+            FLOW = !FLOW;
+            calcSize();
+            setBackGradient();
         };
     }
     window.onload = function () {
