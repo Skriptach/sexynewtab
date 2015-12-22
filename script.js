@@ -99,7 +99,7 @@
         document.ondragend = null;
         dragPage.ondragover = null;
         dragPage.style.zIndex = null;
-        dragPage.classList.remove("draged");
+        dragPage.classList.remove('draged');
         dragPage.style.left = pagePosX;
         dragPage.style.top = pagePosY;
         dragPage.style.width = '';
@@ -107,7 +107,7 @@
         chrome.extension.getBackgroundPage().swap(lastPosition, dragPage.index);
         lastPosition = null;
     }
-    function PrepareDrag(e) {
+    function prepareDrag(e) {
         dragPage = e.target.parentElement.parentElement;
         if (dragPage.classList.contains('page')) {
             lastPosition = dragPage.index;
@@ -150,12 +150,12 @@
     function removePage(page) {
         page.firstElementChild.firstElementChild.removeAttribute('href');
         page.classList.add('inactive');
-        page.style.webkitTransform = "scale(0.3)";
+        page.style.webkitTransform = 'scale(0.3)';
         var hold = setTimeout(function () {
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
             page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
-            page.style.webkitTransform = "scale(1)";
+            page.style.webkitTransform = 'scale(1)';
         }, 200);
     }
     function calcSize() {
@@ -216,7 +216,7 @@
         }
     }
     function createPages() {
-        var thumbnailnode = document.createElement("div"),
+        var thumbnailnode = document.createElement('div'),
             pages = document.createDocumentFragment(),
             i,
             j,
@@ -232,7 +232,7 @@
                     '<div class="thumbnail"></div>'+
                 '</a>'+
             '</div>';
-        thumbnailnode.setAttribute("class", "page inactive");
+        thumbnailnode.setAttribute('class', 'page inactive');
         thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
         index = 0;
         for (i = 0; i < ROWS_COUNT; i++) {
@@ -260,7 +260,7 @@
         bookmarks.onclick = expandNode;
         history.onclick = expandNode;
         document.onclick = pageClickHandler;
-        document.ondragstart = PrepareDrag;
+        document.ondragstart = prepareDrag;
     }
     function setBackGradient () {
         var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
@@ -310,7 +310,7 @@
             tabs,
             item;
         if (node.childElementCount) {
-            node.style.display = (node.style.display === "none") ? "block" : "none";
+            node.style.display = (node.style.display === 'none') ? 'block' : 'none';
         } else {
             chrome.windows.getAll({populate: true}, function (windows) {
                 for (i = 0; i < windows.length; i++) {
@@ -318,20 +318,20 @@
                     for (j = 0; j < tabs.length; j++) {
                         if (protocol.test(tabs[j].url)) {
                             item = document.createElement('div');
-                            item.style['background-image'] = "URL(" + tabs[j].favIconUrl + ")";
-                            item.setAttribute("class", "item");
+                            item.style['background-image'] = 'URL(' + tabs[j].favIconUrl + ')';
+                            item.setAttribute('class', 'item');
                             item.tab = tabs[j];
                             item.url = tabs[j].url;
-                            item.innerHTML = "<nobr>" + tabs[j].title + "</nobr>";
+                            item.innerHTML = '<nobr>' + tabs[j].title + '</nobr>';
                             // TODO: delegate
                             item.onclick = function () {
-                                if (typeof currentItem === "undefined") {
+                                if (typeof currentItem === 'undefined') {
                                     currentItem = this;
                                 } else {
                                     currentItem.firstChild.className = null;
                                     currentItem = this;
                                 }
-                                this.firstChild.className = "selected";
+                                this.firstChild.className = 'selected';
                                 link_url.value = this.url;
                             };
                             node.appendChild(item);
@@ -339,7 +339,7 @@
                     }
                 }
             });
-            node.style.display = "block";
+            node.style.display = 'block';
         }
     }
     function editPage(e) {
@@ -385,7 +385,7 @@
                 }
             }
         }
-        flowNext = function (nearest) {
+        function flowNext(nearest) {
             var tmp = nearest();
             if(tmp){
                 current_flow_page.classList.remove('current');
@@ -393,7 +393,7 @@
                 current_flow_page.classList.add('current');
                 first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
             }
-        };
+        }
         function scrollFlow(e) {
             if (e.wheelDelta < 0) {
                 flowNext(getNextActivePage);
@@ -424,13 +424,13 @@
     window.onload = function () {
         var _width = window.innerWidth,
             _height = window.innerHeight,
-            styles = document.createElement("style");
+            styles = document.createElement('style');
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','tile_style');
-        tabs.innerText = chrome.i18n.getMessage("fn_tabs");
-        bookmarks.innerText = chrome.i18n.getMessage("fn_bookmarks");
-        d('history').innerText = chrome.i18n.getMessage("fn_history");
-        edit_cancel.value = chrome.i18n.getMessage("mb_cancal");
+        tabs.innerText = chrome.i18n.getMessage('fn_tabs');
+        bookmarks.innerText = chrome.i18n.getMessage('fn_bookmarks');
+        d('history').innerText = chrome.i18n.getMessage('fn_history');
+        edit_cancel.value = chrome.i18n.getMessage('mb_cancal');
         toggle_button.onclick = toggleDisplay();
         function hacks() {
             var wait = null;
@@ -458,10 +458,10 @@
         if (!OptionsMenu) {
             selectRows.selectedIndex = ROWS_COUNT - 2;
             selectCols.selectedIndex = COLUMNS_COUNT - 3;
-            options.style.display = "block";
+            options.style.display = 'block';
             OptionsMenu = !OptionsMenu;
         } else {
-            options.style.display = "none";
+            options.style.display = 'none';
             OptionsMenu = !OptionsMenu;
         }
     };
@@ -469,10 +469,10 @@
     function reportError(type) {
         var mess, line;
         if (reports === null) {
-            mess = document.createElement("div");
+            mess = document.createElement('div');
             reports = footer.appendChild(mess);
         }
-        line = document.createElement("p");
+        line = document.createElement('p');
         line.innerText = chrome.i18n.getMessage(type);
         reports.appendChild(line);
     }
@@ -480,16 +480,16 @@
         function (request, sender, sendResponse) {
             if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
                 switch (request.action) {
-                case "updatePageThumb":
+                case 'updatePageThumb':
                     updatePageThumb(request.params.index);
                     break;
-                case "showEditForm":
+                case 'showEditForm':
                     toggleEditForm(d('page'+request.params.index));
                     break;
-                case "remove":
+                case 'remove':
                     removePage(d('page'+request.params.index));
                     break;
-                case "pageIsFresh":
+                case 'pageIsFresh':
                     request.params.indexes.forEach(function(el, i){
                         d('page'+el).classList.add('fresh');
                     });
