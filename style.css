@@ -185,6 +185,7 @@ input[type="button"] {
 #toggle_button {
 	position:fixed;
 	color: white;
+	font-size: 2em;
 	right:15px;
 	bottom:15px;
 	width:48px;
@@ -193,11 +194,23 @@ input[type="button"] {
 	border-width: 1px;
 	border-radius: 4px;
 	border-color: #122;
-	background: -webkit-linear-gradient(#233, black);
+	background: -webkit-linear-gradient(#233, #011);
 	}
 #toggle_button:active {
-	background: -webkit-linear-gradient(black, #122);
+	background: -webkit-linear-gradient(#110, #122);
 	padding: 1px 0 0 1px;
+	}
+#toggle_button:focus,
+#toggle_button:active {
+	outline: none;
+	}
+#main #toggle_button .st-tile,
+#main.flow #toggle_button .st-coverflow {
+	display: none;
+	}
+#main.flow #toggle_button .st-tile,
+#main #toggle_button .st-coverflow {
+	display: inline;
 	}
 #options {
 	z-index:10;
@@ -270,9 +283,6 @@ select {
 	}
 #main.flow .page.inactive {
 	display:none;
-	}
-#main.flow #flow_icon {
-	margin-top: -100%
 	}
 #main.flow .current.full .flipper {
 	top: -50%;
