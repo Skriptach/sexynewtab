@@ -78,6 +78,9 @@
 	position: absolute;
 	left: 10px;
 	}
+.page.full .thumbnail {
+	border-radius: 0;
+	}
 
 #edit {
 	position:absolute;

@@ -203,14 +203,7 @@
                         page.classList.add('full');
                     }, 10);
                 } else {
-                        _left = set.offsetLeft;
-                        _top = set.offsetTop;
-                        page.style.zIndex = 1000;
-                        page.style.left = -_left;
-                        page.style.top = -_top;
-                        page.style.width = window.innerWidth;
-                        page.style.height = window.innerHeight;
-                        event.target.style['border-radius'] = '0';
+                    page.classList.add('full');
                 }
             } else if (page && page.classList.contains('page')) { toggleEditForm(page); }
         }
@@ -263,28 +256,42 @@
         document.ondragstart = prepareDrag;
     }
     function setBackGradient () {
-        var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
+        var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
+            grad_radiusF = Math.sqrt(window.innerWidth * window.innerWidth / 4 + window.innerHeight * window.innerHeight / 3);
         backgradient.innerHTML =
-        '.backgradient {\n' +
-            '\tbackground-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
-                    grad_radius + ', from(#000065), to(#000010))\n' +
-            '\t}';
+        ['.backgradient {',
+            'background-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
+                    grad_radius + ', from(#000065), to(#000010))',
+            '}',
+        '.full .backgradient {',
+            'background-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
+                    grad_radiusF + ', from(#000065), to(#000010))',
+            '}'].join('\n');
     }
     function setPagesSize() {
-        var i, j, index, leftPos, topPos, page, rules = '';
+        var i, j, index, leftPos, topPos, page, rules, setWidth, setHeight;
         calcSize();
         setBackGradient();
+        setWidth = ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA);
+        setHeight = ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA);
         edit.style.width = PAGE_WIDTH;
         edit.style.height = PAGE_HEIGHT;
-        rules +=
-        '#set {\n' +
-            '\twidth: ' + ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA) + 'px;\n' +
-            '\theight: ' + ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA) + 'px;\n' +
-        '}\n'+
-        '.page {\n' +
-            '\twidth: ' + PAGE_WIDTH + 'px;\n' +
-            '\theight: ' + PAGE_HEIGHT + 'px;\n' +
-            '\t}\n';
+        rules =
+        ['#set {',
+            'width: ' + setWidth + 'px;',
+            'height: ' + setHeight + 'px;',
+        '}',
+        '.page {',
+            'width: ' + PAGE_WIDTH + 'px;',
+            'height: ' + PAGE_HEIGHT + 'px;',
+            '}',
+        '.page.full {',
+            'width: ' + window.innerWidth + 'px;',
+            'height: ' + window.innerHeight + 'px;',
+            'left: '+ -DELTA + 'px !important;',
+            'top: '+ -(window.innerHeight - setHeight)/2 + 'px !important;',
+            'z-index: 1000;',
+            '}'].join('\n');
         index = 0;
         tile_style.innerHTML = rules;
         for (i = 0; i < ROWS_COUNT; i++) {
