@@ -47,8 +47,8 @@
 	}
 
 	function createThumbOf(requestedTab, callback) {
-		var takeScreenshot = function() {
-			// take screenshot
+		function takeScreenshot () {
+			try {// take screenshot
 			chrome.tabs.captureVisibleTab(requestedTab.windowId, {
 				format: 'png'
 			}, function(thumb){
@@ -62,8 +62,11 @@
 					});
 				}
 			});
-		},
-		savedTab;
+			} catch (e){
+				console.log(e);
+			}
+		}
+		var savedTab;
 		try {
 			//get current tab
 			chrome.tabs.getSelected(null, function(currentTab) {
@@ -76,7 +79,9 @@
 						active: true,
 						selected: true,
 						pinned: requestedTab.pinned
-					}, takeScreenshot);
+					}, function (){
+						setTimeout(takeScreenshot, 50);
+					});
 				}
 			});
 		} catch (e) {
@@ -226,7 +231,7 @@
 	//TODO by URL also
 	editPage = function (requestedTab, slot_index) {
 		try {
-			createThumbOf(requestedTab,function(thumb) {
+			createThumbOf(requestedTab, function(thumb) {
 				urls[slot_index] = requestedTab.url;
 				thumbs[urls[slot_index]] = thumb;
 				getHash(requestedTab.url, true);
