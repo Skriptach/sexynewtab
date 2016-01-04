@@ -26,6 +26,10 @@
         return document.getElementById(id);
     }
 
+    function $ (selector) {
+        return document.querySelectorAll(selector);
+    }
+
     try {
         urls = chrome.extension.getBackgroundPage().urls;
         thumbs = chrome.extension.getBackgroundPage().thumbs;
@@ -156,6 +160,9 @@
             page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
             page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
             page.style.webkitTransform = 'scale(1)';
+            setTimeout(function (argument) {
+                page.style.webkitTransform = '';
+            }, 10)
         }, 200);
     }
     function calcSize() {
@@ -249,9 +256,7 @@
             hideEditForm();
         };
         edit_ok.onclick = editPage;
-        tabs.onclick = expandNode;
-        bookmarks.onclick = expandNode;
-        history.onclick = expandNode;
+        tabs.onclick = switchToTabs;
         document.onclick = pageClickHandler;
         document.ondragstart = prepareDrag;
     }
@@ -274,8 +279,6 @@
         setBackGradient();
         setWidth = ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA);
         setHeight = ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA);
-        edit.style.width = PAGE_WIDTH;
-        edit.style.height = PAGE_HEIGHT;
         rules =
         ['#set {',
             'width: ' + setWidth + 'px;',
@@ -309,45 +312,43 @@
             }
         }
     }
-    function expandNode(e) {
-        var node = this.nextElementSibling,
+    function switchToTabs(e) {
+        var node = $('#edit .list .tabs')[0],
+            list = document.createDocumentFragment(),
             protocol = /^https?:/,
             i,
             j,
             tabs,
             item;
-        if (node.childElementCount) {
-            node.style.display = (node.style.display === 'none') ? 'block' : 'none';
-        } else {
-            chrome.windows.getAll({populate: true}, function (windows) {
-                for (i = 0; i < windows.length; i++) {
-                    tabs = windows[i].tabs;
-                    for (j = 0; j < tabs.length; j++) {
-                        if (protocol.test(tabs[j].url)) {
-                            item = document.createElement('div');
-                            item.style['background-image'] = 'URL(' + tabs[j].favIconUrl + ')';
-                            item.setAttribute('class', 'item');
-                            item.tab = tabs[j];
-                            item.url = tabs[j].url;
-                            item.innerHTML = '<nobr>' + tabs[j].title + '</nobr>';
-                            // TODO: delegate
-                            item.onclick = function () {
-                                if (typeof currentItem === 'undefined') {
-                                    currentItem = this;
-                                } else {
-                                    currentItem.firstChild.className = null;
-                                    currentItem = this;
-                                }
-                                this.firstChild.className = 'selected';
-                                link_url.value = this.url;
-                            };
-                            node.appendChild(item);
-                        }
+        [].slice.call(node.children).forEach(function(link){node.removeChild(link);});
+        chrome.windows.getAll({populate: true}, function (windows) {
+            for (i = 0; i < windows.length; i++) {
+                tabs = windows[i].tabs;
+                for (j = 0; j < tabs.length; j++) {
+                    if (protocol.test(tabs[j].url)) {
+                        item = document.createElement('div');
+                        tabs[j].favIconUrl && (item.style['background-image'] = 'URL(' + tabs[j].favIconUrl + ')');
+                        item.setAttribute('class', 'item');
+                        item.tab = tabs[j];
+                        item.url = tabs[j].url;
+                        item.innerHTML = tabs[j].title;
+                        // TODO: delegate
+                        item.onclick = function () {
+                            if (typeof currentItem === 'undefined') {
+                                currentItem = this;
+                            } else {
+                                currentItem.firstChild.className = null;
+                                currentItem = this;
+                            }
+                            this.firstChild.className = 'selected';
+                            $('#link_url input')[0].value = this.url;
+                        };
+                        list.appendChild(item);
                     }
                 }
-            });
-            node.style.display = 'block';
-        }
+            }
+            node.appendChild(list);
+        });
     }
     function editPage(e) {
         chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
@@ -434,9 +435,9 @@
             styles = document.createElement('style');
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','tile_style');
-        tabs.innerText = chrome.i18n.getMessage('fn_tabs');
-        bookmarks.innerText = chrome.i18n.getMessage('fn_bookmarks');
-        d('history').innerText = chrome.i18n.getMessage('fn_history');
+        $('#tabs span')[0].innerText = chrome.i18n.getMessage('fn_tabs');
+        $('#bookmarks span')[0].innerText = chrome.i18n.getMessage('fn_bookmarks');
+        $('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
         edit_cancel.value = chrome.i18n.getMessage('mb_cancal');
         toggle_button.onclick = toggleDisplay();
         function hacks() {

@@ -163,7 +163,7 @@
 			var i = urls.indexOf(info.linkUrl);
 			if (i !== -1) {
 				urls[i] = null;
-				delete thumbs[urls[i]];
+				delete thumbs[info.linkUrl];
 				saveSync();
 				saveLocal();
 				chrome.extension.sendRequest({
@@ -190,7 +190,7 @@
 					urls.push(element);
 				});
 			} else {
-				urls = [null, null, null, null, null, null, null, null, null, null, null, null];
+				urls = new Array(20);
 				saveSync();
 			}
 			if (res.settings) {
@@ -282,17 +282,14 @@
 		}
 	});
 
-	chrome.webRequest.onBeforeRedirect.addListener(
-		function(details){
-			if (urls.indexOf(details.url) !== -1){
-				redirectUrls[details.redirectUrl] = (details.url);
-			}
-		},
-		{
-			urls: ["<all_urls>"],
-			types: ["main_frame"]
-		},
-		['responseHeaders']);
+	chrome.webRequest.onBeforeRedirect.addListener(function(details){
+		if (urls.indexOf(details.url) !== -1){
+			redirectUrls[details.redirectUrl] = (details.url);
+		}
+	}, {
+		urls: ['<all_urls>'],
+		types: ['main_frame']
+	}, ['responseHeaders']);
 
 	function sendFresh(tabId) {
 		var i, indexes = [];
