@@ -20,7 +20,16 @@
         _offsetX,
         _offsetY,
         currentItem,
-        flowNext;
+        flowNext,
+        handlers = {
+            '#toggle_button *': toggleDisplay(),
+            '#tabs *': switchToTabs,
+            '#edit_cancel *': hideEditForm,
+            '#edit_ok *': editPage,
+            '.page:not(.inactive) .flipper a *': pageClickHandler,
+            '.page.inactive .flipper a *': function (event) {toggleEditForm(this.parentElement.parentElement);},
+            '#edit .list .item': selectLink
+        };
 
     function d(id) {
         return document.getElementById(id);
@@ -30,6 +39,15 @@
         return document.querySelectorAll(selector);
     }
 
+    function closest(el, selector) {
+        while (el) {
+            if (el.matches(selector)) {
+                return el;
+            }
+            el = el.parentElement;
+        }
+        return null;
+    }
     try {
         urls = chrome.extension.getBackgroundPage().urls;
         thumbs = chrome.extension.getBackgroundPage().thumbs;
@@ -162,7 +180,7 @@
             page.style.webkitTransform = 'scale(1)';
             setTimeout(function (argument) {
                 page.style.webkitTransform = '';
-            }, 10)
+            }, 10);
         }, 200);
     }
     function calcSize() {
@@ -192,27 +210,21 @@
         }
     }
     function pageClickHandler(event) {
-        var page, _left, _top;
-        if (event.button === 0) {
-            try {
-                page = event.target.parentElement.parentElement.parentElement;
-            } catch (error) {
-                //do nothing. because it seems just any of top elements was clicked.
+        var page;
+        if (event.button !== 0) {return;}
+        page = event.target.parentElement.parentElement.parentElement;
+        if (main.classList.contains('flow')){
+            event.preventDefault();
+            if (!page.classList.contains('current')){
+                flowNext(function(){
+                    return page;
+                });
             }
-            if (event.target.className === 'thumbnail' && !page.classList.contains('inactive')) {
-                if (main.classList.contains('flow')){
-                    if (!page.contains('current')){
-                        flowNext(function(){
-                            return page;
-                        });
-                    }
-                    setTimeout(function(){
-                        page.classList.add('full');
-                    }, 10);
-                } else {
-                    page.classList.add('full');
-                }
-            } else if (page && page.classList.contains('page')) { toggleEditForm(page); }
+            setTimeout(function(){
+                page.classList.add('full');
+            }, 10);
+        } else {
+            page.classList.add('full');
         }
     }
     function createPages() {
@@ -251,14 +263,16 @@
         }
         set.appendChild(pages);
         page.firstElementChild.appendChild(edit);
-        edit.onclick = function (e) { e.stopPropagation(); };
-        edit_cancel.onclick = function (e) {
-            hideEditForm();
-        };
-        edit_ok.onclick = editPage;
-        tabs.onclick = switchToTabs;
-        document.onclick = pageClickHandler;
         document.ondragstart = prepareDrag;
+    }
+    function clicksDelegate (event) {
+        for (var selector in handlers){
+            if (event.target.matches(selector) || event.target.matches(selector.replace('*', ''))){
+                var target = closest(event.target, selector.replace('*', ''));
+                handlers[selector].call(target, event);
+                return;
+            }
+        }
     }
     function setBackGradient () {
         var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
@@ -332,23 +346,22 @@
                         item.tab = tabs[j];
                         item.url = tabs[j].url;
                         item.innerHTML = tabs[j].title;
-                        // TODO: delegate
-                        item.onclick = function () {
-                            if (typeof currentItem === 'undefined') {
-                                currentItem = this;
-                            } else {
-                                currentItem.firstChild.className = null;
-                                currentItem = this;
-                            }
-                            this.firstChild.className = 'selected';
-                            $('#link_url input')[0].value = this.url;
-                        };
                         list.appendChild(item);
                     }
                 }
             }
             node.appendChild(list);
         });
+    }
+    function selectLink () {
+        if (typeof currentItem === 'undefined') {
+            currentItem = this;
+        } else {
+            currentItem.firstChild.className = null;
+            currentItem = this;
+        }
+        this.firstChild.className = 'selected';
+        $('#link_url input')[0].value = this.url;
     }
     function editPage(e) {
         chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
@@ -439,7 +452,7 @@
         $('#bookmarks span')[0].innerText = chrome.i18n.getMessage('fn_bookmarks');
         $('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
         edit_cancel.value = chrome.i18n.getMessage('mb_cancal');
-        toggle_button.onclick = toggleDisplay();
+        document.onclick = clicksDelegate;
         function hacks() {
             var wait = null;
             setPagesSize();
