@@ -23,7 +23,7 @@
         flowNext,
         handlers = {
             '#toggle_button *': toggleDisplay(),
-            '#tabs *': switchToTabs,
+            '#edit .header .tab *': switchList,
             '#edit_cancel *': hideEditForm,
             '#edit_ok *': editPage,
             '.page:not(.inactive) .flipper a *': pageClickHandler,
@@ -147,6 +147,7 @@
     }
     function showEditForm() {
         currentEditPage.appendChild(edit);
+        $('#edit .header .tab.active')[0].click();
         setTimeout(function () {
             currentEditPage.classList.add('turned');
         }, 10);
@@ -326,8 +327,14 @@
             }
         }
     }
-    function switchToTabs(e) {
-        var node = $('#edit .list .tabs')[0],
+    function switchList (e) {
+        $('#edit .header .tab.active')[0].classList.remove('active');
+        this.classList.add('active');
+        this.id === 'tabs' ? switchToTabs() :
+            this.id === 'history' ? switchToHistory() : switchToBookmarks();
+    }
+    function switchToTabs() {
+        var node = $('#edit .list .tree')[0],
             list = document.createDocumentFragment(),
             protocol = /^https?:/,
             i,
@@ -352,6 +359,33 @@
             }
             node.appendChild(list);
         });
+    }
+    function switchToHistory() {
+        var node = $('#edit .list .tree')[0],
+            list = document.createDocumentFragment(),
+            protocol = /^https?:/,
+            i,
+            tabs,
+            item;
+        [].slice.call(node.children).forEach(function(link){node.removeChild(link);});
+        chrome.history.search({
+            text: '',
+            startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
+        }, function (visitItems) {
+            for (i = 0; i < visitItems.length; i++) {
+                if (protocol.test(visitItems[i].url)) {
+                    item = document.createElement('div');
+                    item.style['background-image'] = 'URL(chrome://favicon/' + visitItems[i].url + ')';
+                    item.setAttribute('class', 'item');
+                    item.url = visitItems[i].url;
+                    item.innerHTML = visitItems[i].title || visitItems[i].url;
+                    list.appendChild(item);
+                }
+            }
+            node.appendChild(list);
+        });
+    }
+    function switchToBookmarks () {
     }
     function selectLink () {
         if (typeof currentItem === 'undefined') {
