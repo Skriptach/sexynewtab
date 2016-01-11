@@ -114,6 +114,21 @@
 		req.send();
 	}
 
+	function onRemove (index) {
+		if (index !== -1) {
+			urls[index] = null;
+			delete thumbs[urls[index]];
+			saveSync();
+			saveLocal();
+			chrome.extension.sendRequest({
+				action: 'remove',
+				params: {
+					index: index
+				}
+			});
+		}
+	}
+
 	function init() {
 		var urls_ready = false, thumbs_ready = false;
 
@@ -147,43 +162,6 @@
 			}
 		}
 
-		function oncontextEdit(info, tab) {
-			var i = urls.indexOf(info.linkUrl);
-			if (i !== -1) {
-				chrome.tabs.sendRequest(tab.id, {
-					action: 'showEditForm',
-					params: {
-						index: i
-					}
-				});
-			}
-		}
-
-		function oncontextRemove(info, tab) {
-			var i = urls.indexOf(info.linkUrl);
-			if (i !== -1) {
-				urls[i] = null;
-				delete thumbs[info.linkUrl];
-				saveSync();
-				saveLocal();
-				chrome.extension.sendRequest({
-					action: 'remove',
-					params: {
-						index: i
-					}
-				});
-			}
-		}
-
-		chrome.contextMenus.create({title: chrome.i18n.getMessage('m_edit'),
-								contexts: ['link'],
-								documentUrlPatterns: ['chrome-extension://' + chrome.i18n.getMessage('@@extension_id') + '/layout.html'],
-								onclick: oncontextEdit });
-		chrome.contextMenus.create({title: chrome.i18n.getMessage('m_clear'),
-								contexts: ['link'],
-								documentUrlPatterns: ['chrome-extension://' + chrome.i18n.getMessage('@@extension_id') + '/layout.html'],
-								onclick: oncontextRemove
-								});
 		chrome.storage.sync.get(['urls', 'settings'], function(res) {
 			if (res.urls){
 				res.urls.forEach(function(element, index){
@@ -272,6 +250,10 @@
 				break;
 			case 'subscribe':
 				subscribe(request.callback);
+				sendResponse({});
+				break;
+			case 'clear':
+				onRemove(request.index);
 				sendResponse({});
 				break;
 			default:

@@ -104,6 +104,25 @@ button {
 .page.full .thumbnail {
 	border-radius: 0;}
 
+.page .flipper button {
+	position: absolute;
+	background: rgba(51, 51, 51, 0.5);
+	border-radius: 3px;
+	display: none;
+	opacity: 0;}
+
+.page .flipper button.edit {
+	right: 10px;
+	top: 10px;}
+.page .flipper button.remove {
+	right: 10px;
+	bottom: 10px;}
+
+.page:not(.inactive):hover .flipper button {
+	display: initial;
+	opacity: 0.3;}
+.page:not(.inactive):hover .flipper button:hover {
+	opacity: 0.8;}
 
 #edit {
 	position:absolute;
@@ -119,8 +138,6 @@ button {
 	-webkit-transform: rotate3d(0, 1, 0, 180deg);
 	-webkit-backface-visibility: hidden;}
 
-#edit .header {
-	overflow: hidden;}
 #edit div.list {
 	position: relative;
 	margin-bottom: 7;
@@ -201,8 +218,10 @@ input[type="button"] {
 	background: none;
 	width: 25px;
 	height: 25px;
-	float: right;}
-#edit_cancel .st-cancel-4:before{
+	float: right;
+	margin-top: -5;
+	outline: none;}
+#edit_cancel .st-left-open-2:before{
 	margin: 0;}
 
 #edit_cancel:hover,

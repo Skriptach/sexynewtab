@@ -27,6 +27,8 @@
             '#edit_cancel *': hideEditForm,
             '#edit_ok *': editPage,
             '.page:not(.inactive) .flipper a *': pageClickHandler,
+            '.page .flipper .edit *': function (event) {toggleEditForm(closest(this, '.page'));},
+            '.page .flipper .remove *': clearPage,
             '.page.inactive .flipper a *': function (event) {toggleEditForm(this.parentElement.parentElement);},
             '#edit .list .item': selectLink
         };
@@ -166,9 +168,15 @@
             hideEditForm();
             currentEditPage = page;
             var hold = setTimeout(function () {
-                showEditForm(currentEditPage);
+                showEditForm();
             }, 300);
         }
+    }
+    function clearPage (event) {
+        chrome.extension.sendRequest({
+            action: 'clear',
+            index: closest(this, '.page').index
+        }, function(response) {});
     }
     function removePage(page) {
         page.firstElementChild.firstElementChild.removeAttribute('href');
@@ -244,6 +252,8 @@
                     '<div class="logo"></div>'+
                     '<div class="thumbnail"></div>'+
                 '</a>'+
+                '<button class="edit" title="'+chrome.i18n.getMessage('m_edit') + '"><i class="st-pencil-alt"></i></button>'+
+                '<button class="remove" title="'+chrome.i18n.getMessage('m_clear') + '"><i class="st-cancel-4"></i></button>'+
             '</div>';
         thumbnailnode.setAttribute('class', 'page inactive');
         thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
@@ -535,9 +545,6 @@
                 switch (request.action) {
                 case 'updatePageThumb':
                     updatePageThumb(request.params.index);
-                    break;
-                case 'showEditForm':
-                    toggleEditForm(d('page'+request.params.index));
                     break;
                 case 'remove':
                     removePage(d('page'+request.params.index));
