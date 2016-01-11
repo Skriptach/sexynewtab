@@ -124,11 +124,15 @@ button {
 #edit div.list {
 	position: relative;
 	margin-bottom: 7;
-	padding: 3 6;
+	padding: 3 0 3 6;
 	height: calc(100% - 31px - 35px - 14px); /* height of tabs, height of input URL, height of margin  */
 	overflow:auto;
 	background-color:#FFF;
 	cursor:default;}
+#edit .list .tree {
+	height: 100%;
+	overflow: auto;
+	padding-right: 6px;}
 
 #edit .tab {
 	text-decoration: none;

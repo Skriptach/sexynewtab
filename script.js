@@ -388,13 +388,11 @@
     function switchToBookmarks () {
     }
     function selectLink () {
-        if (typeof currentItem === 'undefined') {
-            currentItem = this;
-        } else {
-            currentItem.firstChild.className = null;
-            currentItem = this;
+        if (currentItem) {
+            currentItem.classList.remove('selected');
         }
-        this.firstChild.className = 'selected';
+        currentItem = this;
+        this.classList.add('selected');
         $('#link_url input')[0].value = this.url;
     }
     function editPage(e) {
