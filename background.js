@@ -27,11 +27,16 @@
 	}
 
 	function saveLocal() {
-		try {
-			chrome.storage.local.set({'thumbs': thumbs, 'hashes': hashes});
-		} catch (e) {
-			console.log(e);
-		}
+		var buferT = {};
+		var buferH = {};
+		urls.forEach(function (url) {
+			if (!url){return;}
+			thumbs[url] && (buferT[url] = thumbs[url]);
+			hashes[url] && (buferH[url] = hashes[url]);
+		});
+		thumbs = buferT;
+		hashes = buferH;
+		chrome.storage.local.set({'thumbs': thumbs, 'hashes': hashes});
 	}
 
 	function saveSync(){
@@ -43,15 +48,20 @@
 	}
 
 	function refreshNewTabPages(slot_index) {
-		chrome.extension.sendRequest({action: 'updatePageThumb', params: {index: slot_index}});
+		chrome.extension.sendRequest({action: 'updatePageThumb', params: {index: slot_index, thumb: thumbs[urls[slot_index]]}});
 	}
 
-	function createThumbOf(requestedTab, callback) {
+	function createThumbOf(requestedTab, callback, savedTab) {
 		function takeScreenshot () {
 			try {// take screenshot
 			chrome.tabs.captureVisibleTab(requestedTab.windowId, {
 				format: 'png'
 			}, function(thumb){
+				if (!thumb && chrome.runtime.lastError && chrome.runtime.lastError.message === 'Failed to capture tab: unknown error'){
+					// try once again
+					TRIES-- && createThumbOf(requestedTab, callback, savedTab);
+					return;
+				}
 				callback(thumb);
 				if (savedTab){
 					// switch back
@@ -66,21 +76,21 @@
 				console.log(e);
 			}
 		}
-		var savedTab;
+
 		try {
 			//get current tab
 			chrome.tabs.getSelected(null, function(currentTab) {
 				if (currentTab.id === requestedTab.id){
 					takeScreenshot();
 				} else {
-					savedTab = currentTab;
+					savedTab = savedTab || currentTab;
 					// switch to requested tab
 					chrome.tabs.update(requestedTab.id, {
 						active: true,
 						selected: true,
 						pinned: requestedTab.pinned
 					}, function (){
-						setTimeout(takeScreenshot, 50);
+						setTimeout(takeScreenshot, 100);
 					});
 				}
 			});
@@ -116,10 +126,10 @@
 
 	function onRemove (index) {
 		if (index !== -1) {
-			urls[index] = null;
 			delete thumbs[urls[index]];
-			saveSync();
+			urls[index] = null;
 			saveLocal();
+			saveSync();
 			chrome.extension.sendRequest({
 				action: 'remove',
 				params: {
@@ -211,11 +221,11 @@
 		try {
 			createThumbOf(requestedTab, function(thumb) {
 				urls[slot_index] = requestedTab.url;
-				thumbs[urls[slot_index]] = thumb;
+				thumbs[requestedTab.url] = thumb;
 				getHash(requestedTab.url, true);
 				refreshNewTabPages(slot_index);
-				saveSync();
 				saveLocal();
+				saveSync();
 			});
 		} catch (e) {
 			console.log(e);
