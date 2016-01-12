@@ -181,6 +181,7 @@
     function removePage(page) {
         page.firstElementChild.firstElementChild.removeAttribute('href');
         page.classList.add('inactive');
+        page.classList.remove('fresh');
         page.style.webkitTransform = 'scale(0.3)';
         var hold = setTimeout(function () {
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
@@ -204,17 +205,16 @@
             PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
         }
     }
-    function updatePageThumb(slotIndex, page) {
-        if (!page) {
-            page = d('page' + slotIndex);
-        }
+    function updatePageThumb(slotIndex, page, thumb) {
+        page = page || d('page' + slotIndex);
+        thumb = thumb || thumbs[urls[slotIndex]];
         if (!!urls[slotIndex]) {
             page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.classList.remove('inactive');
-            if (thumbs[urls[slotIndex]]) {
+            if (thumb) {
                 page.classList.remove('fresh');
-                page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumbs[urls[slotIndex]] + ')';
+                page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumb + ')';
             }
         }
     }
@@ -544,7 +544,7 @@
             if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
                 switch (request.action) {
                 case 'updatePageThumb':
-                    updatePageThumb(request.params.index);
+                    updatePageThumb(request.params.index, null, request.params.thumb);
                     break;
                 case 'remove':
                     removePage(d('page'+request.params.index));
