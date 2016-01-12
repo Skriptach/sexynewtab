@@ -3,7 +3,8 @@
 	settings = {
 		COLUMNS_COUNT : 4,
 		ROWS_COUNT : 3,
-		CHECK_PERIOD : 4 //hours
+		CHECK_PERIOD : 4, //hours
+		FLOW : false
 	},
 	swap, editPage, subscribe;
 
@@ -110,7 +111,7 @@
 					clearTimeout(timers[url]);
 					h = MD5(req.responseText);
 					if (!messageFlag && hashes[url] && hashes[url].hash !== h) {
-						chrome.extension.sendRequest({action: 'pageIsFresh', params: {index: urls.indexOf(url)}});
+						chrome.extension.sendRequest({action: 'pageIsFresh', params: {indexes: [urls.indexOf(url)]}});
 					}
 					hashes[url] ={
 						hash : h,
@@ -266,6 +267,11 @@
 				break;
 			case 'clear':
 				onRemove(request.index);
+				sendResponse({});
+				break;
+			case 'toggleView':
+				settings.FLOW = request.FLOW;
+				saveSync();
 				sendResponse({});
 				break;
 			default:

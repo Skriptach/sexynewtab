@@ -20,9 +20,10 @@
         _offsetX,
         _offsetY,
         currentItem,
-        flowNext,
+        first_flow_page,
+        current_flow_page,
         handlers = {
-            '#toggle_button *': toggleDisplay(),
+            '#toggle_button *': toggleDisplay,
             '#edit .header .tab *': switchList,
             '#edit_cancel *': hideEditForm,
             '#edit_ok *': editPage,
@@ -50,19 +51,7 @@
         }
         return null;
     }
-    try {
-        urls = chrome.extension.getBackgroundPage().urls;
-        thumbs = chrome.extension.getBackgroundPage().thumbs;
-    } catch (e) {
-        console.log(e);
-        return;
-    }
-    if (!!localStorage.rows) {
-        ROWS_COUNT = +localStorage.rows;
-    }
-    if (!!localStorage.col) {
-        COLUMNS_COUNT = +localStorage.col;
-    }
+
     function pagesNumberChanged(e, id) {
         var s = e.currentTarget;
         if (id === 0) {
@@ -180,10 +169,11 @@
     }
     function removePage(page) {
         page.firstElementChild.firstElementChild.removeAttribute('href');
-        page.classList.add('inactive');
         page.classList.remove('fresh');
         page.style.webkitTransform = 'scale(0.3)';
         var hold = setTimeout(function () {
+            page.classList.add('inactive');
+            FLOW && flowTo(getNextActivePage);
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
             page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
@@ -220,20 +210,18 @@
     }
     function pageClickHandler(event) {
         var page;
-        if (event.button !== 0) {return;}
         page = event.target.parentElement.parentElement.parentElement;
-        if (main.classList.contains('flow')){
+        if (main.classList.contains('flow') && !page.classList.contains('current')){
             event.preventDefault();
-            if (!page.classList.contains('current')){
-                flowNext(function(){
-                    return page;
-                });
-            }
+            if (event.button !== 0) {return;}
+            flowTo(function(){
+                return page;
+            });
+        } else {
+            if (event.button !== 0) {return;}
             setTimeout(function(){
                 page.classList.add('full');
             }, 10);
-        } else {
-            page.classList.add('full');
         }
     }
     function createPages() {
@@ -409,85 +397,87 @@
         chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
         hideEditForm();
     }
+
+    function current_index(){
+        var i = first_flow_page.index,
+            res = i;
+        for (; i<current_flow_page.index; i++) {
+            if (!d('page'+i).classList.contains('inactive')) {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    function getNextActivePage() {
+        var tmp;
+        if (first_flow_page){
+            tmp = current_flow_page;
+        } else {
+            tmp = set.firstElementChild;
+            if (!tmp.classList.contains('inactive')){
+                return tmp;
+            }
+        }
+        while (tmp = tmp.nextElementSibling){
+            if (!tmp.classList.contains('inactive')){
+                return tmp;
+            }
+        }
+    }
+    function getPrevActivePage(){
+        var tmp = current_flow_page;
+        while (tmp = tmp.previousElementSibling){
+            if (!tmp.classList.contains('inactive')){
+                return tmp;
+            }
+        }
+    }
+    function flowTo(target) {
+        var tmp = target();
+        if(tmp){
+            current_flow_page.classList.remove('current');
+            current_flow_page = tmp;
+            current_flow_page.classList.add('current');
+            first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
+        }
+    }
+    function scrollFlow(e) {
+        if (e.wheelDelta < 0 || e.keyCode === 39) {
+            flowTo(getNextActivePage);
+        } else if (e.wheelDelta > 0 || e.keyCode === 37) {
+            flowTo(getPrevActivePage);
+        }
+    }
+
     function toggleDisplay() {
-        var first_flow_page, current_flow_page;
-
-        function current_index(){
-            var i = first_flow_page.index,
-                res = current_flow_page.index - first_flow_page.index;
-            for (; i<current_flow_page.index; i++) {
-                if (d('page'+i).classList.contains('inactive')) {
-                    res--;
-                }
-            }
-            return res;
+        if (FLOW){
+            main.classList.remove('flow');
+            current_flow_page.classList.remove('current');
+            first_flow_page.style['margin-left'] = '';
+            document.onmousewheel = null;
+            first_flow_page = current_flow_page = null;
+        } else {
+            first_flow_page = current_flow_page = getNextActivePage();
+            current_flow_page.classList.add('current');
+            first_flow_page.style['margin-left'] = '0';
+            document.onkeydown = document.onmousewheel = scrollFlow;
+            main.classList.add('flow');
         }
-
-        function getNextActivePage() {
-            var tmp;
-            if (first_flow_page){
-                tmp = current_flow_page;
-            } else {
-                tmp = set.firstElementChild;
-                if (!tmp.classList.contains('inactive')){
-                    return tmp;
-                }
-            }
-            while (tmp = tmp.nextElementSibling){
-                if (!tmp.classList.contains('inactive')){
-                    //current_index++;
-                    return tmp;
-                }
-            }
-        }
-        function getPrevActivePage(){
-            var tmp = current_flow_page;
-            while (tmp = tmp.previousElementSibling){
-                if (!tmp.classList.contains('inactive')){
-                    return tmp;
-                }
-            }
-        }
-        function flowNext(nearest) {
-            var tmp = nearest();
-            if(tmp){
-                current_flow_page.classList.remove('current');
-                current_flow_page = tmp;
-                current_flow_page.classList.add('current');
-                first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
-            }
-        }
-        function scrollFlow(e) {
-            if (e.wheelDelta < 0) {
-                flowNext(getNextActivePage);
-            } else if (e.wheelDelta > 0) {
-                flowNext(getPrevActivePage);
-            }
-        }
-
-        return function(){
-            if (FLOW){
-                main.classList.remove('flow');
-                current_flow_page.classList.remove('current');
-                first_flow_page.style['margin-left'] = '';
-                document.onmousewheel = null;
-                first_flow_page = current_flow_page = null;
-            } else {
-                first_flow_page = current_flow_page = getNextActivePage();
-                current_flow_page.classList.add('current');
-                first_flow_page.style['margin-left'] = '0';
-                document.onmousewheel = scrollFlow;
-                main.classList.add('flow');
-            }
-            FLOW = !FLOW;
-            calcSize();
-            setBackGradient();
-        };
+        FLOW = !FLOW;
+        chrome.extension.sendRequest({
+            action: 'toggleView',
+            FLOW: FLOW
+        }, function(response) {});
+        calcSize();
+        setBackGradient();
     }
     window.onload = function () {
         var _width = window.innerWidth,
             _height = window.innerHeight,
-            styles = document.createElement('style');
+            styles = document.createElement('style'),
+            back;
+        container.style.display = 'none';
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
         document.head.appendChild(styles.cloneNode(true)).setAttribute('id','tile_style');
         $('#tabs span')[0].innerText = chrome.i18n.getMessage('fn_tabs');
@@ -495,10 +485,23 @@
         $('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
         edit_cancel.value = chrome.i18n.getMessage('mb_cancal');
         document.onclick = clicksDelegate;
+        try {
+            back = chrome.extension.getBackgroundPage();
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+        urls = back.urls;
+        thumbs = back.thumbs;
         function hacks() {
             var wait = null;
             setPagesSize();
             createPages();
+            back.settings.FLOW && toggleDisplay();
+            // reflow
+            setTimeout(function function_name (argument) {
+                container.style.display = '';
+            }, 0);
             window.onresize = function () {
                 if (_width !== window.innerWidth || _height !== window.innerHeight) {
                     _width = window.innerWidth;

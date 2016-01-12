@@ -53,10 +53,12 @@ button {
 	-webkit-transition-property: -webkit-transform;}
 
 .flipper {
+	top: 0;
+	left: 0;
 	width:100%;
 	height:100%;
 	position:absolute;
-	-webkit-transition-property: -webkit-transform;
+	-webkit-transition-property: left, top, width, height, -webkit-transform;
 	-webkit-transition-duration: .5s;
 	-webkit-transform-style: preserve-3d;
 	-webkit-transform: rotate3d(0, 1, 0, 0deg);
@@ -92,7 +94,6 @@ button {
 	border-radius:6px;
 	position:absolute;}
 
-
 .page.fresh .thumbnail:before {
 	content: '\2605';
 	font-size: 2.5em;
@@ -118,7 +119,8 @@ button {
 	right: 10px;
 	bottom: 10px;}
 
-.page:not(.inactive):hover .flipper button {
+#main:not(.flow) .page:not(.inactive):not(.full):hover .flipper button,
+#main.flow .page.current:not(.full):hover .flipper button {
 	display: initial;
 	opacity: 0.3;}
 .page:not(.inactive):hover .flipper button:hover {
@@ -319,7 +321,8 @@ select {
 	width: 50% !important;
 	height: 50% !important;
 	white-space: nowrap;
-	-webkit-transform-style: preserve-3d;}
+	-webkit-transform-style: preserve-3d;
+	z-index: 100;}
 
 #main.flow .page {
 	width: 100% !important;
@@ -337,7 +340,7 @@ select {
 #main.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
 	content: '';
 	width: 100%;
-	height: 100%;
+	height: 50%;
 	border-radius:7px;
 	background-color: #000;
 	position: absolute;
@@ -351,8 +354,13 @@ select {
 	-webkit-transform: translateZ(0px);
 	-webkit-transform-origin: 50%;}
 
-#main.flow .page.current + .page, #main.flow .page.current ~ .inactive + .page:not(.inactive) {
+#main.flow .page.current + .page:not(.inactive),
+#main.flow .page.current ~ .inactive + .page:not(.inactive) {
 	margin-left: -70%;}
+
+#main.flow .page.current + .page:not(.inactive) ~ .page:not(.inactive),
+#main.flow .page.current ~ .inactive + .page:not(.inactive) ~ .page:not(.inactive) {
+	margin-left: -90%;}
 
 #main.flow .current ~ .page {
 	-webkit-transform: rotateY(-45deg) translateZ(-400px);
