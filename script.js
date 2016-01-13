@@ -52,16 +52,6 @@
 		return null;
 	}
 
-	function pagesNumberChanged(e, id) {
-		var s = e.currentTarget;
-		if (id === 0) {
-			ROWS_COUNT = s.options[s.selectedIndex].value;
-			localStorage.rows = ROWS_COUNT;
-		} else {
-			COLUMNS_COUNT = s.options[s.selectedIndex].value;
-			localStorage.col = COLUMNS_COUNT;
-		}
-	}
 	function onDrag(e) {
 		if (e.screenX > 0 || e.screenY > 0) {
 			var TargetPosX,
