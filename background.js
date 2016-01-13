@@ -310,7 +310,7 @@
 	}
 
 	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		if (tab.url === 'chrome://newtab/' || changeInfo.url === 'chrome://newtab/') {
+		if (tab.url === 'chrome://newtab/' && tab.status === 'complete') {
 			sendFresh(tab.id);
 		}
 	});
