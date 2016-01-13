@@ -85,7 +85,6 @@
 					TargetPosY = pagePosY;
 					modificator = (position > dragPage.index) ? 1 : -1;
 					i = dragPage.index;
-					//prevPage = dragPage;
 					do {
 						i += modificator;
 						moved = d('page' + i);
@@ -186,7 +185,6 @@
 			} else {
 				page.classList.add('inactive');
 			}
-			//page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
 			page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
 			page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
 			page.style.webkitTransform = 'scale(1)';
@@ -212,7 +210,6 @@
 		thumb = thumb || thumbs[urls[slotIndex]];
 		if (!!urls[slotIndex]) {
 			page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
-			//page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
 			page.classList.remove('inactive');
 			if (thumb) {
 				page.classList.remove('fresh');
