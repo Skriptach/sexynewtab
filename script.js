@@ -459,6 +459,7 @@
             first_flow_page = current_flow_page = null;
         } else {
             first_flow_page = current_flow_page = getNextActivePage();
+            if (!first_flow_page){return;}
             current_flow_page.classList.add('current');
             first_flow_page.style['margin-left'] = '0';
             document.onkeydown = document.onmousewheel = scrollFlow;
