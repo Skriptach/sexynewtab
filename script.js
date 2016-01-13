@@ -172,8 +172,20 @@
         page.classList.remove('fresh');
         page.style.webkitTransform = 'scale(0.3)';
         var hold = setTimeout(function () {
-            page.classList.add('inactive');
-            FLOW && flowTo(getNextActivePage);
+            if (FLOW){
+                if (page === first_flow_page){
+                    first_flow_page = getNextActivePage();
+                }
+                page.classList.add('deleting');
+                flowTo(getNextActivePage() || getPrevActivePage());
+                setTimeout(function (argument) {
+                    page.style['margin-left'] = '';
+                    page.classList.remove('deleting');
+                    page.classList.add('inactive');
+                }, 500);
+            } else {
+                page.classList.add('inactive');
+            }
             //page.lastElementChild.lastElementChild.setAttribute('title',slots[i].title);
             page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
             page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
@@ -214,9 +226,7 @@
         if (main.classList.contains('flow') && !page.classList.contains('current')){
             event.preventDefault();
             if (event.button !== 0) {return;}
-            flowTo(function(){
-                return page;
-            });
+            flowTo(page);
         } else {
             if (event.button !== 0) {return;}
             setTimeout(function(){
@@ -400,9 +410,11 @@
 
     function current_index(){
         var i = first_flow_page.index,
-            res = i;
+            res = i,
+            classes;
         for (; i<current_flow_page.index; i++) {
-            if (!d('page'+i).classList.contains('inactive')) {
+            classes = d('page'+i).classList;
+            if (!classes.contains('inactive') && !classes.contains('deleting')) {
                 res++;
             }
         }
@@ -434,19 +446,18 @@
         }
     }
     function flowTo(target) {
-        var tmp = target();
-        if(tmp){
+        if(target){
             current_flow_page.classList.remove('current');
-            current_flow_page = tmp;
+            current_flow_page = target;
             current_flow_page.classList.add('current');
             first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
         }
     }
     function scrollFlow(e) {
         if (e.wheelDelta < 0 || e.keyCode === 39) {
-            flowTo(getNextActivePage);
+            flowTo(getNextActivePage());
         } else if (e.wheelDelta > 0 || e.keyCode === 37) {
-            flowTo(getPrevActivePage);
+            flowTo(getPrevActivePage());
         }
     }
 

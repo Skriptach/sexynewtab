@@ -129,8 +129,11 @@
 
 	function onRemove (index) {
 		if (index !== -1) {
-			delete thumbs[urls[index]];
+			var url = urls[index];
 			urls[index] = null;
+			if (urls.indexOf(url) === -1) {
+				delete thumbs[urls[index]];
+			}
 			saveLocal();
 			saveSync();
 			chrome.extension.sendRequest({

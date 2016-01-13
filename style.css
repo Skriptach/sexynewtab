@@ -337,6 +337,12 @@ select {
 	-webkit-transform: rotateY(45deg) translateZ(-400px);
 	-webkit-transform-origin: 0%;}
 
+#main.flow .page.deleting {
+	width: 0 !important;
+	margin: 0;
+	visibility: hidden;
+	-webkit-transition-property: margin, width, -webkit-transform, -webkit-transform-origin;}
+
 #main.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
 	content: '';
 	width: 100%;
@@ -377,4 +383,5 @@ select {
 	left: -50%;
 	width: 200%;
 	height: 200%;
-	border-radius: 0;}
+	border-radius: 0;
+	-webkit-transition-duration: .1s;}
