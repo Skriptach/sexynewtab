@@ -237,41 +237,9 @@ input[type="button"] {
 #edit_cancel:focus {
 	color: #DC0000;}
 
-#footer {
-	position:absolute;
-	bottom:10;
-	width:100%;
-	text-align: center;}
-
-#footer>div {
-	display:inline-block;
-	margin:auto;
-	padding:7 10;
-	border-radius:6px;
-	background:#fff299;
-	border: 1 solid lightGrey;
-	color:red;
-	font-weight: bold;
-	max-width:700;}
-
 .link {
 	text-decoration:none;
 	cursor:default;}
-
-#optionsbutton {
-	display: none;
-	background: url('images/rub.png') 0 0 no-repeat;
-	position:absolute;
-	right:15;
-	bottom:15;
-	z-index:10;
-	width: 43;
-	height:24;
-	background-color:#000050;
-	border-radius: 4px;}
-
-#optionsbutton:hover {
-	background-color:#053fd5;}
 
 #toggle_button {
 	position:fixed;
@@ -300,26 +268,6 @@ input[type="button"] {
 #main.flow #toggle_button .st-tile,
 #main #toggle_button .st-coverflow {
 	display: inline;}
-
-#options {
-	z-index:10;
-	position:absolute;
-	right:15;
-	bottom:40;
-	display:none;
-	border:1 solid #d7d7d7;
-	background-color:#000050;
-	color:grey;
-	padding:10;
-	border-radius: 7px;}
-
-#options > div {
-	width:130;
-	margin-top:5;
-	maring-left:10;}
-
-select {
-	float:right;}
 
 #main.flow {
 	-webkit-perspective: 800;}

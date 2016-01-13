@@ -495,7 +495,6 @@
         $('#tabs span')[0].innerText = chrome.i18n.getMessage('fn_tabs');
         $('#bookmarks span')[0].innerText = chrome.i18n.getMessage('fn_bookmarks');
         $('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
-        edit_cancel.value = chrome.i18n.getMessage('mb_cancal');
         document.onclick = clicksDelegate;
         try {
             back = chrome.extension.getBackgroundPage();
@@ -532,28 +531,7 @@
             }
         } else { hacks(); }
     };
-    optionsbutton.onclick = function () {
-        if (!OptionsMenu) {
-            selectRows.selectedIndex = ROWS_COUNT - 2;
-            selectCols.selectedIndex = COLUMNS_COUNT - 3;
-            options.style.display = 'block';
-            OptionsMenu = !OptionsMenu;
-        } else {
-            options.style.display = 'none';
-            OptionsMenu = !OptionsMenu;
-        }
-    };
 
-    function reportError(type) {
-        var mess, line;
-        if (reports === null) {
-            mess = document.createElement('div');
-            reports = footer.appendChild(mess);
-        }
-        line = document.createElement('p');
-        line.innerText = chrome.i18n.getMessage(type);
-        reports.appendChild(line);
-    }
     chrome.extension.onRequest.addListener(
         function (request, sender, sendResponse) {
             if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
