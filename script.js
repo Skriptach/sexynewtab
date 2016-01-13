@@ -247,7 +247,7 @@
             '<div class="flipper">'+
                 '<a class="link">'+
                     '<div class="backgradient"></div>'+
-                    '<div class="logo"></div>'+
+                    '<div class="plus"><i class="st-plus-circle"></i></div>'+
                     '<div class="thumbnail"></div>'+
                 '</a>'+
                 '<button class="edit" title="'+chrome.i18n.getMessage('m_edit') + '"><i class="st-pencil-alt"></i></button>'+
