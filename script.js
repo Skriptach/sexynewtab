@@ -304,7 +304,9 @@
 			'left: '+ -DELTA + 'px !important;',
 			'top: '+ -(window.innerHeight - setHeight)/2 + 'px !important;',
 			'z-index: 1000;',
-			'}'].join('\n');
+			'}',
+		'.plus i {',
+			'font-size: ' + PAGE_HEIGHT  * 35.457 / 100 + 'px'].join('\n');
 		index = 0;
 		tile_style.innerHTML = rules;
 		for (i = 0; i < ROWS_COUNT; i++) {
