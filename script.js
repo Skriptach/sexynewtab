@@ -468,7 +468,7 @@
 			action: 'toggleView',
 			FLOW: FLOW
 		}, function(response) {});
-		calcSize();
+		setPagesSize();
 		setBackGradient();
 	}
 	window.onload = function () {
