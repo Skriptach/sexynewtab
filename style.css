@@ -125,8 +125,7 @@ button {
 	right: 10px;
 	bottom: 10px;}
 
-#main:not(.flow) .page:not(.inactive):not(.full):hover .flipper button,
-#main.flow .page.current:not(.full):hover .flipper button {
+.page:not(.inactive):not(.full):hover .flipper button {
 	display: initial;
 	opacity: 0.3;}
 .page:not(.inactive):hover .flipper button:hover {
