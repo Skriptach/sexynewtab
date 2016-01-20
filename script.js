@@ -345,7 +345,7 @@
 				tabs = windows[i].tabs;
 				for (j = 0; j < tabs.length; j++) {
 					if (protocol.test(tabs[j].url)) {
-						item = document.createElement('div');
+						item = document.createElement('li');
 						tabs[j].favIconUrl && (item.style['background-image'] = 'URL(' + tabs[j].favIconUrl + ')');
 						item.setAttribute('class', 'item');
 						item.tab = tabs[j];
@@ -372,7 +372,7 @@
 		}, function (visitItems) {
 			for (i = 0; i < visitItems.length; i++) {
 				if (protocol.test(visitItems[i].url)) {
-					item = document.createElement('div');
+					item = document.createElement('li');
 					item.style['background-image'] = 'URL(chrome://favicon/' + visitItems[i].url + ')';
 					item.setAttribute('class', 'item');
 					item.url = visitItems[i].url;

@@ -162,10 +162,22 @@ button[disabled="disabled"] {
 	overflow:auto;
 	background-color:#FFF;
 	cursor:default;}
+#edit div.list:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	box-shadow: inset 0 12px 12px -5px #FFF, inset 0 -12px 12px -5px #FFF;
+	pointer-events: none;}
+
 #edit .list .tree {
 	height: 100%;
 	overflow: auto;
-	padding-right: 6px;}
+	padding-right: 6px;
+	margin: 0;
+	padding: 0;}
 
 #edit .tab {
 	text-decoration: none;
