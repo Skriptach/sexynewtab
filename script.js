@@ -175,8 +175,8 @@
 			} else {
 				page.classList.add('inactive');
 			}
-			page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = '';
 			page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
+			page.querySelector('.plus').removeAttribute('style');
 			page.style.webkitTransform = 'scale(1)';
 			setTimeout(function (argument) {
 				page.style.webkitTransform = '';
@@ -201,6 +201,7 @@
 		if (!!urls[slotIndex]) {
 			page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
 			page.classList.remove('inactive');
+			page.querySelector('.plus').style['background-image'] = 'URL(chrome://favicon/' + urls[slotIndex] + ')';
 			if (thumb) {
 				page.classList.remove('fresh');
 				page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumb + ')';
@@ -384,17 +385,32 @@
 	}
 	function switchToBookmarks () {
 	}
+
 	function selectLink () {
-		if (currentItem) {
-			currentItem.classList.remove('selected');
-		}
+		$('#link_url input')[0].value = this.url;
+		$('#link_url input')[0].onchange();
+		currentItem && currentItem.classList.remove('selected');
 		currentItem = this;
 		this.classList.add('selected');
-		$('#link_url input')[0].value = this.url;
 	}
 	function editPage(e) {
-		chrome.extension.getBackgroundPage().editPage(currentItem.tab, currentEditPage.index);
+		var state = edit_ok.getAttribute('disabled');
+		if (state === 'disabled'){return;}
+		chrome.extension.getBackgroundPage().editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
 		hideEditForm();
+	}
+
+	function urlChange (event) {
+		var protocol = /^https?:\/\//,
+			domain = /^[\w]+[\w-\.]+/,
+			url = this.value;
+		currentItem && currentItem.classList.remove('selected');
+		currentItem = null;
+		if (!protocol.test(url) && !domain.test(url)){
+			edit_ok.setAttribute('disabled', 'disabled');
+		} else {
+			edit_ok.removeAttribute('disabled');
+		}
 	}
 
 	function current_index(){
@@ -510,6 +526,8 @@
 					wait = setTimeout(setPagesSize, 100);
 				}
 			};
+			$('#link_url input')[0].onkeyup = urlChange;
+			$('#link_url input')[0].onchange = urlChange;
 		}
 		if (!urls.length) {
 			try {

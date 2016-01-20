@@ -222,20 +222,22 @@
 		callbacks.push(callback);
 	};
 
-	//TODO by URL also
-	editPage = function (requestedTab, slot_index) {
-		try {
-			createThumbOf(requestedTab, function(thumb) {
-				urls[slot_index] = requestedTab.url;
-				thumbs[requestedTab.url] = thumb;
-				getHash(requestedTab.url, true);
-				refreshNewTabPages(slot_index);
-				saveLocal();
-				saveSync();
-			});
-		} catch (e) {
-			console.log(e);
+	editPage = function (url, slot_index, requestedTab) {
+		var protocol = /^https?:\/\//,
+			domain = /^[\w]+[\w-\.]+/;
+		if (!protocol.test(url)){
+			if(!domain.test(url)){return;}
+			url = 'http://'+url;
 		}
+		urls[slot_index] = url;
+		getHash(url, true);
+		refreshNewTabPages(slot_index);
+		saveLocal();
+		saveSync();
+		requestedTab && createThumbOf(requestedTab, function(thumb) {
+			thumbs[requestedTab.url] = thumb;
+			saveLocal();
+		});
 	};
 
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
