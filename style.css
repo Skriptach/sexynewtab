@@ -159,7 +159,6 @@ button[disabled="disabled"] {
 	margin-bottom: 7;
 	padding: 3 0 3 6;
 	height: calc(100% - 31px - 35px - 14px); /* height of tabs, height of input URL, height of margin  */
-	overflow:auto;
 	background-color:#FFF;
 	cursor:default;}
 #edit div.list:after {
@@ -361,3 +360,14 @@ input[type="button"] {
 	height: 200%;
 	border-radius: 0;
 	-webkit-transition-duration: .1s;}
+
+::-webkit-scrollbar {
+	width: 6px;}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 6px;
+	background-color: rgba(0,0,0,0.4);}
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0,0,0,0.6);}
+::-webkit-scrollbar-thumb:active {
+	background-color: rgba(0,0,0,0.8);}
