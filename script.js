@@ -197,14 +197,14 @@
 	}
 	function updatePageThumb(slotIndex, page, thumb) {
 		page = page || d('page' + slotIndex);
-		thumb = thumb || thumbs[urls[slotIndex]];
+		page.thumb = thumb || thumbs[urls[slotIndex]] || page.thumb;
 		if (!!urls[slotIndex]) {
 			page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
 			page.classList.remove('inactive');
 			page.querySelector('.plus').style['background-image'] = 'URL(chrome://favicon/' + urls[slotIndex] + ')';
-			if (thumb) {
+			if (page.thumb) {
 				page.classList.remove('fresh');
-				page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + thumb + ')';
+				page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + page.thumb + ')';
 			}
 		}
 	}

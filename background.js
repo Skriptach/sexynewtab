@@ -231,13 +231,17 @@
 		}
 		urls[slot_index] = url;
 		getHash(url, true);
-		refreshNewTabPages(slot_index);
 		saveLocal();
 		saveSync();
-		requestedTab && createThumbOf(requestedTab, function(thumb) {
-			thumbs[requestedTab.url] = thumb;
-			saveLocal();
-		});
+		if (requestedTab) {
+			createThumbOf(requestedTab, function(thumb) {
+				thumbs[requestedTab.url] = thumb || thumbs[requestedTab.url];
+				refreshNewTabPages(slot_index);
+				saveLocal();
+			});
+		} else {
+			refreshNewTabPages(slot_index);
+		}
 	};
 
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
