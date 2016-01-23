@@ -4,7 +4,8 @@
 		COLUMNS_COUNT : 4,
 		ROWS_COUNT : 3,
 		CHECK_PERIOD : 4, //hours
-		FLOW : false
+		FLOW : false,
+		NEW : false // flag for just installed
 	},
 	swap, editPage, subscribe;
 
@@ -226,7 +227,7 @@
 		var protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/;
 		if (!protocol.test(url)){
-			if(!domain.test(url)){return;}
+			if(!domain.test(url)){return false;}
 			url = 'http://'+url;
 		}
 		urls[slot_index] = url;
@@ -242,7 +243,17 @@
 		} else {
 			refreshPages(slot_index);
 		}
+		return true;
 	};
+
+	chrome.runtime.onInstalled.addListener(function (event) {
+		function notEmpty (link) {
+			return !!link;
+		}
+		if (event.reason === 'install' && !urls.some(notEmpty)){
+			settings.NEW = true;
+		}
+	});
 
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
 		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){

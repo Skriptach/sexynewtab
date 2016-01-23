@@ -325,6 +325,21 @@
 			}
 		}
 	}
+
+	function firstInit () {
+		chrome.topSites.get(function (topSites) {
+			var length = topSites.length < urls.length ? topSites.length : urls.length,
+				deniedCount = 0,
+				back = chrome.extension.getBackgroundPage();
+			back.settings.NEW = false;
+			for (var i = 0; i < length; i++){
+				if (!back.editPage(topSites[i].url, i - deniedCount)){
+					deniedCount++;
+				}
+			}
+		});
+	}
+
 	function switchList (e) {
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
@@ -513,6 +528,7 @@
 			var wait = null;
 			setPagesSize();
 			createPages();
+			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
 			// reflow
 			setTimeout(function function_name (argument) {
