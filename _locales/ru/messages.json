@@ -11,6 +11,9 @@
 	"fn_history":{
 		"message":"История"
 	},
+	"fn_top":{
+		"message":"Топ"
+	},
 	"m_edit":{
 		"message":"Редактировать…"
 	},

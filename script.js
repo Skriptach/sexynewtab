@@ -344,8 +344,11 @@
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
 		this.id === 'tabs' ? switchToTabs() :
-			this.id === 'history' ? switchToHistory() : switchToBookmarks();
+			this.id === 'history' ? switchToHistory() :
+			this.id === 'topsites' ? switchToTop()
+			: switchToBookmarks();
 	}
+
 	function switchToTabs() {
 		var node = $('#edit .list .tree')[0],
 			list = document.createDocumentFragment(),
@@ -392,6 +395,28 @@
 					item.setAttribute('class', 'item');
 					item.url = visitItems[i].url;
 					item.innerHTML = visitItems[i].title || visitItems[i].url;
+					list.appendChild(item);
+				}
+			}
+			node.appendChild(list);
+		});
+	}
+	function switchToTop() {
+		var node = $('#edit .list .tree')[0],
+			list = document.createDocumentFragment(),
+			protocol = /^https?:/,
+			i,
+			tabs,
+			item;
+		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
+		chrome.topSites.get(function (topSites) {
+			for (i = 0; i < topSites.length; i++) {
+				if (protocol.test(topSites[i].url)) {
+					item = document.createElement('li');
+					item.style['background-image'] = 'URL(chrome://favicon/' + topSites[i].url + ')';
+					item.setAttribute('class', 'item');
+					item.url = topSites[i].url;
+					item.innerHTML = topSites[i].title || topSites[i].url;
 					list.appendChild(item);
 				}
 			}
@@ -515,6 +540,7 @@
 		$('#tabs span')[0].innerText = chrome.i18n.getMessage('fn_tabs');
 		$('#bookmarks span')[0].innerText = chrome.i18n.getMessage('fn_bookmarks');
 		$('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
+		$('#topsites span')[0].innerText = chrome.i18n.getMessage('fn_top');
 		document.onclick = clicksDelegate;
 		try {
 			back = chrome.extension.getBackgroundPage();

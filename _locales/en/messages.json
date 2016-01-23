@@ -11,6 +11,9 @@
 	"fn_history":{
 		"message":"History"
 	},
+	"fn_top":{
+		"message":"Top"
+	},
 	"m_edit":{
 		"message":"Edit…"
 	},
