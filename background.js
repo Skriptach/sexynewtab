@@ -1,8 +1,8 @@
 ﻿var urls = [],
 	thumbs = {},
 	settings = {
-		COLUMNS_COUNT : 4,
-		ROWS_COUNT : 3,
+		COLUMNS_COUNT : 5,
+		ROWS_COUNT : 4,
 		CHECK_PERIOD : 4, //hours
 		FLOW : false,
 		NEW : false // flag for just installed

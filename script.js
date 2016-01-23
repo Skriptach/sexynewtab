@@ -1,8 +1,8 @@
 ﻿/*jslint sloppy:true, nomen:true, browser:true, plusplus :true */
 /*globals chrome console localStorage set optionsbutton selectRows selectCols options edit link_url footer */
 (function () {
-	var COLUMNS_COUNT = 5,
-		ROWS_COUNT = 4,
+	var COLUMNS_COUNT,
+		ROWS_COUNT,
 		DELTA = 10,
 		PAGE_WIDTH,
 		PAGE_HEIGHT,
@@ -524,6 +524,8 @@
 		}
 		urls = back.urls;
 		thumbs = back.thumbs;
+		COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
+		ROWS_COUNT = back.settings.ROWS_COUNT;
 		function hacks() {
 			var wait = null;
 			setPagesSize();
