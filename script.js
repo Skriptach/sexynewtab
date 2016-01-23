@@ -195,7 +195,7 @@
 			PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
 		}
 	}
-	function updatePageThumb(slotIndex, page, thumb) {
+	function updatePage(slotIndex, page, thumb) {
 		page = page || d('page' + slotIndex);
 		page.thumb = thumb || thumbs[urls[slotIndex]] || page.thumb;
 		if (!!urls[slotIndex]) {
@@ -254,7 +254,7 @@
 				page.style.left = leftPos;
 				page.style.top = topPos;
 				pages.appendChild(page);
-				updatePageThumb(index, page);
+				updatePage(index, page);
 				index++;
 			}
 		}
@@ -489,7 +489,7 @@
 		setPagesSize();
 		setBackGradient();
 	}
-	window.onload = function () {
+	function init () {
 		var _width = window.innerWidth,
 			_height = window.innerHeight,
 			styles = document.createElement('style'),
@@ -537,14 +537,14 @@
 				return;
 			}
 		} else { hacks(); }
-	};
+	}
 
 	chrome.extension.onRequest.addListener(
 		function (request, sender, sendResponse) {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
 				switch (request.action) {
-				case 'updatePageThumb':
-					updatePageThumb(request.params.index, null, request.params.thumb);
+				case 'updatePage':
+					updatePage(request.params.index, null, request.params.thumb);
 					break;
 				case 'remove':
 					removePage(d('page'+request.params.index));
@@ -558,4 +558,7 @@
 			}
 		}
 	);
+
+	window.onload = init();
+
 }());

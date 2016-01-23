@@ -49,8 +49,8 @@
 		}
 	}
 
-	function refreshNewTabPages(slot_index) {
-		chrome.extension.sendRequest({action: 'updatePageThumb', params: {index: slot_index, thumb: thumbs[urls[slot_index]]}});
+	function refreshPages(slot_index) {
+		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: thumbs[urls[slot_index]]}});
 	}
 
 	function createThumbOf(requestedTab, callback, savedTab) {
@@ -236,11 +236,11 @@
 		if (requestedTab) {
 			createThumbOf(requestedTab, function(thumb) {
 				thumbs[requestedTab.url] = thumb || thumbs[requestedTab.url];
-				refreshNewTabPages(slot_index);
+				refreshPages(slot_index);
 				saveLocal();
 			});
 		} else {
-			refreshNewTabPages(slot_index);
+			refreshPages(slot_index);
 		}
 	};
 
@@ -262,7 +262,7 @@
 							// save it
 							thumbs[url] = thumb;
 							getHash(url, true);
-							refreshNewTabPages(i);
+							refreshPages(i);
 							saveLocal();
 						});
 					} catch (e) {
@@ -292,6 +292,7 @@
 	});
 
 	chrome.webRequest.onBeforeRedirect.addListener(function(details){
+		// TODO follow redirect chain more than once
 		if (urls.indexOf(details.url) !== -1){
 			redirectUrls[details.redirectUrl] = (details.url);
 		}
