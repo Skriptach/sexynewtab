@@ -8,6 +8,7 @@
 button {
 	cursor: pointer;
 	border: none;
+	outline: none;
 	color: #FFF;
 	font-size: 22px;
 	width: 35px;
