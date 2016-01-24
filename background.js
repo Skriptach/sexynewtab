@@ -271,7 +271,7 @@
 					try {
 						createThumbOf(sender.tab, function (thumb) {
 							// save it
-							thumbs[url] = thumb;
+							thumbs[url] = thumb || thumbs[url];
 							getHash(url, true);
 							refreshPages(i);
 							saveLocal();
