@@ -1,0 +1,32 @@
+{
+	"descript":{
+		"message":"Sexy New Tab замінює Top Sites на гарну сторінку. Відображає у вигляді галереї або плитки. Синхронізується."
+	},
+	"fn_tabs":{
+		"message":"Вкладки"
+	},
+	"fn_bookmarks":{
+		"message":"Закладки"
+	},
+	"fn_history":{
+		"message":"Історія"
+	},
+	"fn_top":{
+		"message":"Топ"
+	},
+	"m_edit":{
+		"message":"Редагувати…"
+	},
+	"m_upd":{
+		"message":"Оновити ескіз"
+	},
+	"m_clear":{
+		"message":"Видалити"
+	},
+	"pa_add":{
+		"message":"Додати поточну сторінку"
+	},
+	"mb_cancal":{
+		"message":"Відміна"
+	}
+}
