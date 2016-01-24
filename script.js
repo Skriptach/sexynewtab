@@ -344,6 +344,7 @@
 	}
 
 	function switchList (e) {
+		if (this.getAttribute('disabled') === 'disabled'){return;}
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
 		this.id === 'tabs' ? switchToTabs() :
