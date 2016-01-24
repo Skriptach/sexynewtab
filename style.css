@@ -18,6 +18,9 @@ button[disabled="disabled"] {
 	cursor: default !important;
 	color: graytext !important;}
 
+.ontop {
+	z-index: 100;}
+
 .plus {
 	position:absolute;
 	width:100%;
@@ -80,7 +83,6 @@ button[disabled="disabled"] {
 	-webkit-backface-visibility: hidden;}
 
 .page.turned {
-	z-index: 100;
 	top: 10% !important;
 	left: 35% !important;
 	width: 30%;

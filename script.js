@@ -129,12 +129,15 @@
 		currentEditPage.appendChild(edit);
 		$('#edit .header .tab.active')[0].click();
 		setTimeout(function () {
-			currentEditPage.classList.add('turned');
+			currentEditPage.classList.add('turned', 'ontop');
 		}, 10);
 	}
 	function hideEditForm() {
 		currentEditPage.classList.remove('turned');
-		currentEditPage = null;
+		setTimeout(function () {
+			currentEditPage.classList.remove('ontop');
+			currentEditPage = null;
+		}, 300);
 	}
 	function toggleEditForm(page) {
 		if (!currentEditPage) {
@@ -144,10 +147,10 @@
 		}
 		if (currentEditPage && page !== currentEditPage) {
 			hideEditForm();
-			currentEditPage = page;
 			var hold = setTimeout(function () {
+				currentEditPage = page;
 				showEditForm();
-			}, 300);
+			}, 310);
 		}
 	}
 	function clearPage (event) {
