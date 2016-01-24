@@ -137,6 +137,8 @@ button[disabled="disabled"] {
 .page:not(.inactive):not(.full):hover .flipper button {
 	display: initial;
 	opacity: 0.3;}
+#main.flow .page:not(.current):hover .flipper button {
+	display: none;}
 .page:not(.inactive):hover .flipper button:hover {
 	opacity: 0.8;}
 
