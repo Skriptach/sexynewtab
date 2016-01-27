@@ -269,7 +269,7 @@
 			case 'refreshThumb':
 				var url, i;
 				// check if sender tab url really added to fav pages
-				url = getByRedirected(sender.tab.url);
+				url = getOriginBy(sender.tab.url);
 				i = urls.indexOf(url);
 				if (url && i !== -1) {
 					createThumbOf(sender.tab, function (thumb) {
@@ -302,15 +302,16 @@
 		}
 	});
 
-	function getByRedirected (url) {
+	function getOriginBy (url) {
 		if (urls.indexOf(url) !== -1){return url;}
+		if (urls.indexOf(url.replace(/\/$/, '')) !== -1){return url.replace(/\/$/, '');}
 		for(var u in redirectUrls){
 			if (redirectUrls[u].indexOf(url) !== -1){return u;}
 		}
 	}
 
 	chrome.webRequest.onBeforeRedirect.addListener(function(details){
-		var origin = getByRedirected(details.url);
+		var origin = getOriginBy(details.url);
 		origin && (redirectUrls[origin] = redirectUrls[origin] || []);
 		if (origin && redirectUrls[origin] && redirectUrls[origin].indexOf(details.redirectUrl) === -1) {
 			redirectUrls[origin].push(details.redirectUrl);
