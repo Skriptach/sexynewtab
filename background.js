@@ -130,10 +130,11 @@
 
 	function onRemove (index) {
 		if (index !== -1) {
-			var url = urls[index];
+			var oldUrl = urls[index];
 			urls[index] = null;
-			if (urls.indexOf(url) === -1) {
-				delete thumbs[urls[index]];
+			if (urls.indexOf(oldUrl) === -1) {
+				delete thumbs[oldUrl];
+				delete redirectUrls[oldUrl];
 			}
 			saveLocal();
 			saveSync();
@@ -231,7 +232,13 @@
 			url = 'http://'+url;
 		}
 		if (urls[slot_index] === url){return;}
+
+		var oldUrl = urls[slot_index];
 		urls[slot_index] = url;
+		if (urls.indexOf(oldUrl) === -1) {
+			delete thumbs[oldUrl];
+			delete redirectUrls[oldUrl];
+		}
 		getHash(url, true);
 		saveLocal();
 		saveSync();
@@ -263,8 +270,8 @@
 				var url, i;
 				// check if sender tab url really added to fav pages
 				url = getByRedirected(sender.tab.url);
-				if (url) {
-					i = urls.indexOf(url);
+				i = urls.indexOf(url);
+				if (url && i !== -1) {
 					createThumbOf(sender.tab, function (thumb) {
 						// save it
 						thumbs[url] = thumb || thumbs[url];
