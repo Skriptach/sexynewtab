@@ -259,26 +259,18 @@
 		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){
 			switch (request.action) {
 			case 'refreshThumb':
-				var url, i = urls.indexOf(sender.tab.url);
+				var url, i;
 				// check if sender tab url really added to fav pages
-				if (i !== -1){
-					url = sender.tab.url;
-				} else {
-					url = redirectUrls[sender.tab.url];
-				}
+				url = getByRedirected(sender.tab.url);
 				if (url) {
 					i = urls.indexOf(url);
-					try {
-						createThumbOf(sender.tab, function (thumb) {
-							// save it
-							thumbs[url] = thumb || thumbs[url];
-							getHash(url, true);
-							refreshPages(i);
-							saveLocal();
-						});
-					} catch (e) {
-						console.log(e);
-					}
+					createThumbOf(sender.tab, function (thumb) {
+						// save it
+						thumbs[url] = thumb || thumbs[url];
+						getHash(url, true);
+						refreshPages(i);
+						saveLocal();
+					});
 				}
 				break;
 			case 'subscribe':
@@ -302,10 +294,18 @@
 		}
 	});
 
+	function getByRedirected (url) {
+		if (urls.indexOf(url) !== -1){return url;}
+		for(var u in redirectUrls){
+			if (redirectUrls[u].indexOf(url) !== -1){return u;}
+		}
+	}
+
 	chrome.webRequest.onBeforeRedirect.addListener(function(details){
-		// TODO follow redirect chain more than once
-		if (urls.indexOf(details.url) !== -1){
-			redirectUrls[details.redirectUrl] = (details.url);
+		var origin = getByRedirected(details.url);
+		origin && (redirectUrls[origin] = redirectUrls[origin] || []);
+		if (origin && redirectUrls[origin] && redirectUrls[origin].indexOf(details.redirectUrl) === -1) {
+			redirectUrls[origin].push(details.redirectUrl);
 		}
 	}, {
 		urls: ['<all_urls>'],
