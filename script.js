@@ -372,7 +372,7 @@
 						item.setAttribute('class', 'item');
 						item.tab = tabs[j];
 						item.url = tabs[j].url;
-						item.innerHTML = tabs[j].title;
+						item.innerText = tabs[j].title;
 						list.appendChild(item);
 					}
 				}
