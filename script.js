@@ -445,6 +445,10 @@
 	}
 
 	function urlChange (event) {
+		if (event && event.type === 'paste'){
+			setTimeout(urlChange, 1);
+			return;
+		}
 		var protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/,
 			url = this.value;
@@ -574,8 +578,8 @@
 					wait = setTimeout(setPagesSize, 100);
 				}
 			};
-			$('#link_url input')[0].onkeyup = urlChange;
-			$('#link_url input')[0].onchange = urlChange;
+			var inputUrl = $('#link_url input')[0];
+			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
 		}
 		if (!urls.length) {
 			try {
