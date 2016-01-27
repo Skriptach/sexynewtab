@@ -230,13 +230,14 @@
 			if(!domain.test(url)){return false;}
 			url = 'http://'+url;
 		}
+		if (urls[slot_index] === url){return;}
 		urls[slot_index] = url;
 		getHash(url, true);
 		saveLocal();
 		saveSync();
 		if (requestedTab) {
 			createThumbOf(requestedTab, function(thumb) {
-				thumbs[requestedTab.url] = thumb || thumbs[requestedTab.url];
+				thumbs[requestedTab.url] = thumb;
 				refreshPages(slot_index);
 				saveLocal();
 			});
