@@ -1,5 +1,4 @@
-﻿var urls = [],
-	thumbs = {},
+﻿var slotsList = [],
 	settings = {
 		COLUMNS_COUNT : 5,
 		ROWS_COUNT : 4,
@@ -10,16 +9,17 @@
 	swap, editPage, subscribe;
 
 ;(function (){
+'use strict';
 
-	var hashes = {},
+	var thumbs = {},
+		hashes = {},
 		timers = {},
 		callbacks = [],
 		redirectUrls = {},
 		TRIES = 3;
-		req = new XMLHttpRequest();
 
-	// subscribe and announce added for that case when browser just runed with saved tabs
-	// and 'slots' is empty (have not loaded in time). So at the place 'slots' was demand (newtab or content-script),
+	// subscribe and announce added for that case when browser just runned with saved session tabs
+	// and 'slots' is empty (have not loaded in time). So at the moment 'slots' has been demand (newtab or content-script),
 	// execution can be restored.
 
 	function announce() {
@@ -30,12 +30,12 @@
 	}
 
 	function saveLocal() {
-		var buferT = {};
-		var buferH = {};
-		urls.forEach(function (url) {
-			if (!url){return;}
-			thumbs[url] && (buferT[url] = thumbs[url]);
-			hashes[url] && (buferH[url] = hashes[url]);
+		var buferT = {},
+			buferH = {};
+		slotsList.forEach(function (slot) {
+			if (!slot || !slot.url){return;}
+			buferT[slot.url] = slot.thumb;
+			hashes[slot.url] && (buferH[slot.url] = hashes[slot.url]);
 		});
 		thumbs = buferT;
 		hashes = buferH;
@@ -43,20 +43,21 @@
 	}
 
 	function saveSync(){
-		try {
-			chrome.storage.sync.set({'urls': urls, 'settings': settings});
-		} catch (e) {
-			console.log(e);
-		}
+		chrome.storage.sync.set({
+			'urls': slotsList.map(function (slot) {
+					return slot ? slot.url : null;
+				}),
+			'settings': settings
+		});
 	}
 
 	function refreshPages(slot_index) {
-		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: thumbs[urls[slot_index]]}});
+		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: slotsList[slot_index].thumb }});
 	}
 
 	function createThumbOf(requestedTab, callback, savedTab) {
 		function takeScreenshot () {
-			try {// take screenshot
+			// take screenshot
 			chrome.tabs.captureVisibleTab(requestedTab.windowId, {
 				format: 'png'
 			}, function(thumb){
@@ -76,45 +77,59 @@
 					});
 				}
 			});
-			} catch (e){
-				console.log(e);
-			}
 		}
 
-		try {
-			//get current tab
-			chrome.tabs.getSelected(null, function(currentTab) {
-				if (currentTab.id === requestedTab.id){
-					takeScreenshot();
-				} else {
-					savedTab = savedTab || currentTab;
-					// switch to requested tab
-					chrome.tabs.update(requestedTab.id, {
-						active: true,
-						selected: true,
-						pinned: requestedTab.pinned
-					}, function (){
-						setTimeout(takeScreenshot, 100);
-					});
-				}
-			});
-		} catch (e) {
-			console.log(e);
-		}
+		//get current tab
+		chrome.tabs.getSelected(null, function(currentTab) {
+			if (currentTab.id === requestedTab.id){
+				takeScreenshot();
+			} else {
+				savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
+				// switch to requested tab
+				chrome.tabs.update(requestedTab.id, {
+					active: true,
+					selected: true,
+					pinned: requestedTab.pinned
+				}, function (){
+					setTimeout(takeScreenshot, 100);
+				});
+			}
+		});
+	}
+
+	function byUrl (url) {
+		return function (slot) {
+			return (slot && slot.url === url);
+		};
+	}
+
+	function stopLoopCheck (url){
+		clearTimeout(timers[url]);
+		delete hashes[url];
+		delete timers[url];
 	}
 
 	function getHash(url, messageFlag) {
-		var h;
+		if (!slotsList.find(byUrl(url))){
+			stopLoopCheck(url);
+			return;
+		}
+		var req = new XMLHttpRequest();
 		req.open('GET', url, true);
-		req.onloadend = function(aEvt){
-			if (req.readyState == 4) {
-				if(req.status == 200) {
+		req.onloadend = function(){
+			if (req.readyState === 4) {
+				if(req.status === 200) {
 					clearTimeout(timers[url]);
-					h = MD5(req.responseText);
+					var i = slotsList.findIndex(byUrl(url));
+					if (i === -1){return;}
+					var h = MD5(req.responseText);
 					if (!messageFlag && hashes[url] && hashes[url].hash !== h) {
-						chrome.extension.sendRequest({action: 'pageIsFresh', params: {indexes: [urls.indexOf(url)]}});
+						chrome.extension.sendRequest({
+							action: 'pageIsFresh',
+							params: {indexes: [i]}
+						});
 					}
-					hashes[url] ={
+					hashes[url] = {
 						hash : h,
 						last : new Date().getTime(),
 						thumb: !!messageFlag
@@ -130,10 +145,10 @@
 
 	function onRemove (index) {
 		if (index !== -1) {
-			var oldUrl = urls[index];
-			urls[index] = null;
-			if (urls.indexOf(oldUrl) === -1) {
-				delete thumbs[oldUrl];
+			var oldUrl = slotsList[index].url;
+			slotsList[index] = null;
+			if (!slotsList.find(byUrl(oldUrl))) {
+				stopLoopCheck(oldUrl);
 				delete redirectUrls[oldUrl];
 			}
 			saveLocal();
@@ -147,64 +162,80 @@
 		}
 	}
 
+	function updateFavicon (slot) {
+		getFavicon(slot.url)
+		.then(function(response){
+			slot.favicon = response;
+			refreshPages(slotsList.indexOf(slot));
+		});
+	}
+
 	function init() {
 		var urls_ready = false, thumbs_ready = false;
 
 		function startLoopCheck() {
-			var i, t = (new Date()).getTime(), diff, C = 3600*1000;
+			var t = (new Date()).getTime(), diff, C = 3600*1000;
 			function setTimer(url, delay) {
 				timers[url] = setTimeout(function() {
 					getHash(url);
 				}, delay);
 			}
 
-			for (i in urls) {
-				if (urls.hasOwnProperty(i)  && urls[i]) {
-					diff = hashes[urls[i]] ? t-hashes[urls[i]].last : Infinity;
+			slotsList.forEach(function (slot, i) {
+				if (slot && slot.url) {
+					diff = hashes[slot.url] ? t - hashes[slot.url].last : Infinity;
 					if (diff/C >= settings.CHECK_PERIOD) {
-						setTimer(urls[i], 10);
+						setTimer(slot.url, 10);
 					} else {
-						setTimer(urls[i], settings.CHECK_PERIOD*C - diff);
-						if (!hashes[urls[i]].thumb){
-							chrome.extension.sendRequest({action: 'pageIsFresh', params: {indexes: [i]}});
+						setTimer(slot.url, settings.CHECK_PERIOD*C - diff);
+						if (!hashes[slot.url].thumb){
+							chrome.extension.sendRequest({
+								action: 'pageIsFresh',
+								params: {indexes: [i]}
+							});
 						}
 					}
 				}
-			}
+			});
 		}
 
 		function loaded() {
 			if (urls_ready && thumbs_ready) {
+				slotsList.forEach(function(slot){
+					slot.thumb = thumbs[slot.url];
+				});
 				announce();
 				startLoopCheck();
 			}
 		}
 
 		chrome.storage.sync.get(['urls', 'settings'], function(res) {
-			if (res.urls){
-				res.urls.forEach(function(element, index){
-					urls.push(element);
+			if (res.urls && res.urls.length){
+				res.urls.forEach(function(url, index){
+					slotsList[index] = {url: url};
+					if(slotsList[index] && slotsList[index].url && (!slotsList[index].favicon || (/^chrome:/).test(slotsList[index].favicon)) ){
+						updateFavicon(slotsList[index]);
+					}
 				});
 			} else {
-				urls = new Array(20);
+				slotsList = new Array(20);
 				saveSync();
 			}
 			if (res.settings) {
 				settings.COLUMNS_COUNT = res.settings.COLUMNS_COUNT;
 				settings.ROWS_COUNT = res.settings.ROWS_COUNT;
 				settings.CHECK_PERIOD = res.settings.CHECK_PERIOD;
+				settings.FLOW = res.settings.FLOW;
+				settings.NEW = res.settings.NEW;
 			}
 			urls_ready = true;
 			loaded();
 		});
 
 		chrome.storage.local.get(['thumbs', 'hashes'], function(res){
-			var i;
 			if (res.thumbs) {
-				for (i in res.thumbs) {
-					if (res.thumbs.hasOwnProperty(i)) {
-						thumbs[i] = res.thumbs[i];
-					}
+				for (var i in res.thumbs) {
+					thumbs[i] = res.thumbs[i];
 				}
 			}
 			if (res.hashes){
@@ -216,7 +247,7 @@
 	}
 
 	swap = function (old_index, new_index) {
-		urls.splice(new_index, 0, urls.splice(old_index, 1)[0]);
+		slotsList.splice(new_index, 0, slotsList.splice(old_index, 1)[0]);
 		saveSync();
 	};
 
@@ -231,12 +262,12 @@
 			if(!domain.test(url)){return false;}
 			url = 'http://'+url;
 		}
-		if (urls[slot_index] === url){return;}
+		if (slotsList[slot_index].url === url){return;}
 
-		var oldUrl = urls[slot_index];
-		urls[slot_index] = url;
-		if (urls.indexOf(oldUrl) === -1) {
-			delete thumbs[oldUrl];
+		var oldUrl = slotsList[slot_index].url;
+		slotsList[slot_index] = {url: url};
+		if (!slotsList.find(byUrl(oldUrl))) {
+			stopLoopCheck(oldUrl);
 			delete redirectUrls[oldUrl];
 		}
 		getHash(url, true);
@@ -244,43 +275,58 @@
 		saveSync();
 		if (requestedTab) {
 			createThumbOf(requestedTab, function(thumb) {
-				thumbs[requestedTab.url] = thumb;
+				slotsList[slot_index].thumb = thumb;
+				if (requestedTab.favIconUrl){
+					updateFavicon(slotsList[slot_index]);
+				}
 				refreshPages(slot_index);
 				saveLocal();
 			});
 		} else {
-			refreshPages(slot_index);
+			updateFavicon(slotsList[slot_index]);
 		}
 		return true;
 	};
 
-	chrome.runtime.onInstalled.addListener(function (event) {
-		function notEmpty (link) {
-			return !!link;
+	function getOriginBy (url) {
+		if (slotsList.findIndex(byUrl(url)) !== -1){return url;}
+		if (slotsList.findIndex(byUrl(url.replace(/\/$/, ''))) !== -1){return url.replace(/\/$/, '');}
+		for(var u in redirectUrls){
+			if (redirectUrls[u].indexOf(url) !== -1){return u;}
 		}
-		if (event.reason === 'install' && !urls.some(notEmpty)){
+	}
+
+	chrome.runtime.onInstalled.addListener(function (event) {
+		function notEmpty (slot) {
+			return (slot && slot.url);
+		}
+		if (event.reason === 'install' && !slotsList.some(notEmpty)){
 			settings.NEW = true;
 		}
+	});
+
+	chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
+		var url, i;
+			// check if sender tab url really added to fav pages
+			url = getOriginBy(tab.url);
+			i = slotsList.findIndex(byUrl(url));
+			if (url && i !== -1 && changeInfo.status === 'complete') {
+				createThumbOf(tab, function (thumb) {
+					// save it
+					slotsList[i].thumb = thumb || slotsList[i].thumb;
+					getHash(url, true);
+					saveLocal();
+					if (tab.favIconUrl){
+						updateFavicon(slotsList[i]);
+					}
+					refreshPages(i);
+				});
+			}
 	});
 
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
 		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){
 			switch (request.action) {
-			case 'refreshThumb':
-				var url, i;
-				// check if sender tab url really added to fav pages
-				url = getOriginBy(sender.tab.url);
-				i = urls.indexOf(url);
-				if (url && i !== -1) {
-					createThumbOf(sender.tab, function (thumb) {
-						// save it
-						thumbs[url] = thumb || thumbs[url];
-						getHash(url, true);
-						refreshPages(i);
-						saveLocal();
-					});
-				}
-				break;
 			case 'subscribe':
 				subscribe(request.callback);
 				sendResponse({});
@@ -302,14 +348,6 @@
 		}
 	});
 
-	function getOriginBy (url) {
-		if (urls.indexOf(url) !== -1){return url;}
-		if (urls.indexOf(url.replace(/\/$/, '')) !== -1){return url.replace(/\/$/, '');}
-		for(var u in redirectUrls){
-			if (redirectUrls[u].indexOf(url) !== -1){return u;}
-		}
-	}
-
 	chrome.webRequest.onBeforeRedirect.addListener(function(details){
 		var origin = getOriginBy(details.url);
 		origin && (redirectUrls[origin] = redirectUrls[origin] || []);
@@ -322,14 +360,12 @@
 	}, ['responseHeaders']);
 
 	function sendFresh(tabId) {
-		var i, indexes = [];
-		for (i in urls) {
-			if (urls.hasOwnProperty(i)  && urls[i]) {
-				if (!hashes[urls[i]] || !hashes[urls[i]].thumb){
-					indexes.push(i);
-				}
+		var indexes = [];
+		slotsList.forEach(function(slot, i) {
+			if (slot && slot.url) {
+				indexes.push(i);
 			}
-		}
+		});
 		chrome.tabs.sendRequest(tabId,
 			{action: 'pageIsFresh',
 			params: {indexes: indexes}

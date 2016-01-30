@@ -1,18 +1,14 @@
-﻿/*jslint sloppy:true, nomen:true, browser:true, plusplus :true */
-/*globals chrome console localStorage set optionsbutton selectRows selectCols options edit link_url footer */
-(function () {
+﻿;(function () {
+'use strict';
+
 	var COLUMNS_COUNT,
 		ROWS_COUNT,
 		DELTA = 10,
 		PAGE_WIDTH,
 		PAGE_HEIGHT,
 		FLOW = false,
-		menuSelectedPage = null,
 		currentEditPage = null,
-		OptionsMenu = false,
-		reports = null,
-		urls,
-		thumbs,
+		slotsList,
 		dragPage = null,
 		lastPosition = null,
 		pagePosX,
@@ -28,9 +24,9 @@
 			'#edit_cancel *': hideEditForm,
 			'#edit_ok *': editPage,
 			'.page:not(.inactive) .flipper a *': pageClickHandler,
-			'.page .flipper .edit *': function (event) {toggleEditForm(closest(this, '.page'));},
+			'.page .flipper .edit *': function () {toggleEditForm(closest(this, '.page'));},
 			'.page .flipper .remove *': clearPage,
-			'.page.inactive .flipper a *': function (event) {toggleEditForm(this.parentElement.parentElement);},
+			'.page.inactive .flipper a *': function () {toggleEditForm(closest(this, '.page'));},
 			'#edit .list .item': selectLink
 		};
 
@@ -58,7 +54,6 @@
 				TargetPosY,
 				modificator,
 				i,
-				prevPage,
 				moved,
 				tmpPosX,
 				tmpPosY,
@@ -96,7 +91,7 @@
 			}
 		}
 	}
-	function stopDrag(e) {
+	function stopDrag() {
 		document.ondrag = null;
 		document.ondragend = null;
 		dragPage.ondragover = null;
@@ -110,7 +105,7 @@
 		lastPosition = null;
 	}
 	function prepareDrag(e) {
-		dragPage = e.target.parentElement.parentElement;
+		dragPage = closest(e.target, '.page');
 		if (dragPage.classList.contains('page')) {
 			lastPosition = dragPage.index;
 			dragPage.classList.add('draged');
@@ -147,7 +142,7 @@
 		}
 		if (currentEditPage && page !== currentEditPage) {
 			hideEditForm();
-			var hold = setTimeout(function () {
+			setTimeout(function () {
 				currentEditPage = page;
 				showEditForm();
 			}, 310);
@@ -157,20 +152,20 @@
 		chrome.extension.sendRequest({
 			action: 'clear',
 			index: closest(this, '.page').index
-		}, function(response) {});
+		}, function() {});
 	}
 	function removePage(page) {
-		page.firstElementChild.firstElementChild.removeAttribute('href');
+		page.querySelector('a').removeAttribute('href');
 		page.classList.remove('fresh');
 		page.style.webkitTransform = 'scale(0.3)';
-		var hold = setTimeout(function () {
+		setTimeout(function () {
 			if (FLOW){
 				if (page === first_flow_page){
 					first_flow_page = getNextActivePage();
 				}
 				page.classList.add('deleting');
 				flowTo(getNextActivePage() || getPrevActivePage());
-				setTimeout(function (argument) {
+				setTimeout(function () {
 					page.style['margin-left'] = '';
 					page.classList.remove('deleting');
 					page.classList.add('inactive');
@@ -178,10 +173,10 @@
 			} else {
 				page.classList.add('inactive');
 			}
-			page.firstElementChild.firstElementChild.lastElementChild.removeAttribute('style');
+			page.querySelector('.thumbnail').removeAttribute('style');
 			page.querySelector('.plus').removeAttribute('style');
 			page.style.webkitTransform = 'scale(1)';
-			setTimeout(function (argument) {
+			setTimeout(function () {
 				page.style.webkitTransform = '';
 			}, 10);
 		}, 200);
@@ -189,8 +184,7 @@
 	function calcSize() {
 		var _width = window.innerWidth,
 			_height = window.innerHeight,
-			PROPORTION = _height / _width,
-			setstyle;
+			PROPORTION = _height / _width;
 		PAGE_WIDTH = FLOW ? _width / 2 : (_width - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
 		PAGE_HEIGHT = FLOW ? _height / 2 : PAGE_WIDTH * PROPORTION;
 		if (!FLOW && PAGE_HEIGHT * ROWS_COUNT + ((ROWS_COUNT + 1) * DELTA) > _height) {
@@ -201,19 +195,20 @@
 	function updatePage(slotIndex, page, thumb) {
 		page = page || d('page' + slotIndex);
 		var oldUrl = page.url;
-		page.url = urls[slotIndex];
-		page.thumb = thumb || thumbs[urls[slotIndex]] || (oldUrl === page.url) && page.thumb || '';
-		if (!!urls[slotIndex]) {
-			page.firstElementChild.firstElementChild.setAttribute('href', urls[slotIndex]);
-			page.classList.remove('inactive');
-			page.querySelector('.plus').style['background-image'] = 'URL(chrome://favicon/' + urls[slotIndex] + ')';
-			page.classList.remove('fresh');
-			page.firstElementChild.firstElementChild.lastElementChild.style['background-image'] = 'URL(' + page.thumb + ')';
+		page.url = slotsList[slotIndex] ? slotsList[slotIndex].url : null;
+		page.thumb = thumb ? thumb :
+			slotsList[slotIndex] && slotsList[slotIndex].thumb ? slotsList[slotIndex].thumb :
+			(oldUrl === page.url) ? page.thumb : '';
+		if (page.url) {
+			page.querySelector('a').setAttribute('href', page.url);
+			page.querySelector('.plus').style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
+			page.classList.remove('inactive', 'fresh');
+			page.querySelector('.thumbnail').style['background-image'] = 'URL(' + page.thumb + ')';
 		}
 	}
 	function pageClickHandler(event) {
 		var page;
-		page = event.target.parentElement.parentElement.parentElement;
+		page = closest(this, '.page');
 		if (main.classList.contains('flow') && !page.classList.contains('current')){
 			event.preventDefault();
 			if (event.button !== 0) {return;}
@@ -331,7 +326,7 @@
 
 	function firstInit () {
 		chrome.topSites.get(function (topSites) {
-			var length = topSites.length < urls.length ? topSites.length : urls.length,
+			var length = topSites.length < slotsList.length ? topSites.length : slotsList.length,
 				deniedCount = 0,
 				back = chrome.extension.getBackgroundPage();
 			back.settings.NEW = false;
@@ -343,7 +338,54 @@
 		});
 	}
 
-	function switchList (e) {
+	function buildList (linksList, isTab) {
+		var node = $('#edit .list .tree')[0],
+			list = document.createDocumentFragment(),
+			protocol = /^https?:/,
+			item;
+		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
+		for (var i = 0; i < linksList.length; i++) {
+			if (protocol.test(linksList[i].url)) {
+				item = document.createElement('li');
+				item.style['background-image'] = 'URL(' + (linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url) + ')';
+				item.setAttribute('class', 'item');
+				item.url = linksList[i].url;
+				item.innerText = linksList[i].title || linksList[i].url;
+				if (isTab){
+					item.tab = linksList[i];
+				}
+				list.appendChild(item);
+			}
+		}
+		node.appendChild(list);
+	}
+
+	function switchToTabs() {
+		var tabs = [];
+		chrome.windows.getAll({populate: true}, function (windows) {
+			for (var i = 0; i < windows.length; i++) {
+				tabs = tabs.concat(windows[i].tabs);
+			}
+			buildList(tabs, true);
+		});
+	}
+	function switchToHistory() {
+		chrome.history.search({
+			text: '',
+			startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
+		}, function (visitItems) {
+			buildList(visitItems);
+		});
+	}
+	function switchToTop() {
+		chrome.topSites.get(function (topSites) {
+			buildList(topSites);
+		});
+	}
+	function switchToBookmarks () {
+	}
+
+	function switchList () {
 		if (this.getAttribute('disabled') === 'disabled'){return;}
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
@@ -353,91 +395,14 @@
 			: switchToBookmarks();
 	}
 
-	function switchToTabs() {
-		var node = $('#edit .list .tree')[0],
-			list = document.createDocumentFragment(),
-			protocol = /^https?:/,
-			i,
-			j,
-			tabs,
-			item;
-		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
-		chrome.windows.getAll({populate: true}, function (windows) {
-			for (i = 0; i < windows.length; i++) {
-				tabs = windows[i].tabs;
-				for (j = 0; j < tabs.length; j++) {
-					if (protocol.test(tabs[j].url)) {
-						item = document.createElement('li');
-						tabs[j].favIconUrl && (item.style['background-image'] = 'URL(' + tabs[j].favIconUrl + ')');
-						item.setAttribute('class', 'item');
-						item.tab = tabs[j];
-						item.url = tabs[j].url;
-						item.innerText = tabs[j].title;
-						list.appendChild(item);
-					}
-				}
-			}
-			node.appendChild(list);
-		});
-	}
-	function switchToHistory() {
-		var node = $('#edit .list .tree')[0],
-			list = document.createDocumentFragment(),
-			protocol = /^https?:/,
-			i,
-			tabs,
-			item;
-		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
-		chrome.history.search({
-			text: '',
-			startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
-		}, function (visitItems) {
-			for (i = 0; i < visitItems.length; i++) {
-				if (protocol.test(visitItems[i].url)) {
-					item = document.createElement('li');
-					item.style['background-image'] = 'URL(chrome://favicon/' + visitItems[i].url + ')';
-					item.setAttribute('class', 'item');
-					item.url = visitItems[i].url;
-					item.innerHTML = visitItems[i].title || visitItems[i].url;
-					list.appendChild(item);
-				}
-			}
-			node.appendChild(list);
-		});
-	}
-	function switchToTop() {
-		var node = $('#edit .list .tree')[0],
-			list = document.createDocumentFragment(),
-			protocol = /^https?:/,
-			i,
-			tabs,
-			item;
-		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
-		chrome.topSites.get(function (topSites) {
-			for (i = 0; i < topSites.length; i++) {
-				if (protocol.test(topSites[i].url)) {
-					item = document.createElement('li');
-					item.style['background-image'] = 'URL(chrome://favicon/' + topSites[i].url + ')';
-					item.setAttribute('class', 'item');
-					item.url = topSites[i].url;
-					item.innerHTML = topSites[i].title || topSites[i].url;
-					list.appendChild(item);
-				}
-			}
-			node.appendChild(list);
-		});
-	}
-	function switchToBookmarks () {
-	}
-
-	function selectLink () {
+	function selectLink (event) {
 		$('#link_url input')[0].value = this.url;
 		$('#link_url input')[0].onchange();
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = this;
 		this.classList.add('selected');
 	}
-	function editPage(e) {
+	function editPage() {
 		var state = edit_ok.getAttribute('disabled');
 		if (state === 'disabled'){return;}
 		chrome.extension.getBackgroundPage().editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
@@ -451,7 +416,7 @@
 		}
 		var protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/,
-			url = this.value;
+			url = $('#link_url input')[0].value;
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = null;
 		if (!protocol.test(url) && !domain.test(url)){
@@ -503,7 +468,7 @@
 			current_flow_page.classList.remove('current');
 			current_flow_page = target;
 			current_flow_page.classList.add('current');
-			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page != current_flow_page) + '%';
+			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page !== current_flow_page) + '%';
 		}
 	}
 	function scrollFlow(e) {
@@ -533,7 +498,7 @@
 		chrome.extension.sendRequest({
 			action: 'toggleView',
 			FLOW: FLOW
-		}, function(response) {});
+		}, function() {});
 		setPagesSize();
 		setBackGradient();
 	}
@@ -550,14 +515,8 @@
 		$('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
 		$('#topsites span')[0].innerText = chrome.i18n.getMessage('fn_top');
 		document.onclick = clicksDelegate;
-		try {
-			back = chrome.extension.getBackgroundPage();
-		} catch (e) {
-			console.log(e);
-			return;
-		}
-		urls = back.urls;
-		thumbs = back.thumbs;
+		back = chrome.extension.getBackgroundPage();
+		slotsList = back.slotsList;
 		COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
 		ROWS_COUNT = back.settings.ROWS_COUNT;
 		function hacks() {
@@ -567,7 +526,7 @@
 			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
 			// reflow
-			setTimeout(function function_name (argument) {
+			setTimeout(function () {
 				container.style.display = '';
 			}, 0);
 			window.onresize = function () {
@@ -581,13 +540,8 @@
 			var inputUrl = $('#link_url input')[0];
 			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
 		}
-		if (!urls.length) {
-			try {
-				chrome.extension.getBackgroundPage().subscribe(hacks);
-			} catch (e) {
-				console.log(e);
-				return;
-			}
+		if (!slotsList.length) {
+			chrome.extension.getBackgroundPage().subscribe(hacks);
 		} else { hacks(); }
 	}
 
@@ -602,8 +556,8 @@
 					removePage(d('page'+request.params.index));
 					break;
 				case 'pageIsFresh':
-					request.params.indexes.forEach(function(el, i){
-						d('page'+el).classList.add('fresh');
+					request.params.indexes.forEach(function(index){
+						d('page'+index).classList.add('fresh');
 					});
 					break;
 				}

@@ -2,18 +2,13 @@
 	"manifest_version": 2,
 	"name": "Sexy New Tab",
 	"description":"__MSG_descript__",
-	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "contextMenus", "history", "webRequest", "unlimitedStorage"],
+	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "history", "webRequest", "unlimitedStorage"],
 	"background": {
-		"scripts":["background.js", "MD5.js"]
+		"scripts":["MD5.js", "favicon.js", "background.js"]
 	},
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
 	},
-	"content_scripts": [ {
-		"js": [ "content_script.js" ],
-		"matches": [ "<all_urls>" ],
-		"run_at": "document_end"
-	} ],
 	"icons": {
 		"128": "icons/128.png",
 		"16": "icons/16.png",
