@@ -59,16 +59,27 @@ var getFavicon, resolveUrl;
 
 	function findLargest (links) {
 		if (!links.length){return;}
-		var link = links[links.length - 1],
+		var c, at, atp,
+			link = links[links.length - 1],
+			href = link.getAttribute('href'),
 			size = parseInt(link.getAttribute('sizes'), 10) || 0;
-		[].slice.call(links).forEach(function (l) {
-			var s = parseInt(l.getAttribute('sizes'), 10) || 0;
+		[].slice.call(links).some(function (l) {
+			c = l.getAttribute('color');
+			var v = l.getAttribute('sizes'),
+				h = l.getAttribute('href'),
+				s = (v === 'any' || (/\.svg$/).test(h) || c) ? Number.MAX_VALUE :
+					parseInt(v, 10) || 0;
+			if (l.rel === 'apple-touch-icon'){at = h;}
+			if (l.rel === 'apple-touch-icon-precomposed'){atp = h;}
 			if (s>size) {
-				link = l;
+				href = h;
 				size = s;
 			}
+			return (size === Number.MAX_VALUE);
 		});
-		return link;
+		return  (size === Number.MAX_VALUE) ? {href: href, color: c} :
+				(size > 0) ? href :
+				atp || at || href;
 	}
 
 	function tryGuess (byUrl) {
@@ -90,8 +101,12 @@ var getFavicon, resolveUrl;
 				links = doc.querySelectorAll('link[rel*="icon"][href]'),
 				favicon;
 			favicon = findLargest(links);
-			if (favicon) {
-				return resolveUrl(favicon.getAttribute('href'), response.landingUrl || url, doc);
+			if (favicon && favicon.href) {
+				favicon.href = resolveUrl(favicon.href, response.landingUrl || url, doc);
+				return favicon;
+			} else if (favicon) {
+				favicon = resolveUrl(favicon, response.landingUrl || url, doc);
+				return favicon;
 			} else {
 				return tryGuess(response.landingUrl || url);
 			}

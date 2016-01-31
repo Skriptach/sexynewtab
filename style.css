@@ -24,12 +24,15 @@ button[disabled="disabled"] {
 
 .plus {
 	position:absolute;
+	display: table;
 	width:100%;
 	height:100%;
 	background-size:20%;
-	display: table;
 	background-repeat: no-repeat;
-	background-position: 50%;}
+	background-position: 50%;
+	-webkit-mask-size: 20%;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-position: 50%;}
 
 .plus i {
 	color: #000070;
