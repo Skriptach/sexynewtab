@@ -255,16 +255,21 @@
 		callbacks.push(callback);
 	};
 
-	editPage = function (url, slot_index, requestedTab) {
+	function fixUrl (url) {
 		var protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/;
 		if (!protocol.test(url)){
 			if(!domain.test(url)){return false;}
 			url = 'http://'+url;
 		}
-		if (slotsList[slot_index].url === url){return;}
+		return resolveUrl(url, url);
+	}
 
-		var oldUrl = slotsList[slot_index].url;
+	editPage = function (url, slot_index, requestedTab) {
+		url = fixUrl(url);
+		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
+
+		var oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
 		slotsList[slot_index] = {url: url};
 		if (!slotsList.find(byUrl(oldUrl))) {
 			stopLoopCheck(oldUrl);
