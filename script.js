@@ -8,6 +8,7 @@
 		PAGE_HEIGHT,
 		FLOW = false,
 		currentEditPage = null,
+		back,
 		slotsList,
 		dragPage = null,
 		lastPosition = null,
@@ -101,7 +102,7 @@
 		dragPage.style.top = pagePosY;
 		dragPage.style.width = '';
 		dragPage.style.height = '';
-		chrome.extension.getBackgroundPage().swap(lastPosition, dragPage.index);
+		back.swap(lastPosition, dragPage.index);
 		lastPosition = null;
 	}
 	function prepareDrag(e) {
@@ -201,7 +202,9 @@
 			(oldUrl === page.url) ? page.thumb : '';
 		if (page.url) {
 			page.querySelector('a').setAttribute('href', page.url);
-			page.querySelector('.plus').style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
+			if(!page.thumb){
+					page.querySelector('.plus').style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
+			}
 			page.classList.remove('inactive', 'fresh');
 			page.querySelector('.thumbnail').style['background-image'] = 'URL(' + page.thumb + ')';
 		}
@@ -317,8 +320,6 @@
 					page.style.left = leftPos;
 					page.style.top = topPos;
 					index++;
-				} else {
-					return;
 				}
 			}
 		}
@@ -327,8 +328,7 @@
 	function firstInit () {
 		chrome.topSites.get(function (topSites) {
 			var length = topSites.length < slotsList.length ? topSites.length : slotsList.length,
-				deniedCount = 0,
-				back = chrome.extension.getBackgroundPage();
+				deniedCount = 0;
 			back.settings.NEW = false;
 			for (var i = 0; i < length; i++){
 				if (!back.editPage(topSites[i].url, i - deniedCount)){
@@ -405,7 +405,7 @@
 	function editPage() {
 		var state = edit_ok.getAttribute('disabled');
 		if (state === 'disabled'){return;}
-		chrome.extension.getBackgroundPage().editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
+		back.editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
 		hideEditForm();
 	}
 
@@ -505,9 +505,7 @@
 	function init () {
 		var _width = window.innerWidth,
 			_height = window.innerHeight,
-			styles = document.createElement('style'),
-			back;
-		container.style.display = 'none';
+			styles = document.createElement('style');
 		document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
 		document.head.appendChild(styles.cloneNode(true)).setAttribute('id','tile_style');
 		$('#tabs span')[0].innerText = chrome.i18n.getMessage('fn_tabs');
@@ -525,10 +523,6 @@
 			createPages();
 			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
-			// reflow
-			setTimeout(function () {
-				container.style.display = '';
-			}, 0);
 			window.onresize = function () {
 				if (_width !== window.innerWidth || _height !== window.innerHeight) {
 					_width = window.innerWidth;
@@ -541,7 +535,7 @@
 			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
 		}
 		if (!slotsList.length) {
-			chrome.extension.getBackgroundPage().subscribe(hacks);
+			back.subscribe(hacks);
 		} else { hacks(); }
 	}
 
