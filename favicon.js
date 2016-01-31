@@ -1,9 +1,11 @@
-var getFavicon;
+var getFavicon, resolveUrl;
 ;(function (){
+'use strict';
 
 	var parser = new DOMParser();
 
-	function resolve(doc, url, base_url) {
+	resolveUrl = function (url, base_url, doc) {
+		doc = doc || parser.parseFromString('<html><head></head><body></body></html>', 'text/html');
 		var base = doc.getElementsByTagName('base')[0],
 			head = doc.head || doc.getElementsByTagName('head')[0],
 			our_base = base || head.appendChild(doc.createElement('base')),
@@ -12,7 +14,7 @@ var getFavicon;
 		our_base.href = base_url;
 		resolver.href = url;
 		return resolver.href;
-	}
+	};
 
 	function get (url) {
 		return new Promise(function(resolve, reject) {
@@ -27,8 +29,9 @@ var getFavicon;
 						landingUrl: xhr.responseURL
 					});
 				} else {
-					var error = new Error(this.statusText);
-					error.code = this.status;
+					var error = new Error(xhr.statusText);
+					error.code = xhr.status;
+					error.responseURL = xhr.responseURL;
 					reject(error);
 				}
 				xhr = undefined;
@@ -43,10 +46,10 @@ var getFavicon;
 	function loadImage (src) {
 		return new Promise(function (resolve, reject) {
 			var img = document.createElement('img');
-			img.onload = function (argument) {
+			img.onload = function () {
 				resolve(src);
 			};
-			img.onerror = function (argument) {
+			img.onerror = function () {
 				reject();
 			};
 
@@ -68,26 +71,32 @@ var getFavicon;
 		return link;
 	}
 
+	function tryGuess (byUrl) {
+		var tryPNG = resolveUrl('/favicon.png', byUrl),
+			tryICO = resolveUrl('/favicon.ico', byUrl);
+		return loadImage(tryPNG)
+			.catch(function () {
+				return loadImage(tryICO)
+					.catch(function () {
+						return 'chrome://favicon/' + byUrl;
+					});
+			});
+	}
 	getFavicon = function (url) {
+
 		return get(url)
 		.then(function (response) {
-			var doc = parser.parseFromString(response.body, "text/html"),
+			var doc = parser.parseFromString(response.body, 'text/html'),
 				links = doc.querySelectorAll('link[rel*="icon"][href]'),
 				favicon;
 			favicon = findLargest(links);
 			if (favicon) {
-				return resolve(doc, favicon.getAttribute('href'), response.landingUrl || url);
+				return resolveUrl(favicon.getAttribute('href'), response.landingUrl || url, doc);
 			} else {
-				var tryPNG = resolve(doc, '/favicon.png', response.landingUrl || url),
-					tryICO = resolve(doc, '/favicon.ico', response.landingUrl || url);
-				return loadImage(tryPNG)
-					.catch(function () {
-						return loadImage(tryICO)
-							.catch(function () {
-								return 'chrome://favicon/' + (response.landingUrl || url);
-							});
-					});
+				return tryGuess(response.landingUrl || url);
 			}
-		}, function () {});
+		}, function (error) {
+			return tryGuess(error.responseURL || url);
+		});
 	};
 }());
