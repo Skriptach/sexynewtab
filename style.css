@@ -259,7 +259,7 @@ input[type="button"] {
 	float: right;
 	margin-top: -5;
 	outline: none;}
-#edit_cancel .st-left-open-2:before{
+#edit_cancel .st-back:before{
 	margin: 0;}
 
 #edit_cancel:hover,

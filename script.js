@@ -244,8 +244,8 @@
 					'<div class="plus"><i class="st-plus-circle"></i></div>'+
 					'<div class="thumbnail"></div>'+
 				'</a>'+
-				'<button class="edit" title="'+chrome.i18n.getMessage('m_edit') + '"><i class="st-pencil-alt"></i></button>'+
-				'<button class="remove" title="'+chrome.i18n.getMessage('m_clear') + '"><i class="st-cancel-4"></i></button>'+
+				'<button class="edit" title="'+chrome.i18n.getMessage('m_edit') + '"><i class="st-pencil"></i></button>'+
+				'<button class="remove" title="'+chrome.i18n.getMessage('m_clear') + '"><i class="st-trash"></i></button>'+
 			'</div>';
 		thumbnailnode.setAttribute('class', 'page inactive');
 		thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
