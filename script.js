@@ -257,6 +257,7 @@
 		for (i = 0; i < ROWS_COUNT; i++) {
 			for (j = 0; j < COLUMNS_COUNT; j++) {
 				page = thumbnailnode.cloneNode(true);
+				page.draggable = true;
 				page.setAttribute('id', 'page' + index);
 				page.index = index;
 				leftPos = j * (PAGE_WIDTH + DELTA);
