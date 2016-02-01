@@ -122,8 +122,12 @@
 		}
 	}
 	function showEditForm() {
+		var inputUrl = $('#link_url input')[0];
 		currentEditPage.appendChild(edit);
 		$('#edit .header .tab.active')[0].click();
+		inputUrl.value = currentEditPage.url;
+		inputUrl.title = currentEditPage.url || '';
+		inputUrl.onchange();
 		setTimeout(function () {
 			currentEditPage.classList.add('turned', 'ontop');
 		}, 10);
@@ -217,7 +221,7 @@
 	function pageClickHandler(event) {
 		var page;
 		page = closest(this, '.page');
-		if (main.classList.contains('flow') && !page.classList.contains('current')){
+		if (FLOW && !page.classList.contains('current')){
 			event.preventDefault();
 			if (event.button !== 0) {return;}
 			flowTo(page);
@@ -401,11 +405,13 @@
 	}
 
 	function selectLink (event) {
-		$('#link_url input')[0].value = this.url;
-		$('#link_url input')[0].onchange();
+		var inputUrl = $('#link_url input')[0];
+		inputUrl.value = this.url;
+		inputUrl.onchange();
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = this;
 		this.classList.add('selected');
+		inputUrl.select();
 	}
 	function editPage() {
 		var state = edit_ok.getAttribute('disabled');
@@ -476,10 +482,24 @@
 			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page !== current_flow_page) + '%';
 		}
 	}
+
 	function scrollFlow(e) {
-		if (e.wheelDelta < 0 || e.keyCode === 39) {
+		if (!FLOW){return;}
+		if (e.wheelDelta < 0) {
 			flowTo(getNextActivePage());
-		} else if (e.wheelDelta > 0 || e.keyCode === 37) {
+		} else if (e.wheelDelta > 0) {
+			flowTo(getPrevActivePage());
+		}
+	}
+
+	function keyHandler(e) {
+		if(e.keyCode === 27 && currentEditPage){
+			hideEditForm();
+		}
+		if (!FLOW){return;}
+		if (e.keyCode === 39) {
+			flowTo(getNextActivePage());
+		} else if (e.keyCode === 37) {
 			flowTo(getPrevActivePage());
 		}
 	}
@@ -489,14 +509,12 @@
 			main.classList.remove('flow');
 			current_flow_page.classList.remove('current');
 			first_flow_page.style['margin-left'] = '';
-			document.onmousewheel = null;
 			first_flow_page = current_flow_page = null;
 		} else {
 			first_flow_page = current_flow_page = getNextActivePage();
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
 			first_flow_page.style['margin-left'] = '0';
-			document.onkeydown = document.onmousewheel = scrollFlow;
 			main.classList.add('flow');
 		}
 		FLOW = !FLOW;
@@ -538,6 +556,19 @@
 			};
 			var inputUrl = $('#link_url input')[0];
 			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
+			inputUrl.onkeydown = function (event) {
+				if (event.keyCode === 13){
+					editPage();
+				}
+				if (FLOW && (event.keyCode === 39 || event.keyCode === 37)){
+					event.stopPropagation();
+				}
+			};
+			$('#edit .tree')[0].onmousewheel = function (event) {
+				if (event.wheelDeltaX === 0){event.stopPropagation();}
+			};
+			document.onkeydown = keyHandler;
+			document.onmousewheel = scrollFlow;
 		}
 		if (!slotsList.length) {
 			back.subscribe(hacks);
