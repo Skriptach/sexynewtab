@@ -43,10 +43,14 @@
 	}
 
 	function saveSync(){
+		var slots = slotsList.map(function (slot) {
+				return slot && slot.url ? {
+					url: slot.url,
+					favicon: slot.favicon
+				} : null;
+			});
 		chrome.storage.sync.set({
-			'urls': slotsList.map(function (slot) {
-					return slot ? slot.url : null;
-				}),
+			'slots': slots,
 			'settings': settings
 		});
 	}
@@ -209,12 +213,12 @@
 			}
 		}
 
-		chrome.storage.sync.get(['urls', 'settings'], function(res) {
-			if (res.urls && res.urls.length){
-				res.urls.forEach(function(url, index){
-					slotsList[index] = {url: url};
-					if(slotsList[index] && slotsList[index].url && (!slotsList[index].favicon || (/^chrome:/).test(slotsList[index].favicon)) ){
-						updateFavicon(slotsList[index]);
+		chrome.storage.sync.get(['slots', 'settings'], function(res) {
+			if (res.slots && res.slots.length){
+				slotsList = res.slots;
+				slotsList.forEach(function(slot){
+					if(slot && slot.url && (!slot.favicon || (/^chrome:/).test(slot.favicon)) ){
+						updateFavicon(slot);
 					}
 				});
 			} else {
