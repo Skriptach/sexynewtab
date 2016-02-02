@@ -206,7 +206,7 @@
 		function loaded() {
 			if (urls_ready && thumbs_ready) {
 				slotsList.forEach(function(slot){
-					slot.thumb = thumbs[slot.url];
+					slot && (slot.thumb = thumbs[slot.url]);
 				});
 				announce();
 				startLoopCheck();

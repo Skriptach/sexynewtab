@@ -207,7 +207,7 @@
 		if (page.url) {
 			page.querySelector('a').setAttribute('href', page.url);
 			if(!page.thumb){
-				if (slotsList[slotIndex].favicon.href){
+				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.href){
 					page.querySelector('.plus').style['-webkit-mask-image'] = 'URL(' + slotsList[slotIndex].favicon.href + ')';
 					page.querySelector('.plus').style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
 				} else {
