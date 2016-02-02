@@ -248,7 +248,7 @@
 			if (res.slots && res.slots.length){
 				slotsList = res.slots;
 				slotsList.forEach(function(slot){
-					if(slot && slot.url && (!slot.favicon || (/^chrome:/).test(slot.favicon)) ){
+					if(slot && slot.url && (!slot.favicon || slot.favicon === '/icons/document.svg') ){
 						updateFavicon(slot);
 					}
 				});

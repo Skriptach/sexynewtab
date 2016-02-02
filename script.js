@@ -207,11 +207,15 @@
 		if (page.url) {
 			page.querySelector('a').setAttribute('href', page.url);
 			if(!page.thumb){
+				var icon = page.querySelector('.plus');
 				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.href){
-					page.querySelector('.plus').style['-webkit-mask-image'] = 'URL(' + slotsList[slotIndex].favicon.href + ')';
-					page.querySelector('.plus').style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
+					icon.style['background-image'] = '';
+					icon.style['-webkit-mask-image'] = 'URL(' + slotsList[slotIndex].favicon.href + ')';
+					icon.style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
 				} else {
-					page.querySelector('.plus').style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
+					icon.style['background-color'] = '';
+					icon.style['-webkit-mask-image'] = '';
+					icon.style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
 				}
 			}
 			page.classList.remove('inactive', 'fresh');

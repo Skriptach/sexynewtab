@@ -2,7 +2,8 @@ var getFavicon, resolveUrl;
 ;(function (){
 'use strict';
 
-	var parser = new DOMParser();
+	var parser = new DOMParser(),
+		blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
 
 	resolveUrl = function (url, base_url, doc) {
 		doc = doc || parser.parseFromString('<html><head></head><body></body></html>', 'text/html');
@@ -47,7 +48,8 @@ var getFavicon, resolveUrl;
 		return new Promise(function (resolve, reject) {
 			var img = document.createElement('img');
 			img.onload = function () {
-				resolve(src);
+				if (img.width < 16 || img.height < 16){reject();}
+				else {resolve(src);}
 			};
 			img.onerror = function () {
 				reject();
@@ -89,7 +91,7 @@ var getFavicon, resolveUrl;
 			.catch(function () {
 				return loadImage(tryICO)
 					.catch(function () {
-						return 'chrome://favicon/' + byUrl;
+						return blankIcon;
 					});
 			});
 	}
@@ -106,7 +108,10 @@ var getFavicon, resolveUrl;
 				return favicon;
 			} else if (favicon) {
 				favicon = resolveUrl(favicon, response.landingUrl || url, doc);
-				return favicon;
+				return loadImage(favicon)
+					.catch(function () {
+						return blankIcon;
+					});
 			} else {
 				return tryGuess(response.landingUrl || url);
 			}
