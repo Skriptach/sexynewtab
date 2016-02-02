@@ -59,46 +59,77 @@
 		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: slotsList[slot_index].thumb }});
 	}
 
-	function createThumbOf(requestedTab, callback, savedTab) {
+	function createThumbOf() {
+		var savedTab,
+			processing,
+			queue = [];
+
+		function addToQueue (tab, func) {
+			queue.push({
+				tab: tab,
+				callback: func,
+				tries: 3
+			});
+			process();
+		}
+
 		function takeScreenshot () {
 			// take screenshot
-			chrome.tabs.captureVisibleTab(requestedTab.windowId, {
+			chrome.tabs.captureVisibleTab(processing.tab.windowId, {
 				format: 'png'
 			}, function(thumb){
-				if (!thumb && chrome.runtime.lastError && chrome.runtime.lastError.message === 'Failed to capture tab: unknown error' && TRIES){
+				if (!thumb && chrome.runtime.lastError && chrome.runtime.lastError.message === 'Failed to capture tab: unknown error' && processing.tries){
 					// try once again
-					TRIES-- && createThumbOf(requestedTab, callback, savedTab);
+					processing.tries--;
+					processing.tries && queue.unshift(processing);
+					process();
 					return;
 				}
-				TRIES = 3;
-				callback(thumb);
-				if (savedTab){
-					// switch back
-					chrome.tabs.update(savedTab.id, {
+				processing.callback(thumb);
+				processing = null;
+				process();
+			});
+		}
+
+		function next () {
+			//get current tab
+			chrome.tabs.getSelected(null, function(currentTab) {
+				if (currentTab.id === processing.tab.id){
+					takeScreenshot();
+				} else {
+					savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
+					// switch to requested tab
+					chrome.tabs.update(processing.tab.id, {
 						active: true,
 						selected: true,
-						pinned: savedTab.pinned
+						pinned: processing.tab.pinned
+					}, function (){
+						setTimeout(takeScreenshot, 100);
 					});
 				}
 			});
 		}
 
-		//get current tab
-		chrome.tabs.getSelected(null, function(currentTab) {
-			if (currentTab.id === requestedTab.id){
-				takeScreenshot();
-			} else {
-				savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
-				// switch to requested tab
-				chrome.tabs.update(requestedTab.id, {
+		function process () {
+			if (processing){return;}
+			if (queue.length){
+				processing = queue.shift();
+				next();
+			} else if (savedTab){
+				// switch back
+				chrome.tabs.update(savedTab.id, {
 					active: true,
 					selected: true,
-					pinned: requestedTab.pinned
-				}, function (){
-					setTimeout(takeScreenshot, 100);
+					pinned: savedTab.pinned
 				});
+				savedTab = null;
 			}
-		});
+		}
+
+		if (createThumbOf !== addToQueue){
+			createThumbOf = addToQueue;
+			addToQueue.apply(this, arguments);
+		}
 	}
 
 	function byUrl (url) {
