@@ -422,6 +422,7 @@
 		var state = edit_ok.getAttribute('disabled');
 		if (state === 'disabled'){return;}
 		back.editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
+		updatePage(currentEditPage.index);
 		hideEditForm();
 	}
 

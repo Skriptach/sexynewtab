@@ -248,7 +248,7 @@
 			if (res.slots && res.slots.length){
 				slotsList = res.slots;
 				slotsList.forEach(function(slot){
-					if(slot && slot.url && (!slot.favicon || slot.favicon === '/icons/document.svg') ){
+					if(slot && slot.url && (!slot.favicon || slot.favicon.href === '/icons/document.svg') ){
 						updateFavicon(slot);
 					}
 				});
@@ -305,7 +305,10 @@
 		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
 
 		var oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
-		slotsList[slot_index] = {url: url};
+		slotsList[slot_index] = {
+			url: url,
+			favicon: {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'}
+		};
 		if (!slotsList.find(byUrl(oldUrl))) {
 			stopLoopCheck(oldUrl);
 			delete redirectUrls[oldUrl];
