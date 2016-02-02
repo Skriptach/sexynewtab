@@ -107,19 +107,21 @@
 	}
 	function prepareDrag(e) {
 		dragPage = closest(e.target, '.page');
-		if (dragPage.classList.contains('page')) {
-			lastPosition = dragPage.index;
-			dragPage.classList.add('draged');
-			dragPage.style.zIndex = 1000;
-			pagePosX = dragPage.offsetLeft;
-			pagePosY = dragPage.offsetTop;
-			_offsetX = e.x - pagePosX;
-			_offsetY = e.y - pagePosY;
-			dragPage.style.width = PAGE_WIDTH + 15;
-			dragPage.style.height = PAGE_HEIGHT + 15;
-			document.ondrag = onDrag;
-			document.ondragend = stopDrag;
+		if (dragPage.classList.contains('turned') || FLOW) {
+			e.preventDefault();
+			return;
 		}
+		lastPosition = dragPage.index;
+		dragPage.classList.add('draged');
+		dragPage.style.zIndex = 1000;
+		pagePosX = dragPage.offsetLeft;
+		pagePosY = dragPage.offsetTop;
+		_offsetX = e.x - pagePosX;
+		_offsetY = e.y - pagePosY;
+		dragPage.style.width = PAGE_WIDTH + 15;
+		dragPage.style.height = PAGE_HEIGHT + 15;
+		document.ondrag = onDrag;
+		document.ondragend = stopDrag;
 	}
 	function showEditForm() {
 		var inputUrl = $('#link_url input')[0];
