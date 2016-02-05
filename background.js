@@ -15,8 +15,7 @@
 		hashes = {},
 		timers = {},
 		callbacks = [],
-		redirectUrls = {},
-		TRIES = 3;
+		redirectUrls = {};
 
 	// subscribe and announce added for that case when browser just runned with saved session tabs
 	// and 'slots' is empty (have not loaded in time). So at the moment 'slots' has been demand (newtab or content-script),
@@ -82,6 +81,7 @@
 					// try once again
 					processing.tries--;
 					processing.tries && queue.unshift(processing);
+					processing = null;
 					process();
 					return;
 				}
