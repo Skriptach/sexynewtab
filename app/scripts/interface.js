@@ -402,7 +402,7 @@
 	}
 
 	function switchList () {
-		if (this.getAttribute('disabled') === 'disabled'){return;}
+		if (this.disabled){return;}
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
 		this.id === 'tabs' ? switchToTabs() :
@@ -421,8 +421,7 @@
 		inputUrl.select();
 	}
 	function editPage() {
-		var state = edit_ok.getAttribute('disabled');
-		if (state === 'disabled'){return;}
+		if (edit_ok.disabled){return;}
 		back.editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
 		updatePage(currentEditPage.index);
 		hideEditForm();
@@ -439,7 +438,7 @@
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = null;
 		if (!protocol.test(url) && !domain.test(url)){
-			edit_ok.setAttribute('disabled', 'disabled');
+			edit_ok.setAttribute('disabled', '');
 		} else {
 			edit_ok.removeAttribute('disabled');
 		}

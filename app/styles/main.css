@@ -14,7 +14,7 @@ button {
 	width: 35px;
 	height: 35px;
 	padding: 0;}
-button[disabled="disabled"] {
+button[disabled] {
 	background: buttonface !important;
 	cursor: default !important;
 	color: graytext !important;}
