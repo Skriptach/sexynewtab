@@ -4,7 +4,7 @@
 	"description":"__MSG_descript__",
 	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "history", "webRequest", "unlimitedStorage"],
 	"background": {
-		"scripts":["MD5.js", "favicon.js", "background.js"]
+		"scripts":["scripts/MD5.js", "scripts/favicon.js", "scripts/background.js"]
 	},
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
@@ -17,6 +17,7 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.7",
+	"version": "0.7.0.1",
+	"version_name": "0.7.0",
 	"author": "Lyubomudr Nazariev"
 }
