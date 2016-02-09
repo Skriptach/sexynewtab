@@ -543,16 +543,17 @@
 		$('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
 		$('#topsites span')[0].innerText = chrome.i18n.getMessage('fn_top');
 		document.onclick = clicksDelegate;
-		back = chrome.extension.getBackgroundPage();
-		slotsList = back.slotsList;
-		COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
-		ROWS_COUNT = back.settings.ROWS_COUNT;
-		function hacks() {
+		function ready(background) {
+			back = background;
+			slotsList = background.slotsList;
+			COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
+			ROWS_COUNT = back.settings.ROWS_COUNT;
 			var wait = null;
 			setPagesSize();
 			createPages();
 			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
+			listenMessages();
 			window.onresize = function () {
 				if (_width !== window.innerWidth || _height !== window.innerHeight) {
 					_width = window.innerWidth;
@@ -577,11 +578,10 @@
 			document.onkeydown = keyHandler;
 			document.onmousewheel = scrollFlow;
 		}
-		if (!slotsList.length) {
-			back.subscribe(hacks);
-		} else { hacks(); }
+		chrome.extension.getBackgroundPage().subscribe(ready);
 	}
 
+	function listenMessages (){
 	chrome.extension.onRequest.addListener(
 		function (request, sender, sendResponse) {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
@@ -601,6 +601,7 @@
 			}
 		}
 	);
+	}
 
 	window.onload = init();
 

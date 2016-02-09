@@ -1,32 +1,22 @@
-﻿var slotsList = [],
-	settings = {
-		COLUMNS_COUNT : 5,
-		ROWS_COUNT : 4,
-		CHECK_PERIOD : 4, //hours
-		FLOW : false,
-		NEW : false // flag for just installed
-	},
-	swap, editPage, subscribe;
+﻿'use strict';
 
 ;(function (){
-'use strict';
 
-	var thumbs = {},
+	var slotsList = [],
+		settings = {
+			COLUMNS_COUNT : 5,
+			ROWS_COUNT : 4,
+			CHECK_PERIOD : 4, //hours
+			FLOW : false,
+			NEW : false // flag for just installed
+		},
+		thumbs = {},
 		hashes = {},
 		timers = {},
 		callbacks = [],
-		redirectUrls = {};
-
-	// subscribe and announce added for that case when browser just runned with saved session tabs
-	// and 'slots' is empty (have not loaded in time). So at the moment 'slots' has been demand (newtab or content-script),
-	// execution can be restored.
-
-	function announce() {
-		for (var i in callbacks) {
-			callbacks[i]();
-		}
-		callbacks = null;
-	}
+		redirectUrls = {},
+		urls_ready = false,
+		thumbs_ready = false;
 
 	function saveLocal() {
 		var buferT = {},
@@ -206,7 +196,6 @@
 	}
 
 	function init() {
-		var urls_ready = false, thumbs_ready = false;
 
 		function startLoopCheck() {
 			var t = (new Date()).getTime(), diff, C = 3600*1000;
@@ -281,14 +270,30 @@
 		});
 	}
 
-	swap = function (old_index, new_index) {
+	function swap (old_index, new_index) {
 		slotsList.splice(new_index, 0, slotsList.splice(old_index, 1)[0]);
 		saveSync();
+	}
+
+	window.subscribe = function  (callback) {
+		callbacks.push(callback);
+		if (urls_ready && thumbs_ready) {
+			announce();
+		}
 	};
 
-	subscribe = function (callback) {
-		callbacks.push(callback);
-	};
+	function announce() {
+		var back = {
+			slotsList: slotsList,
+			settings: settings,
+			swap: swap,
+			editPage: editPage
+		};
+		for (var i in callbacks) {
+			callbacks[i](back);
+		}
+		callbacks = [];
+	}
 
 	function fixUrl (url) {
 		var protocol = /^https?:\/\//,
@@ -300,7 +305,7 @@
 		return resolveUrl(url, url);
 	}
 
-	editPage = function (url, slot_index, requestedTab) {
+	function editPage (url, slot_index, requestedTab) {
 		url = fixUrl(url);
 		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
 
@@ -329,7 +334,7 @@
 			updateFavicon(slotsList[slot_index]);
 		}
 		return true;
-	};
+	}
 
 	function getOriginBy (url) {
 		if (slotsList.findIndex(byUrl(url)) !== -1){return url;}
@@ -370,10 +375,6 @@
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
 		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){
 			switch (request.action) {
-			case 'subscribe':
-				subscribe(request.callback);
-				sendResponse({});
-				break;
 			case 'clear':
 				onRemove(request.index);
 				sendResponse({});
