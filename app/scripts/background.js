@@ -11,7 +11,6 @@
 			NEW : false // flag for just installed
 		},
 		thumbs = {},
-		hashes = {},
 		timers = {},
 		callbacks = [],
 		redirectUrls = {},
@@ -19,16 +18,13 @@
 		thumbs_ready = false;
 
 	function saveLocal() {
-		var buferT = {},
-			buferH = {};
+		var buferT = {};
 		slotsList.forEach(function (slot) {
 			if (!slot || !slot.url){return;}
 			buferT[slot.url] = slot.thumb;
-			hashes[slot.url] && (buferH[slot.url] = hashes[slot.url]);
 		});
 		thumbs = buferT;
-		hashes = buferH;
-		chrome.storage.local.set({'thumbs': thumbs, 'hashes': hashes});
+		chrome.storage.local.set({'thumbs': thumbs});
 	}
 
 	function saveSync(){
@@ -130,42 +126,7 @@
 
 	function stopLoopCheck (url){
 		clearTimeout(timers[url]);
-		delete hashes[url];
 		delete timers[url];
-	}
-
-	function getHash(url, messageFlag) {
-		if (!slotsList.find(byUrl(url))){
-			stopLoopCheck(url);
-			return;
-		}
-		var req = new XMLHttpRequest();
-		req.open('GET', url, true);
-		req.onloadend = function(){
-			if (req.readyState === 4) {
-				if(req.status === 200) {
-					clearTimeout(timers[url]);
-					var i = slotsList.findIndex(byUrl(url));
-					if (i === -1){return;}
-					var h = MD5(req.responseText);
-					if (!messageFlag && hashes[url] && hashes[url].hash !== h) {
-						chrome.extension.sendRequest({
-							action: 'pageIsFresh',
-							params: {indexes: [i]}
-						});
-					}
-					hashes[url] = {
-						hash : h,
-						last : new Date().getTime(),
-						thumb: !!messageFlag
-					};
-				}
-			}
-			timers[url] = setTimeout(function() {
-				getHash(url);
-			}, settings.CHECK_PERIOD*3600*1000);
-		};
-		req.send();
 	}
 
 	function onRemove (index) {
@@ -197,39 +158,12 @@
 
 	function init() {
 
-		function startLoopCheck() {
-			var t = (new Date()).getTime(), diff, C = 3600*1000;
-			function setTimer(url, delay) {
-				timers[url] = setTimeout(function() {
-					getHash(url);
-				}, delay);
-			}
-
-			slotsList.forEach(function (slot, i) {
-				if (slot && slot.url) {
-					diff = hashes[slot.url] ? t - hashes[slot.url].last : Infinity;
-					if (diff/C >= settings.CHECK_PERIOD) {
-						setTimer(slot.url, 10);
-					} else {
-						setTimer(slot.url, settings.CHECK_PERIOD*C - diff);
-						if (!hashes[slot.url].thumb){
-							chrome.extension.sendRequest({
-								action: 'pageIsFresh',
-								params: {indexes: [i]}
-							});
-						}
-					}
-				}
-			});
-		}
-
 		function loaded() {
 			if (urls_ready && thumbs_ready) {
 				slotsList.forEach(function(slot){
 					slot && (slot.thumb = thumbs[slot.url]);
 				});
 				announce();
-				startLoopCheck();
 			}
 		}
 
@@ -256,14 +190,11 @@
 			loaded();
 		});
 
-		chrome.storage.local.get(['thumbs', 'hashes'], function(res){
+		chrome.storage.local.get(['thumbs'], function(res){
 			if (res.thumbs) {
 				for (var i in res.thumbs) {
 					thumbs[i] = res.thumbs[i];
 				}
-			}
-			if (res.hashes){
-				hashes = res.hashes;
 			}
 			thumbs_ready = true;
 			loaded();
@@ -318,7 +249,6 @@
 			stopLoopCheck(oldUrl);
 			delete redirectUrls[oldUrl];
 		}
-		getHash(url, true);
 		saveLocal();
 		saveSync();
 		if (requestedTab) {
@@ -362,7 +292,6 @@
 				createThumbOf(tab, function (thumb) {
 					// save it
 					slotsList[i].thumb = thumb || slotsList[i].thumb;
-					getHash(url, true);
 					saveLocal();
 					if (tab.favIconUrl){
 						updateFavicon(slotsList[i]);
@@ -402,25 +331,6 @@
 		urls: ['<all_urls>'],
 		types: ['main_frame']
 	}, ['responseHeaders']);
-
-	function sendFresh(tabId) {
-		var indexes = [];
-		slotsList.forEach(function(slot, i) {
-			if (slot && slot.url) {
-				indexes.push(i);
-			}
-		});
-		chrome.tabs.sendRequest(tabId,
-			{action: 'pageIsFresh',
-			params: {indexes: indexes}
-		});
-	}
-
-	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		if (tab.url === 'chrome://newtab/' && tab.status === 'complete') {
-			sendFresh(tab.id);
-		}
-	});
 
 	init();
 

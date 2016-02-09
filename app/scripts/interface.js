@@ -163,7 +163,6 @@
 	}
 	function removePage(page) {
 		page.querySelector('a').removeAttribute('href');
-		page.classList.remove('fresh');
 		page.style.webkitTransform = 'scale(0.3)';
 		setTimeout(function () {
 			if (FLOW){
@@ -220,7 +219,7 @@
 					icon.style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
 				}
 			}
-			page.classList.remove('inactive', 'fresh');
+			page.classList.remove('inactive');
 			page.querySelector('.thumbnail').style['background-image'] = 'URL(' + page.thumb + ')';
 		}
 	}
@@ -591,11 +590,6 @@
 					break;
 				case 'remove':
 					removePage(d('page'+request.params.index));
-					break;
-				case 'pageIsFresh':
-					request.params.indexes.forEach(function(index){
-						d('page'+index).classList.add('fresh');
-					});
 					break;
 				}
 			}
