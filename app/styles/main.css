@@ -301,16 +301,17 @@ input[type="button"] {
 	z-index: 100;}
 
 #main.flow .page {
-	width: 100% !important;
-	height: 100% !important;
+	width: 60% !important;
+	height: 60% !important;
 	left: 0 !important;
-	top: 0 !important;
+	top: 20% !important;
 	display: inline-block;
+	vertical-align: top;
 	position: relative;
-	margin-left: -90%;
-	-webkit-transition-property: margin, -webkit-transform, -webkit-transform-origin;
+	margin-left: -45%;
+	-webkit-transition-property: margin, width, height, top, -webkit-transform, -webkit-transform-origin;
 	-webkit-transition-duration: .5s;
-	-webkit-transform: rotateY(45deg) translateZ(-400px);
+	-webkit-transform: rotateY(45deg);
 	-webkit-transform-origin: 0%;}
 
 #main.flow .page.deleting {
@@ -332,20 +333,23 @@ input[type="button"] {
 	-webkit-box-reflect: below 0px linear-gradient(transparent, transparent 50%, rgba(255, 255, 255, 0.5));}
 
 #main.flow .page.current {
-	margin-left: -70%;
-	-webkit-transform: translateZ(0px);
+	margin-left: -15%;
+	width: 100% !important;
+	height: 100% !important;
+	top: 0 !important;
+	-webkit-transform: rotateY(0);
 	-webkit-transform-origin: 50%;}
 
 #main.flow .page.current + .page:not(.inactive),
 #main.flow .page.current ~ .inactive + .page:not(.inactive) {
-	margin-left: -70%;}
+	margin-left: -15%;}
 
 #main.flow .page.current + .page:not(.inactive) ~ .page:not(.inactive),
 #main.flow .page.current ~ .inactive + .page:not(.inactive) ~ .page:not(.inactive) {
-	margin-left: -90%;}
+	margin-left: -45%;}
 
 #main.flow .current ~ .page {
-	-webkit-transform: rotateY(-45deg) translateZ(-400px);
+	-webkit-transform: rotateY(-45deg);
 	-webkit-transform-origin: 100%;}
 
 #main.flow .page:hover {

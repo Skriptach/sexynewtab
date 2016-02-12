@@ -485,7 +485,7 @@
 			current_flow_page.classList.remove('current');
 			current_flow_page = target;
 			current_flow_page.classList.add('current');
-			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 10 - 20*(first_flow_page !== current_flow_page) + '%';
+			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 15 - 30*(first_flow_page !== current_flow_page) + '%';
 		}
 	}
 
