@@ -1,9 +1,10 @@
 ﻿html,body {
-	background-color:#000;
+	background-color:#1A0019;
 	margin:0;
 	overflow:hidden;
 	-webkit-user-select: none;
-	font-size:12px;}
+	font-size:12px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
 
 button {
 	cursor: pointer;
