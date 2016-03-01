@@ -46,6 +46,7 @@
 	function createThumbOf() {
 		var savedTab,
 			processing,
+			current,
 			queue = [];
 
 		function addToQueue (tab, func) {
@@ -58,10 +59,20 @@
 		}
 
 		function takeScreenshot () {
+			if (current.url !== processing.tab.url){
+				processing = null;
+				process();
+				return;
+			}
 			// take screenshot
 			chrome.tabs.captureVisibleTab(processing.tab.windowId, {
 				format: 'png'
 			}, function(thumb){
+				if (current.url !== processing.tab.url){
+					processing = null;
+					process();
+					return;
+				}
 				if (!thumb && chrome.runtime.lastError && chrome.runtime.lastError.message === 'Failed to capture tab: unknown error' && processing.tries){
 					// try once again
 					processing.tries--;
@@ -80,6 +91,7 @@
 			//get current tab
 			chrome.tabs.getSelected(null, function(currentTab) {
 				if (currentTab.id === processing.tab.id){
+					current = currentTab;
 					takeScreenshot();
 				} else {
 					savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
@@ -89,6 +101,7 @@
 						selected: true,
 						pinned: processing.tab.pinned
 					}, function (){
+						current = processing.tab;
 						setTimeout(takeScreenshot, 100);
 					});
 				}
@@ -110,6 +123,12 @@
 				savedTab = null;
 			}
 		}
+
+		chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
+			if (tab.active === true){
+				current = tab;
+			}
+		});
 
 		if (createThumbOf !== addToQueue){
 			createThumbOf = addToQueue;
