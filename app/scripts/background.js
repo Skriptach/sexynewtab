@@ -6,7 +6,6 @@
 		settings = {
 			COLUMNS_COUNT : 5,
 			ROWS_COUNT : 4,
-			CHECK_PERIOD : 4, //hours
 			FLOW : false,
 			NEW : false // flag for just installed
 		},
@@ -182,7 +181,6 @@
 			if (res.settings) {
 				settings.COLUMNS_COUNT = res.settings.COLUMNS_COUNT;
 				settings.ROWS_COUNT = res.settings.ROWS_COUNT;
-				settings.CHECK_PERIOD = res.settings.CHECK_PERIOD;
 				settings.FLOW = res.settings.FLOW;
 				settings.NEW = res.settings.NEW;
 			}
