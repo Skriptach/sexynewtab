@@ -1,4 +1,4 @@
-﻿html,body {
+﻿body {
 	background-color:#1A0019;
 	margin:0;
 	overflow:hidden;
@@ -50,7 +50,9 @@ button[disabled] {
 #container {
 	display:table;
 	height: 100%;
-	width: 100%;}
+	width: 100%;
+	background-size: cover;
+	background-position: center center;}
 
 #main {
 	display:table-cell;
@@ -96,7 +98,8 @@ button[disabled] {
 .page.turned:hover {
 	box-shadow: none;}
 
-.page.turned .flipper {
+.page.turned .flipper,
+.flow .page.turned:before {
 	-webkit-transform: rotate3d(0, 1, 0, 180deg) perspective(800);}
 
 .page.turned #edit {
@@ -137,10 +140,46 @@ button[disabled] {
 .page:not(.inactive):not(.full):hover .flipper button {
 	display: initial;
 	opacity: 0.3;}
-#main.flow .page:not(.current):hover .flipper button {
+.flow .page:not(.current):hover .flipper button {
 	display: none;}
 .page:not(.inactive):hover .flipper button:hover {
 	opacity: 0.8;}
+
+#customize {
+	position: fixed;
+	padding: 14;
+	background-color:#fafafa;
+	border-radius:6px;
+	box-sizing: border-box;
+	width: 350px;
+	right: 15px;
+	bottom: 0px;
+	opacity: -1;
+	z-index: 100;
+	pointer-events: none;
+	-webkit-transition-duration: .5s;
+	-webkit-transition-property: all;
+	-webkit-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+#customize.open {
+	bottom: 70px;
+	opacity: 1;
+	pointer-events: all;
+}
+
+#customize a.theme {
+	text-align: center;
+	display: inline-block;
+	width: 80px;
+	cursor: pointer;
+}
+#customize a.theme span {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-color: #000;
+}
 
 #edit {
 	position:absolute;
@@ -148,9 +187,9 @@ button[disabled] {
 	height: 100%;
 	padding: 14;
 	box-sizing: border-box;
-	background-color:#EFEFEF;
+	background-color:#fafafa;
 	border-radius:6px;
-	box-shadow: 15px 15px 15px #000;
+	box-shadow: 35px 35px 65px rgba(0,0,0,0.8);
 	-webkit-transition-property: -webkit-transform, margin;
 	-webkit-transition-duration: .5s;
 	-webkit-transform: rotate3d(0, 1, 0, 180deg);
@@ -214,18 +253,20 @@ input[type="button"] {
 	width:77;
 	height:23;}
 
-#link_url {
+#link_url,
+#background {
 	position: relative;
 	display: block;}
 
-#link_url input {
+input[type="text"] {
 	border: 1px solid #1544AD;
 	width: 100%;
 	height: 35px;
 	padding: 5 40 5 35;
 	font-size: 16px;}
 
-#link_url i {
+#link_url i,
+#background i {
 	position: absolute;
 	font-size: 22px;
 	margin-top: 6px;
@@ -250,8 +291,7 @@ input[type="button"] {
 	width: 25px;
 	height: 25px;
 	float: right;
-	margin-top: -5;
-	outline: none;}
+	margin-top: -5;}
 #edit_cancel .st-back:before{
 	margin: 0;}
 
@@ -263,11 +303,14 @@ input[type="button"] {
 	text-decoration:none;
 	cursor:default;}
 
-#toggle_button {
+.panel {
 	position:fixed;
 	font-size: 2em;
 	right:15px;
 	bottom:15px;
+	z-index: 100;}
+
+.panel button {
 	width:48px;
 	height:32px;
 	border-width: 1px;
@@ -275,33 +318,29 @@ input[type="button"] {
 	border-color: #122;
 	background: linear-gradient(#233, #011);}
 
-#toggle_button:active {
+.panel button:active {
 	background: linear-gradient(#110, #122);
 	padding: 1px 0 0 1px;}
 
-#toggle_button:focus,
-#toggle_button:active {
-	outline: none;}
-
 #main #toggle_button .st-tile,
-#main.flow #toggle_button .st-coverflow {
+.flow #toggle_button .st-coverflow {
 	display: none;}
 
-#main.flow #toggle_button .st-tile,
+.flow #toggle_button .st-tile,
 #main #toggle_button .st-coverflow {
 	display: inline;}
 
-#main.flow {
+.flow #main {
 	-webkit-perspective: 800;}
 
-#main.flow #set {
+.flow #set {
 	width: 50% !important;
 	height: 50% !important;
 	white-space: nowrap;
 	-webkit-transform-style: preserve-3d;
 	z-index: 100;}
 
-#main.flow .page {
+.flow .page {
 	width: 60% !important;
 	height: 60% !important;
 	left: 0 !important;
@@ -315,25 +354,27 @@ input[type="button"] {
 	-webkit-transform: rotateY(45deg);
 	-webkit-transform-origin: 0%;}
 
-#main.flow .page.deleting {
+.flow .page.deleting {
 	width: 0 !important;
 	margin: 0;
 	visibility: hidden;
 	-webkit-transition-property: margin, width, -webkit-transform, -webkit-transform-origin;}
 
-#main.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
+.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
 	content: '';
 	width: 100%;
-	height: 50%;
+	height: 100%;
 	border-radius:7px;
-	background-color: #000;
 	position: absolute;
-	top: 100%;}
+	top: 100%;
+    -webkit-transition-property: transform;
+    -webkit-transition-duration: .5s;
+	-webkit-backface-visibility: hidden;}
 
-#main.flow .page .flipper {
-	-webkit-box-reflect: below 0px linear-gradient(transparent, transparent 50%, rgba(255, 255, 255, 0.5));}
+.flow .page .flipper {
+	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);}
 
-#main.flow .page.current {
+.flow .page.current {
 	margin-left: -15%;
 	width: 100% !important;
 	height: 100% !important;
@@ -341,25 +382,25 @@ input[type="button"] {
 	-webkit-transform: rotateY(0);
 	-webkit-transform-origin: 50%;}
 
-#main.flow .page.current + .page:not(.inactive),
-#main.flow .page.current ~ .inactive + .page:not(.inactive) {
+.flow .page.current + .page:not(.inactive),
+.flow .page.current ~ .inactive + .page:not(.inactive) {
 	margin-left: -15%;}
 
-#main.flow .page.current + .page:not(.inactive) ~ .page:not(.inactive),
-#main.flow .page.current ~ .inactive + .page:not(.inactive) ~ .page:not(.inactive) {
+.flow .page.current + .page:not(.inactive) ~ .page:not(.inactive),
+.flow .page.current ~ .inactive + .page:not(.inactive) ~ .page:not(.inactive) {
 	margin-left: -45%;}
 
-#main.flow .current ~ .page {
+.flow .current ~ .page {
 	-webkit-transform: rotateY(-45deg);
 	-webkit-transform-origin: 100%;}
 
-#main.flow .page:hover {
+.flow .page:hover {
 	box-shadow: none;}
 
-#main.flow .page.inactive {
+.flow .page.inactive {
 	display:none;}
 
-#main.flow .current.full .flipper {
+.flow .current.full .flipper {
 	top: -50%;
 	left: -50%;
 	width: 200%;
@@ -385,11 +426,11 @@ input[type="button"] {
 		min-width: 0;}
 	.page.turned {
 		left: 50% !important;}
-	#main:not(.flow) .page.turned {
+	body:not(.flow) .page.turned {
 		min-width: 450px;}
 
-	#main:not(.flow) .page.turned .flipper,
-	#main:not(.flow) .page.turned #edit {
+	body:not(.flow) .page.turned .flipper,
+	body:not(.flow) .page.turned #edit {
 		margin-left: -50%;}
 
 	#edit {
@@ -397,6 +438,6 @@ input[type="button"] {
 }
 
 @media screen and (max-width: 880px) {
-	#main.flow #edit .header button span {
+	.flow #edit .header button span {
 		display: none;}
 }

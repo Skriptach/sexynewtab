@@ -4,16 +4,22 @@
 	<meta name="viewport" content="user-scalable=no, width=device-width"/>
 	<title>Sexy New Tab</title>
 	<link rel="stylesheet" href="styles/main.css" />
+	<link rel="stylesheet" href="styles/themes.css" />
 	<link rel="stylesheet" href="styles/fonts/fontello.css" />
 </head>
-<body>
+<body class="deep-purple">
 <div id="container">
 	<div id="main">
 		<div id="set"></div>
-		<button id="toggle_button">
-			<i class="st-coverflow"></i>
-			<i class="st-tile"></i>
-		</button>
+		<div class="panel">
+			<button id="customize_button">
+				<i class="st-brush"></i>
+			</button>
+			<button id="toggle_button">
+				<i class="st-coverflow"></i>
+				<i class="st-tile"></i>
+			</button>
+		</div>
 	</div>
 	<div id="edit">
 		<div class="header">
@@ -27,9 +33,21 @@
 			<ul class="tree"></ul>
 		</div>
 		<label id="link_url">
-			<i class="st-link"></i><input placeholder="http://">
+			<i class="st-link"></i><input type="text" placeholder="http://">
 			<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
 		</label>
+	</div>
+</div>
+<div id="customize">
+	<h3>Theme:</h3>
+	<div>
+		<a class="theme" data="metal"><span></span><br>Metal</a>
+		<a class="theme" data="deep-purple"><span></span><br>Deep Purple</a>
+		<a class="theme" data="dark-side"><span></span><br>Dark Side</a>
+	</div>
+	<h3>Background Image</h3>
+	<div id="background">
+		<i class="st-link"></i><input type="text" placeholder="http://">
 	</div>
 </div>
 </body>

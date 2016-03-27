@@ -7,7 +7,8 @@
 			COLUMNS_COUNT : 5,
 			ROWS_COUNT : 4,
 			FLOW : false,
-			NEW : false // flag for just installed
+			NEW : false, // flag for just installed
+			THEME: 'deep-purple'
 		},
 		thumbs = {},
 		timers = {},
@@ -202,6 +203,8 @@
 				settings.ROWS_COUNT = res.settings.ROWS_COUNT;
 				settings.FLOW = res.settings.FLOW;
 				settings.NEW = res.settings.NEW;
+				settings.THEME = res.settings.THEME;
+				settings.BACK = res.settings.BACK;
 			}
 			urls_ready = true;
 			loaded();
@@ -327,6 +330,16 @@
 				break;
 			case 'toggleView':
 				settings.FLOW = request.FLOW;
+				saveSync();
+				sendResponse({});
+				break;
+			case 'switchTheme':
+				settings.THEME = request.theme;
+				saveSync();
+				sendResponse({});
+				break;
+			case 'setBackground':
+				settings.BACK = request.back;
 				saveSync();
 				sendResponse({});
 				break;

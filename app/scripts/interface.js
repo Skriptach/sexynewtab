@@ -19,8 +19,11 @@
 		currentItem,
 		first_flow_page,
 		current_flow_page,
+		cuurentTheme = 'deep-purple',
 		handlers = {
 			'#toggle_button *': toggleDisplay,
+			'#customize_button *': toggleCustomize,
+			'#customize .theme *': function(){ switchTheme(this.getAttribute('data'), true);},
 			'#edit .header .tab *': switchList,
 			'#edit_cancel *': hideEditForm,
 			'#edit_ok *': editPage,
@@ -531,6 +534,38 @@
 		setPagesSize();
 		setBackGradient();
 	}
+
+	function toggleCustomize() {
+		window.customize.classList.toggle('open');
+	}
+
+	function switchTheme (newTheme, save) {
+		document.body.classList.remove(cuurentTheme);
+		cuurentTheme = newTheme;
+		document.body.classList.add(cuurentTheme);
+		save && chrome.extension.sendRequest({
+			action: 'switchTheme',
+			theme: cuurentTheme
+		}, function() {});
+	}
+
+	function setBackground(bg) {
+		d('container').style['background-image'] = 'url('+ bg +')';
+	}
+
+	function bgChange (event) {
+		if (event && event.type === 'paste'){
+			setTimeout(bgChange, 1);
+			return;
+		}
+		var bg = $('#background input')[0].value;
+		setBackground(bg);
+		chrome.extension.sendRequest({
+			action: 'setBackground',
+			back: bg
+		}, function() {});
+	}
+
 	function init () {
 		var _width = window.innerWidth,
 			_height = window.innerHeight,
@@ -550,6 +585,8 @@
 			var wait = null;
 			setPagesSize();
 			createPages();
+			back.settings.THEME && switchTheme(back.settings.THEME);
+			back.settings.BACK && setBackground(back.settings.BACK);
 			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
 			listenMessages();
@@ -563,6 +600,8 @@
 			};
 			var inputUrl = $('#link_url input')[0];
 			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
+			var inputBack = $('#background input')[0];
+			inputBack.onpaste = inputBack.onkeyup = inputBack.onchange = bgChange;
 			inputUrl.onkeydown = function (event) {
 				if (event.keyCode === 13){
 					editPage();
