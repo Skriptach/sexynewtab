@@ -2,16 +2,14 @@
 
 ;(function (){
 
-	var slotsList = [],
+	var slotsList = new Array(20),
 		settings = {
 			COLUMNS_COUNT : 5,
 			ROWS_COUNT : 4,
 			FLOW : false,
-			NEW : false, // flag for just installed
 			THEME: 'deep-purple'
 		},
 		thumbs = {},
-		timers = {},
 		callbacks = [],
 		redirectUrls = {},
 		urls_ready = false,
@@ -143,17 +141,11 @@
 		};
 	}
 
-	function stopLoopCheck (url){
-		clearTimeout(timers[url]);
-		delete timers[url];
-	}
-
 	function onRemove (index) {
 		if (index !== -1) {
 			var oldUrl = slotsList[index].url;
 			slotsList[index] = null;
 			if (!slotsList.find(byUrl(oldUrl))) {
-				stopLoopCheck(oldUrl);
 				delete redirectUrls[oldUrl];
 			}
 			saveLocal();
@@ -176,7 +168,6 @@
 	}
 
 	function init() {
-
 		function loaded() {
 			if (urls_ready && thumbs_ready) {
 				slotsList.forEach(function(slot){
@@ -195,14 +186,12 @@
 					}
 				});
 			} else {
-				slotsList = new Array(20);
 				saveSync();
 			}
 			if (res.settings) {
 				settings.COLUMNS_COUNT = res.settings.COLUMNS_COUNT;
 				settings.ROWS_COUNT = res.settings.ROWS_COUNT;
 				settings.FLOW = res.settings.FLOW;
-				settings.NEW = res.settings.NEW;
 				settings.THEME = res.settings.THEME;
 				settings.BACK = res.settings.BACK;
 			}
@@ -266,7 +255,6 @@
 			favicon: {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'}
 		};
 		if (!slotsList.find(byUrl(oldUrl))) {
-			stopLoopCheck(oldUrl);
 			delete redirectUrls[oldUrl];
 		}
 		saveLocal();
@@ -294,12 +282,24 @@
 		}
 	}
 
+	function firstInit() {
+		chrome.topSites.get(function (topSites) {
+			var length = Math.min(topSites.length, slotsList.length),
+				deniedCount = 0;
+			for (var i = 0; i < length; i++){
+				if (!editPage(topSites[i].url, i - deniedCount)){
+					deniedCount++;
+				}
+			}
+		});
+	}
+
 	chrome.runtime.onInstalled.addListener(function (event) {
 		function notEmpty (slot) {
 			return (slot && slot.url);
 		}
 		if (event.reason === 'install' && !slotsList.some(notEmpty)){
-			settings.NEW = true;
+			firstInit();
 		}
 	});
 

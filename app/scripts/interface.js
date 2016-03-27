@@ -214,16 +214,16 @@
 				var icon = page.querySelector('.plus');
 				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.href){
 					icon.style['background-image'] = '';
-					icon.style['-webkit-mask-image'] = 'URL(' + slotsList[slotIndex].favicon.href + ')';
+					icon.style['-webkit-mask-image'] = 'url(' + slotsList[slotIndex].favicon.href + ')';
 					icon.style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
 				} else {
 					icon.style['background-color'] = '';
 					icon.style['-webkit-mask-image'] = '';
-					icon.style['background-image'] = 'URL(' + slotsList[slotIndex].favicon + ')';
+					icon.style['background-image'] = 'url(' + slotsList[slotIndex].favicon + ')';
 				}
 			}
 			page.classList.remove('inactive');
-			page.querySelector('.thumbnail').style['background-image'] = 'URL(' + page.thumb + ')';
+			page.querySelector('.thumbnail').style['background-image'] = 'url(' + page.thumb + ')';
 		}
 	}
 	function pageClickHandler(event) {
@@ -343,19 +343,6 @@
 		}
 	}
 
-	function firstInit () {
-		chrome.topSites.get(function (topSites) {
-			var length = topSites.length < slotsList.length ? topSites.length : slotsList.length,
-				deniedCount = 0;
-			back.settings.NEW = false;
-			for (var i = 0; i < length; i++){
-				if (!back.editPage(topSites[i].url, i - deniedCount)){
-					deniedCount++;
-				}
-			}
-		});
-	}
-
 	function buildList (linksList, isTab) {
 		var node = $('#edit .list .tree')[0],
 			list = document.createDocumentFragment(),
@@ -365,7 +352,7 @@
 		for (var i = 0; i < linksList.length; i++) {
 			if (protocol.test(linksList[i].url)) {
 				item = document.createElement('li');
-				item.style['background-image'] = 'URL(' + (linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url) + ')';
+				item.style['background-image'] = 'url(' + (linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url) + ')';
 				item.setAttribute('class', 'item');
 				item.url = linksList[i].url;
 				item.innerText = linksList[i].title || linksList[i].url;
@@ -515,7 +502,6 @@
 
 	function toggleDisplay() {
 		if (FLOW){
-			main.classList.remove('flow');
 			current_flow_page.classList.remove('current');
 			first_flow_page.style['margin-left'] = '';
 			first_flow_page = current_flow_page = null;
@@ -524,8 +510,8 @@
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
 			first_flow_page.style['margin-left'] = '0';
-			main.classList.add('flow');
 		}
+		document.body.classList.toggle('flow');
 		FLOW = !FLOW;
 		chrome.extension.sendRequest({
 			action: 'toggleView',
@@ -579,7 +565,7 @@
 		document.onclick = clicksDelegate;
 		function ready(background) {
 			back = background;
-			slotsList = background.slotsList;
+			slotsList = back.slotsList;
 			COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
 			ROWS_COUNT = back.settings.ROWS_COUNT;
 			var wait = null;
@@ -587,7 +573,6 @@
 			createPages();
 			back.settings.THEME && switchTheme(back.settings.THEME);
 			back.settings.BACK && setBackground(back.settings.BACK);
-			back.settings.NEW && firstInit();
 			back.settings.FLOW && toggleDisplay();
 			listenMessages();
 			window.onresize = function () {
