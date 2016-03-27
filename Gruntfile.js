@@ -96,6 +96,9 @@ module.exports = function (grunt) {
 					'<%= sexy.dist %>/styles/main.css': [
 						'<%= sexy.app %>/styles/main.css'
 					],
+					'<%= sexy.dist %>/styles/themes.css': [
+						'<%= sexy.app %>/styles/themes.css'
+					],
 					'<%= sexy.dist %>/styles/fonts/fontello.css': [
 						'<%= sexy.app %>/styles/fonts/fontello.css'
 					]
