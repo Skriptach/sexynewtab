@@ -17,16 +17,13 @@
 	"m_edit":{
 		"message":"Редагувати…"
 	},
-	"m_upd":{
-		"message":"Оновити ескіз"
-	},
 	"m_clear":{
 		"message":"Видалити"
 	},
-	"pa_add":{
-		"message":"Додати поточну сторінку"
+	"theme_label":{
+		"message":"Кольорова тема"
 	},
-	"mb_cancal":{
-		"message":"Відміна"
+	"background_label":{
+		"message":"Фонове Зображення"
 	}
 }

@@ -17,16 +17,13 @@
 	"m_edit":{
 		"message":"Edit…"
 	},
-	"m_upd":{
-		"message":"Update thumb"
-	},
 	"m_clear":{
 		"message":"Clear"
 	},
-	"pa_add":{
-		"message":"Add current page"
+	"theme_label":{
+		"message":"Color Theme"
 	},
-	"mb_cancal":{
-		"message":"Cancel"
+	"background_label":{
+		"message":"Background Image"
 	}
 }

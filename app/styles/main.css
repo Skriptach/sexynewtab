@@ -159,27 +159,27 @@ button[disabled] {
 	pointer-events: none;
 	-webkit-transition-duration: .5s;
 	-webkit-transition-property: all;
-	-webkit-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
+	-webkit-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);}
 
 #customize.open {
 	bottom: 70px;
 	opacity: 1;
-	pointer-events: all;
-}
+	pointer-events: all;}
+
+#customize h3:first-child {
+	margin-top: 0;}
 
 #customize a.theme {
 	text-align: center;
 	display: inline-block;
 	width: 80px;
-	cursor: pointer;
-}
+	cursor: pointer;}
+
 #customize a.theme span {
 	display: inline-block;
 	width: 40px;
 	height: 40px;
-	background-color: #000;
-}
+	background-color: #000;}
 
 #edit {
 	position:absolute;
@@ -202,6 +202,7 @@ button[disabled] {
 	height: calc(100% - 31px - 35px - 14px); /* height of tabs, height of input URL, height of margin  */
 	background-color:#FFF;
 	cursor:default;}
+
 #edit div.list:after {
 	content: '';
 	position: absolute;

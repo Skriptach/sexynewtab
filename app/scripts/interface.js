@@ -562,6 +562,8 @@
 		$('#bookmarks span')[0].innerText = chrome.i18n.getMessage('fn_bookmarks');
 		$('#history span')[0].innerText = chrome.i18n.getMessage('fn_history');
 		$('#topsites span')[0].innerText = chrome.i18n.getMessage('fn_top');
+		$('#customize h3')[0].innerText = chrome.i18n.getMessage('theme_label');
+		$('#customize h3')[1].innerText = chrome.i18n.getMessage('background_label');
 		document.onclick = clicksDelegate;
 		function ready(background) {
 			back = background;

@@ -17,16 +17,13 @@
 	"m_edit":{
 		"message":"Редактировать…"
 	},
-	"m_upd":{
-		"message":"Обновить эскиз"
-	},
 	"m_clear":{
 		"message":"Удалить"
 	},
-	"pa_add":{
-		"message":"Добавить текущую страницу"
+	"theme_label":{
+		"message":"Цветовая тема"
 	},
-	"mb_cancal":{
-		"message":"Отмена"
+	"background_label":{
+		"message":"Фоновое изображение"
 	}
 }
