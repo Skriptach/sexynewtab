@@ -136,6 +136,11 @@ module.exports = function (grunt) {
 					cwd: '<%= sexy.app %>/icons',
 					src: '{,*/}*.{png,jpg,jpeg,gif}',
 					dest: '<%= sexy.dist %>/icons'
+				}, {
+					expand: true,
+					cwd: '<%= sexy.app %>/styles',
+					src: '{,*/}*.{png,jpg,jpeg,gif}',
+					dest: '<%= sexy.dist %>/styles'
 				}]
 			}
 		},

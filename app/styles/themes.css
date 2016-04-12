@@ -23,6 +23,16 @@ body.dark-side.flow .page:before {
 	background-color: #141414;}
 #customize a.theme[data="dark-side"] span {background: #1E1E1E;}
 
+body.cosmos,
+body.cosmos.flow {
+	background-image: url('/styles/space.jpg');
+	background-size: cover;}
+body.cosmos.flow .page .flipper {
+	-webkit-box-reflect: initial;}
+body.cosmos.flow .page:before {
+	content: none;}
+
 body.metal a.theme[data="metal"] span,
+body.cosmos a.theme[data="cosmos"] span,
 body.dark-side a.theme[data="dark-side"] span,
 body.deep-purple a.theme[data="deep-purple"] span {box-shadow: 0 0 4px 1px #306AD5;}
