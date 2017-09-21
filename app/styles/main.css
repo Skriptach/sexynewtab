@@ -320,7 +320,9 @@ input[type="text"] {
 
 .link {
 	text-decoration:none;
-	cursor:default;
+	cursor:default;}
+
+.flow .link {
 	width: 100%;
 	height: 100%;
 	display: inline-block;}
