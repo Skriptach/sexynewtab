@@ -27,8 +27,8 @@ body.cosmos,
 body.cosmos.flow {
 	background-image: url('/styles/space.jpg');
 	background-size: cover;}
-body.cosmos.flow .page .flipper {
-	-webkit-box-reflect: initial;}
+body.cosmos.flow .page .link {
+	-webkit-box-reflect: unset;}
 body.cosmos.flow .page:before {
 	content: none;}
 
