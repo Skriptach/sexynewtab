@@ -168,6 +168,7 @@
 		page.querySelector('a').removeAttribute('href');
 		page.style.webkitTransform = 'scale(0.3)';
 		setTimeout(function () {
+			page.classList.add('inactive');
 			if (FLOW){
 				if (page === first_flow_page){
 					first_flow_page = getNextActivePage();
@@ -175,12 +176,8 @@
 				page.classList.add('deleting');
 				flowTo(getNextActivePage() || getPrevActivePage());
 				setTimeout(function () {
-					page.style['margin-left'] = '';
 					page.classList.remove('deleting');
-					page.classList.add('inactive');
 				}, 500);
-			} else {
-				page.classList.add('inactive');
 			}
 			page.querySelector('.thumbnail').removeAttribute('style');
 			page.querySelector('.plus').removeAttribute('style');
@@ -309,6 +306,9 @@
 		setBackGradient();
 		setWidth = ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA);
 		setHeight = ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA);
+		$('.page').forEach(function (page, i, arr) {
+			page.style.width = page.style.height = page.style.top = page.style.left = null;
+		});
 		rules =
 		['#set {',
 			'width: ' + setWidth + 'px;',
@@ -470,12 +470,24 @@
 			}
 		}
 	}
+
+	function setFlowPagesSize() {
+		var proportionW = d('set').clientWidth/100;
+		var n = 0;
+		var c = current_index();
+		$('.flow .page').forEach(function (page, i, arr) {
+			if (page.classList.contains('inactive')) {return;}
+			page.style.left = proportionW * ( (n < c ? -5*(19-n)-50 : n === c ? 0 : 5*n + 50 ) );
+			n++;
+		});
+	}
+
 	function flowTo(target) {
 		if(target){
 			current_flow_page.classList.remove('current');
 			current_flow_page = target;
 			current_flow_page.classList.add('current');
-			first_flow_page.style['margin-left'] = (first_flow_page.index - current_index()) * 15 - 30*(first_flow_page !== current_flow_page) + '%';
+			setFlowPagesSize();
 		}
 	}
 
@@ -501,23 +513,26 @@
 	}
 
 	function toggleDisplay() {
-		if (FLOW){
+		document.body.classList.toggle('flow');
+		document.body.classList.add('reflow');
+		FLOW = !FLOW;
+		if (!FLOW){
 			current_flow_page.classList.remove('current');
-			first_flow_page.style['margin-left'] = '';
 			first_flow_page = current_flow_page = null;
+			setPagesSize();
 		} else {
 			first_flow_page = current_flow_page = getNextActivePage();
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
-			first_flow_page.style['margin-left'] = '0';
+			setFlowPagesSize(true);
 		}
-		document.body.classList.toggle('flow');
-		FLOW = !FLOW;
+		setTimeout(function () {
+			document.body.classList.remove('reflow');
+		}, 0);
 		chrome.extension.sendRequest({
 			action: 'toggleView',
 			FLOW: FLOW
 		}, function() {});
-		setPagesSize();
 		setBackGradient();
 	}
 
@@ -582,7 +597,7 @@
 					_width = window.innerWidth;
 					_height = window.innerHeight;
 					clearTimeout(wait);
-					wait = setTimeout(setPagesSize, 100);
+					wait = setTimeout(FLOW ? setFlowPagesSize : setPagesSize, 100);
 				}
 			};
 			var inputUrl = $('#link_url input')[0];
