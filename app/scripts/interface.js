@@ -76,21 +76,21 @@
 					i = dragPage.index;
 					do {
 						i += modificator;
-						moved = d('page' + i);
+						moved = d(`page${i}`);
 						tmpPosX = parseFloat(moved.style.left);
 						tmpPosY = parseFloat(moved.style.top);
 						moved.style.left = TargetPosX;
 						moved.style.top = TargetPosY;
 						TargetPosX = tmpPosX;
 						TargetPosY = tmpPosY;
-						moved.setAttribute('id', 'page' + (i - modificator));
+						moved.setAttribute('id', `page${i - modificator}`);
 						moved.index = i - modificator;
 					} while (i !== position);
 					pagePosX = TargetPosX;
 					pagePosY = TargetPosY;
 					dragPage.index = position;
-					dragPage.setAttribute('id', 'page' + position);
-					set.insertBefore(dragPage, d('page' + (position + 1)));
+					dragPage.setAttribute('id', `page${position}`);
+					set.insertBefore(dragPage, d(`page${position + 1}`));
 				}
 			}
 		}
@@ -199,7 +199,7 @@
 		}
 	}
 	function updatePage(slotIndex, page, thumb) {
-		page = page || d('page' + slotIndex);
+		page = page || d(`page${slotIndex}`);
 		var oldUrl = page.url;
 		page.url = slotsList[slotIndex] ? slotsList[slotIndex].url : null;
 		page.thumb = thumb ? thumb :
@@ -211,16 +211,16 @@
 				var icon = page.querySelector('.plus');
 				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.href){
 					icon.style['background-image'] = '';
-					icon.style['-webkit-mask-image'] = 'url(' + slotsList[slotIndex].favicon.href + ')';
+					icon.style['-webkit-mask-image'] = `url(${slotsList[slotIndex].favicon.href})`;
 					icon.style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
 				} else {
 					icon.style['background-color'] = '';
 					icon.style['-webkit-mask-image'] = '';
-					icon.style['background-image'] = 'url(' + slotsList[slotIndex].favicon + ')';
+					icon.style['background-image'] = `url(${slotsList[slotIndex].favicon})`;
 				}
 			}
 			page.classList.remove('inactive');
-			page.querySelector('.thumbnail').style['background-image'] = 'url(' + page.thumb + ')';
+			page.querySelector('.thumbnail').style['background-image'] = `url(${page.thumb})`;
 		}
 	}
 	function pageClickHandler(event) {
@@ -247,15 +247,15 @@
 			topPos,
 			page,
 			innerHtml =
-			'<div class="flipper">'+
-				'<a class="link">'+
-					'<div class="backgradient"></div>'+
-					'<div class="plus"><i class="st-plus-circle"></i></div>'+
-					'<div class="thumbnail"></div>'+
-				'</a>'+
-				'<button class="edit" title="'+chrome.i18n.getMessage('m_edit') + '"><i class="st-pencil"></i></button>'+
-				'<button class="remove" title="'+chrome.i18n.getMessage('m_clear') + '"><i class="st-trash"></i></button>'+
-			'</div>';
+			`<div class="flipper">
+				<a class="link">
+					<div class="backgradient"></div>
+					<div class="plus"><i class="st-plus-circle"></i></div>
+					<div class="thumbnail"></div>
+				</a>
+				<button class="edit" title="${chrome.i18n.getMessage('m_edit')}"><i class="st-pencil"></i></button>
+				<button class="remove" title="${chrome.i18n.getMessage('m_clear')}"><i class="st-trash"></i></button>
+			</div>`;
 		thumbnailnode.setAttribute('class', 'page inactive');
 		thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
 		index = 0;
@@ -263,7 +263,7 @@
 			for (j = 0; j < COLUMNS_COUNT; j++) {
 				page = thumbnailnode.cloneNode(true);
 				page.draggable = true;
-				page.setAttribute('id', 'page' + index);
+				page.setAttribute('id', `page${index}`);
 				page.index = index;
 				leftPos = j * (PAGE_WIDTH + DELTA);
 				topPos = i * (PAGE_HEIGHT + DELTA);
@@ -291,14 +291,14 @@
 		var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
 			grad_radiusF = Math.sqrt(window.innerWidth * window.innerWidth / 4 + window.innerHeight * window.innerHeight / 3);
 		backgradient.innerHTML =
-		['.backgradient {',
-			'background-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
-					grad_radius + ', from(#000065), to(#000010))',
-			'}',
-		'.full .backgradient {',
-			'background-image: -webkit-gradient(radial, center top, 5, center 30%, ' +
-					grad_radiusF + ', from(#000065), to(#000010))',
-			'}'].join('\n');
+		`.backgradient {
+			background-image: -webkit-gradient(radial, center top, 5, center 30%,
+					${grad_radius}, from(#000065), to(#000010))
+			}
+		.full .backgradient {
+			background-image: -webkit-gradient(radial, center top, 5, center 30%,
+					${grad_radiusF}, from(#000065), to(#000010))
+			}`;
 	}
 	function setPagesSize() {
 		var i, j, index, leftPos, topPos, page, rules, setWidth, setHeight;
@@ -310,29 +310,29 @@
 			page.style.width = page.style.height = page.style.top = page.style.left = null;
 		});
 		rules =
-		['#set {',
-			'width: ' + setWidth + 'px;',
-			'height: ' + setHeight + 'px;',
-		'}',
-		'.page {',
-			'width: ' + PAGE_WIDTH + 'px;',
-			'height: ' + PAGE_HEIGHT + 'px;',
-			'}',
-		'body:not(.flow) .page.full {',
-			'width: ' + window.innerWidth/2 + 'px;',
-			'height: ' + window.innerHeight/2 + 'px;',
-			'left: '+ (setWidth - window.innerWidth/2)/2 + 'px !important;',
-			'top: '+ (setHeight - window.innerHeight/2)/2 + 'px !important;',
-			'}',
-		'.plus i {',
-			'font-size: ' + PAGE_HEIGHT  * 35.457 / 100 + 'px'].join('\n');
+		`#set {
+			width: ${setWidth}px;
+			height: ${setHeight}px;
+		}
+		.page {
+			width: ${PAGE_WIDTH}px;
+			height: ${PAGE_HEIGHT}px;
+			}
+		body:not(.flow) .page.full {
+			width: ${window.innerWidth/2}px;
+			height: ${window.innerHeight/2}px;
+			left: ${(setWidth - window.innerWidth/2)/2}px !important;
+			top: ${(setHeight - window.innerHeight/2)/2}px !important;
+			}
+		.plus i {
+			font-size: ${PAGE_HEIGHT  * 35.457 / 100}px`;
 		index = 0;
 		tile_style.innerHTML = rules;
 		for (i = 0; i < ROWS_COUNT; i++) {
 			for (j = 0; j < COLUMNS_COUNT; j++) {
 				leftPos = j * (PAGE_WIDTH + DELTA);
 				topPos = i * (PAGE_HEIGHT + DELTA);
-				page = d('page' + index);
+				page = d(`page${index}`);
 				if (page) {
 					page.style.left = leftPos;
 					page.style.top = topPos;
@@ -351,7 +351,7 @@
 		for (var i = 0; i < linksList.length; i++) {
 			if (protocol.test(linksList[i].url)) {
 				item = document.createElement('li');
-				item.style['background-image'] = 'url(' + (linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url) + ')';
+				item.style['background-image'] = `url(${(linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url)})`;
 				item.setAttribute('class', 'item');
 				item.url = linksList[i].url;
 				item.innerText = linksList[i].title || linksList[i].url;
@@ -437,7 +437,7 @@
 			res = i,
 			classes;
 		for (; i<current_flow_page.index; i++) {
-			classes = d('page'+i).classList;
+			classes = d(`page${i}`).classList;
 			if (!classes.contains('inactive') && !classes.contains('deleting')) {
 				res++;
 			}
@@ -550,7 +550,7 @@
 	}
 
 	function setBackground(bg) {
-		d('container').style['background-image'] = 'url('+ bg +')';
+		d('container').style['background-image'] = `url(${bg})`;
 	}
 
 	function bgChange (event) {
@@ -629,7 +629,7 @@
 					updatePage(request.params.index, null, request.params.thumb);
 					break;
 				case 'remove':
-					removePage(d('page'+request.params.index));
+					removePage(d(`page${request.params.index}`));
 					break;
 				}
 			}
