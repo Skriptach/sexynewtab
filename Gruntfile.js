@@ -58,7 +58,7 @@ module.exports = function (grunt) {
 		// concat, minify and revision files. Creates configurations in memory so
 		// additional tasks can operate on them
 		useminPrepare: {
-			//html: '<%= sexy.app %>/layout.html',
+			html: '<%= sexy.app %>/layout.html',
 			options: {
 				dest: '<%= sexy.dist %>',
 				flow: {
