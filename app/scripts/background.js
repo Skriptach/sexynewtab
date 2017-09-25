@@ -16,8 +16,8 @@
 		thumbs_ready = false;
 
 	function saveLocal() {
-		var buferT = {};
-		slotsList.forEach(function (slot) {
+		let buferT = {};
+		slotsList.forEach((slot) => {
 			if (!slot || !slot.url){return;}
 			buferT[slot.url] = slot.thumb;
 		});
@@ -25,8 +25,8 @@
 		chrome.storage.local.set({'thumbs': thumbs});
 	}
 
-	function saveSync(){
-		var slots = slotsList.map(function (slot) {
+	function saveSync() {
+		let slots = slotsList.map((slot) => {
 				return slot && slot.url ? {
 					url: slot.url,
 					favicon: slot.favicon
@@ -66,7 +66,7 @@
 			// take screenshot
 			chrome.tabs.captureVisibleTab(processing.tab.windowId, {
 				format: 'png'
-			}, function(thumb){
+			}, (thumb) => {
 				if (current.url !== processing.tab.url){
 					processing = null;
 					process();
@@ -88,7 +88,7 @@
 
 		function next () {
 			//get current tab
-			chrome.tabs.getSelected(null, function(currentTab) {
+			chrome.tabs.getSelected(null, (currentTab) => {
 				if (currentTab.id === processing.tab.id){
 					current = currentTab;
 					takeScreenshot();
@@ -99,7 +99,7 @@
 						active: true,
 						selected: true,
 						pinned: processing.tab.pinned
-					}, function (){
+					}, () => {
 						current = processing.tab;
 						setTimeout(takeScreenshot, 100);
 					});
@@ -123,7 +123,7 @@
 			}
 		}
 
-		chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
+		chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 			if (tab.active === true){
 				current = tab;
 			}
@@ -136,14 +136,12 @@
 	}
 
 	function byUrl (url) {
-		return function (slot) {
-			return (slot && slot.url === url);
-		};
+		return slot => (slot && slot.url === url);
 	}
 
 	function onRemove (index) {
 		if (index !== -1) {
-			var oldUrl = slotsList[index].url;
+			let oldUrl = slotsList[index].url;
 			slotsList[index] = null;
 			if (!slotsList.find(byUrl(oldUrl))) {
 				delete redirectUrls[oldUrl];
@@ -161,7 +159,7 @@
 
 	function updateFavicon (slot) {
 		getFavicon(slot.url)
-		.then(function(response){
+		.then((response) => {
 			slot.favicon = response;
 			saveSync();
 			refreshPages(slotsList.indexOf(slot));
@@ -171,17 +169,17 @@
 	function init() {
 		function loaded() {
 			if (urls_ready && thumbs_ready) {
-				slotsList.forEach(function(slot){
+				slotsList.forEach((slot) => {
 					slot && (slot.thumb = thumbs[slot.url]);
 				});
 				announce();
 			}
 		}
 
-		chrome.storage.sync.get(['slots', 'settings'], function(res) {
+		chrome.storage.sync.get(['slots', 'settings'], (res) => {
 			if (res.slots && res.slots.length){
 				slotsList = res.slots;
-				slotsList.forEach(function(slot){
+				slotsList.forEach((slot) => {
 					if(slot && slot.url && (!slot.favicon || slot.favicon.href === '/icons/document.svg') ){
 						updateFavicon(slot);
 					}
@@ -198,9 +196,9 @@
 			loaded();
 		});
 
-		chrome.storage.local.get(['thumbs'], function(res){
+		chrome.storage.local.get(['thumbs'], (res) => {
 			if (res.thumbs) {
-				for (var i in res.thumbs) {
+				for (let i in res.thumbs) {
 					thumbs[i] = res.thumbs[i];
 				}
 			}
@@ -214,7 +212,7 @@
 		saveSync();
 	}
 
-	window.subscribe = function  (callback) {
+	window.subscribe = (callback) => {
 		callbacks.push(callback);
 		if (urls_ready && thumbs_ready) {
 			announce();
@@ -222,20 +220,20 @@
 	};
 
 	function announce() {
-		var back = {
+		let back = {
 			slotsList: slotsList,
 			settings: settings,
 			swap: swap,
 			editPage: editPage
 		};
-		for (var i in callbacks) {
+		for (let i in callbacks) {
 			callbacks[i](back);
 		}
 		callbacks = [];
 	}
 
 	function fixUrl (url) {
-		var protocol = /^https?:\/\//,
+		let protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/;
 		if (!protocol.test(url)){
 			if(!domain.test(url)){return false;}
@@ -248,7 +246,7 @@
 		url = fixUrl(url);
 		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
 
-		var oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
+		let oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
 		slotsList[slot_index] = {
 			url: url,
 			favicon: {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'}
@@ -259,7 +257,7 @@
 		saveLocal();
 		saveSync();
 		if (requestedTab) {
-			createThumbOf(requestedTab, function(thumb) {
+			createThumbOf(requestedTab, (thumb) => {
 				slotsList[slot_index].thumb = thumb;
 				if (requestedTab.favIconUrl){
 					updateFavicon(slotsList[slot_index]);
@@ -276,16 +274,16 @@
 	function getOriginBy (url) {
 		if (slotsList.findIndex(byUrl(url)) !== -1){return url;}
 		if (slotsList.findIndex(byUrl(url.replace(/\/$/, ''))) !== -1){return url.replace(/\/$/, '');}
-		for(var u in redirectUrls){
+		for(let u in redirectUrls){
 			if (redirectUrls[u].indexOf(url) !== -1){return u;}
 		}
 	}
 
 	function firstInit() {
-		chrome.topSites.get(function (topSites) {
-			var length = Math.min(topSites.length, slotsList.length),
+		chrome.topSites.get((topSites) => {
+			let length = Math.min(topSites.length, slotsList.length),
 				deniedCount = 0;
-			for (var i = 0; i < length; i++){
+			for (let i = 0; i < length; i++){
 				if (!editPage(topSites[i].url, i - deniedCount)){
 					deniedCount++;
 				}
@@ -293,35 +291,31 @@
 		});
 	}
 
-	chrome.runtime.onInstalled.addListener(function (event) {
-		function notEmpty (slot) {
-			return (slot && slot.url);
-		}
-		if (event.reason === 'install' && !slotsList.some(notEmpty)){
+	chrome.runtime.onInstalled.addListener((event) => {
+		if (event.reason === 'install' && !slotsList.some( slot => (slot && slot.url) ) ) {
 			firstInit();
 		}
 	});
 
-	chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
-		var url, i;
-			// check if sender tab url really added to fav pages
-			url = getOriginBy(tab.url);
-			i = slotsList.findIndex(byUrl(url));
-			if (url && i !== -1 && changeInfo.status === 'complete') {
-				createThumbOf(tab, function (thumb) {
-					// save it
-					slotsList[i].thumb = thumb || slotsList[i].thumb;
-					saveLocal();
-					if (tab.favIconUrl){
-						updateFavicon(slotsList[i]);
-					}
-					refreshPages(i);
-				});
-			}
+	chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
+		// check if sender tab url really added to fav pages
+		let url = getOriginBy(tab.url);
+		let i = slotsList.findIndex(byUrl(url));
+		if (url && i !== -1 && changeInfo.status === 'complete') {
+			createThumbOf(tab, (thumb) => {
+				// save it
+				slotsList[i].thumb = thumb || slotsList[i].thumb;
+				saveLocal();
+				if (tab.favIconUrl){
+					updateFavicon(slotsList[i]);
+				}
+				refreshPages(i);
+			});
+		}
 	});
 
-	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
-		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')){
+	chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')) {
 			switch (request.action) {
 			case 'clear':
 				onRemove(request.index);
@@ -350,8 +344,8 @@
 		}
 	});
 
-	chrome.webRequest.onBeforeRedirect.addListener(function(details){
-		var origin = getOriginBy(details.url);
+	chrome.webRequest.onBeforeRedirect.addListener((details) => {
+		let origin = getOriginBy(details.url);
 		origin && (redirectUrls[origin] = redirectUrls[origin] || []);
 		if (origin && redirectUrls[origin] && redirectUrls[origin].indexOf(details.redirectUrl) === -1) {
 			redirectUrls[origin].push(details.redirectUrl);
