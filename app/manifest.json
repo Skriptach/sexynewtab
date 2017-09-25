@@ -17,7 +17,7 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.7.2.9",
+	"version": "0.7.2.10",
 	"version_name": "0.7.2",
 	"author": "Liubomudr Nazariev"
 }

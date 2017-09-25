@@ -163,6 +163,7 @@
 		getFavicon(slot.url)
 		.then(function(response){
 			slot.favicon = response;
+			saveSync();
 			refreshPages(slotsList.indexOf(slot));
 		});
 	}
@@ -185,8 +186,6 @@
 						updateFavicon(slot);
 					}
 				});
-			} else {
-				saveSync();
 			}
 			if (res.settings) {
 				settings.COLUMNS_COUNT = res.settings.COLUMNS_COUNT;
