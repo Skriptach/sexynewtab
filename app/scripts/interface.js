@@ -157,10 +157,10 @@
 		}
 	}
 	function clearPage () {
-		chrome.extension.sendRequest({
+		chrome.runtime.sendMessage({
 			action: 'clear',
 			index: closest(this, '.page').index
-		}, () => {});
+		});
 	}
 	function removePage (page) {
 		page.querySelector('a').removeAttribute('href');
@@ -515,10 +515,10 @@
 			setFlowPagesSize(true);
 		}
 		setTimeout(() => document.body.classList.remove('reflow'), 0);
-		chrome.extension.sendRequest({
+		chrome.runtime.sendMessage({
 			action: 'toggleView',
 			FLOW: FLOW
-		}, () => {});
+		});
 		setBackGradient();
 	}
 
@@ -530,10 +530,10 @@
 		document.body.classList.remove(cuurentTheme);
 		cuurentTheme = newTheme;
 		document.body.classList.add(cuurentTheme);
-		save && chrome.extension.sendRequest({
+		save && chrome.runtime.sendMessage({
 			action: 'switchTheme',
 			theme: cuurentTheme
-		}, () => {});
+		});
 	}
 
 	function setBackground (bg) {
@@ -547,10 +547,10 @@
 		}
 		let bg = $('#background input')[0].value;
 		setBackground(bg);
-		chrome.extension.sendRequest({
+		chrome.runtime.sendMessage({
 			action: 'setBackground',
 			back: bg
-		}, () => {});
+		});
 	}
 
 	function init () {
@@ -566,7 +566,7 @@
 		$('#customize h3')[0].innerText = chrome.i18n.getMessage('theme_label');
 		$('#customize h3')[1].innerText = chrome.i18n.getMessage('background_label');
 		document.onclick = clicksDelegate;
-		chrome.extension.getBackgroundPage().subscribe((background) => {
+		function ready (background) {
 			back = background;
 			slotsList = back.slotsList;
 			COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
@@ -603,11 +603,12 @@
 			};
 			document.onkeydown = keyHandler;
 			document.onmousewheel = scrollFlow;
-		});
+		}
+		chrome.runtime.getBackgroundPage( (bgWindow) => bgWindow.subscribe(ready) );
 	}
 
 	function listenMessages () {
-		chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+		chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
 				switch (request.action) {
 				case 'updatePage':

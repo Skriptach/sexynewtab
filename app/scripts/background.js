@@ -39,7 +39,13 @@
 	}
 
 	function refreshPages (slot_index) {
-		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: slotsList[slot_index].thumb }});
+		chrome.runtime.sendMessage({
+			action: 'updatePage',
+			params: {
+				index: slot_index,
+				thumb: slotsList[slot_index].thumb 
+			}
+		});
 	}
 
 	function createThumbOf () {
@@ -64,9 +70,7 @@
 				return;
 			}
 			// take screenshot
-			chrome.tabs.captureVisibleTab(processing.tab.windowId, {
-				format: 'png'
-			}, (thumb) => {
+			chrome.tabs.captureVisibleTab(processing.tab.windowId, { format: 'png' }, (thumb) => {
 				if (current.url !== processing.tab.url){
 					processing = null;
 					process();
@@ -88,18 +92,15 @@
 
 		function next () {
 			//get current tab
-			chrome.tabs.getSelected(null, (currentTab) => {
+			chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+				let currentTab = tabs[0];
 				if (currentTab.id === processing.tab.id){
 					current = currentTab;
 					takeScreenshot();
 				} else {
 					savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
 					// switch to requested tab
-					chrome.tabs.update(processing.tab.id, {
-						active: true,
-						selected: true,
-						pinned: processing.tab.pinned
-					}, () => {
+					chrome.tabs.update(processing.tab.id, { active: true }, () => {
 						current = processing.tab;
 						setTimeout(takeScreenshot, 100);
 					});
@@ -114,19 +115,13 @@
 				next();
 			} else if (savedTab){
 				// switch back
-				chrome.tabs.update(savedTab.id, {
-					active: true,
-					selected: true,
-					pinned: savedTab.pinned
-				});
+				chrome.tabs.update(savedTab.id, { active: true });
 				savedTab = null;
 			}
 		}
 
-		chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
-			if (tab.active === true){
-				current = tab;
-			}
+		chrome.tabs.onActivated.addListener((activeInfo) => {
+			chrome.tabs.get(activeInfo.tabId, (tab) => current = tab);
 		});
 
 		if (createThumbOf !== addToQueue){
@@ -148,7 +143,7 @@
 			}
 			saveLocal();
 			saveSync();
-			chrome.extension.sendRequest({
+			chrome.runtime.sendMessage({
 				action: 'remove',
 				params: {
 					index: index
@@ -314,7 +309,7 @@
 		}
 	});
 
-	chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')) {
 			switch (request.action) {
 			case 'clear':
