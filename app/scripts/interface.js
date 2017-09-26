@@ -1,7 +1,7 @@
 ﻿;(function () {
 'use strict';
 
-	var COLUMNS_COUNT,
+	let COLUMNS_COUNT,
 		ROWS_COUNT,
 		DELTA = 10,
 		PAGE_WIDTH,
@@ -34,7 +34,7 @@
 			'#edit .list .item': selectLink
 		};
 
-	function d(id) {
+	function d (id) {
 		return document.getElementById(id);
 	}
 
@@ -42,7 +42,7 @@
 		return document.querySelectorAll(selector);
 	}
 
-	function closest(el, selector) {
+	function closest (el, selector) {
 		while (el) {
 			if (el.matches(selector)) {
 				return el;
@@ -52,9 +52,9 @@
 		return null;
 	}
 
-	function onDrag(e) {
+	function onDrag (e) {
 		if (e.screenX > 0 || e.screenY > 0) {
-			var TargetPosX,
+			let TargetPosX,
 				TargetPosY,
 				modificator,
 				i,
@@ -95,7 +95,7 @@
 			}
 		}
 	}
-	function stopDrag() {
+	function stopDrag () {
 		document.ondrag = null;
 		document.ondragend = null;
 		dragPage.ondragover = null;
@@ -108,7 +108,7 @@
 		back.swap(lastPosition, dragPage.index);
 		lastPosition = null;
 	}
-	function prepareDrag(e) {
+	function prepareDrag (e) {
 		dragPage = closest(e.target, '.page');
 		if (dragPage.classList.contains('turned') || FLOW) {
 			e.preventDefault();
@@ -126,25 +126,23 @@
 		document.ondrag = onDrag;
 		document.ondragend = stopDrag;
 	}
-	function showEditForm() {
-		var inputUrl = $('#link_url input')[0];
+	function showEditForm () {
+		let inputUrl = $('#link_url input')[0];
 		currentEditPage.appendChild(edit);
 		$('#edit .header .tab.active')[0].click();
 		inputUrl.value = currentEditPage.url;
 		inputUrl.title = currentEditPage.url || '';
 		inputUrl.onchange();
-		setTimeout(function () {
-			currentEditPage.classList.add('turned', 'ontop');
-		}, 10);
+		setTimeout(() => currentEditPage.classList.add('turned', 'ontop'), 10);
 	}
-	function hideEditForm() {
+	function hideEditForm () {
 		currentEditPage.classList.remove('turned');
-		setTimeout(function () {
+		setTimeout(() => {
 			currentEditPage.classList.remove('ontop');
 			currentEditPage = null;
 		}, 300);
 	}
-	function toggleEditForm(page) {
+	function toggleEditForm (page) {
 		if (!currentEditPage) {
 			currentEditPage = page;
 			showEditForm();
@@ -152,22 +150,22 @@
 		}
 		if (currentEditPage && page !== currentEditPage) {
 			hideEditForm();
-			setTimeout(function () {
+			setTimeout(() => {
 				currentEditPage = page;
 				showEditForm();
 			}, 310);
 		}
 	}
-	function clearPage (event) {
+	function clearPage () {
 		chrome.extension.sendRequest({
 			action: 'clear',
 			index: closest(this, '.page').index
-		}, function() {});
+		}, () => {});
 	}
-	function removePage(page) {
+	function removePage (page) {
 		page.querySelector('a').removeAttribute('href');
 		page.style.webkitTransform = 'scale(0.3)';
-		setTimeout(function () {
+		setTimeout(() => {
 			page.classList.add('inactive');
 			if (FLOW){
 				if (page === first_flow_page){
@@ -175,20 +173,16 @@
 				}
 				page.classList.add('deleting');
 				flowTo(getNextActivePage() || getPrevActivePage());
-				setTimeout(function () {
-					page.classList.remove('deleting');
-				}, 500);
+				setTimeout(() => page.classList.remove('deleting'), 500);
 			}
 			page.querySelector('.thumbnail').removeAttribute('style');
 			page.querySelector('.plus').removeAttribute('style');
 			page.style.webkitTransform = 'scale(1)';
-			setTimeout(function () {
-				page.style.webkitTransform = '';
-			}, 10);
+			setTimeout(() => page.style.webkitTransform = '', 10);
 		}, 200);
 	}
-	function calcSize() {
-		var _width = window.innerWidth,
+	function calcSize () {
+		let _width = window.innerWidth,
 			_height = window.innerHeight,
 			PROPORTION = _height / _width;
 		PAGE_WIDTH = FLOW ? _width / 2 : (_width - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
@@ -198,9 +192,9 @@
 			PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
 		}
 	}
-	function updatePage(slotIndex, page, thumb) {
+	function updatePage (slotIndex, page, thumb) {
 		page = page || d(`page${slotIndex}`);
-		var oldUrl = page.url;
+		let oldUrl = page.url;
 		page.url = slotsList[slotIndex] ? slotsList[slotIndex].url : null;
 		page.thumb = thumb ? thumb :
 			slotsList[slotIndex] && slotsList[slotIndex].thumb ? slotsList[slotIndex].thumb :
@@ -208,7 +202,7 @@
 		if (page.url) {
 			page.querySelector('a').setAttribute('href', page.url);
 			if(!page.thumb){
-				var icon = page.querySelector('.plus');
+				let icon = page.querySelector('.plus');
 				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.color){
 					icon.style['background-image'] = '';
 					icon.style['-webkit-mask-image'] = `url(${slotsList[slotIndex].favicon.href})`;
@@ -223,8 +217,8 @@
 			page.querySelector('.thumbnail').style['background-image'] = `url(${page.thumb})`;
 		}
 	}
-	function pageClickHandler(event) {
-		var page;
+	function pageClickHandler (event) {
+		let page;
 		page = closest(this, '.page');
 		if (FLOW && !page.classList.contains('current')){
 			event.preventDefault();
@@ -232,16 +226,12 @@
 			flowTo(page);
 		} else {
 			if (event.button !== 0) {return;}
-			setTimeout(function(){
-				page.classList.add('full');
-			}, 10);
+			setTimeout(() => page.classList.add('full'), 10);
 		}
 	}
-	function createPages() {
-		var thumbnailnode = document.createElement('div'),
+	function createPages () {
+		let thumbnailnode = document.createElement('div'),
 			pages = document.createDocumentFragment(),
-			i,
-			j,
 			index,
 			leftPos,
 			topPos,
@@ -259,8 +249,8 @@
 		thumbnailnode.setAttribute('class', 'page inactive');
 		thumbnailnode.insertAdjacentHTML('beforeend', innerHtml);
 		index = 0;
-		for (i = 0; i < ROWS_COUNT; i++) {
-			for (j = 0; j < COLUMNS_COUNT; j++) {
+		for (let i = 0; i < ROWS_COUNT; i++) {
+			for (let j = 0; j < COLUMNS_COUNT; j++) {
 				page = thumbnailnode.cloneNode(true);
 				page.draggable = true;
 				page.setAttribute('id', `page${index}`);
@@ -279,16 +269,16 @@
 		document.ondragstart = prepareDrag;
 	}
 	function clicksDelegate (event) {
-		for (var selector in handlers){
+		for (let selector in handlers){
 			if (event.target.matches(selector) || event.target.matches(selector.replace('*', ''))){
-				var target = closest(event.target, selector.replace('*', ''));
+				let target = closest(event.target, selector.replace('*', ''));
 				handlers[selector].call(target, event);
 				return;
 			}
 		}
 	}
 	function setBackGradient () {
-		var grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
+		let grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
 			grad_radiusF = Math.sqrt(window.innerWidth * window.innerWidth / 4 + window.innerHeight * window.innerHeight / 3);
 		backgradient.innerHTML =
 		`.backgradient {
@@ -300,13 +290,13 @@
 					${grad_radiusF}, from(#000065), to(#000010))
 			}`;
 	}
-	function setPagesSize() {
-		var i, j, index, leftPos, topPos, page, rules, setWidth, setHeight;
+	function setPagesSize () {
+		let index, leftPos, topPos, page, rules, setWidth, setHeight;
 		calcSize();
 		setBackGradient();
 		setWidth = ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA);
 		setHeight = ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA);
-		$('.page').forEach(function (page, i, arr) {
+		$('.page').forEach((page) => {
 			page.style.width = page.style.height = page.style.top = page.style.left = null;
 		});
 		rules =
@@ -328,8 +318,8 @@
 			font-size: ${PAGE_HEIGHT  * 35.457 / 100}px`;
 		index = 0;
 		tile_style.innerHTML = rules;
-		for (i = 0; i < ROWS_COUNT; i++) {
-			for (j = 0; j < COLUMNS_COUNT; j++) {
+		for (let i = 0; i < ROWS_COUNT; i++) {
+			for (let j = 0; j < COLUMNS_COUNT; j++) {
 				leftPos = j * (PAGE_WIDTH + DELTA);
 				topPos = i * (PAGE_HEIGHT + DELTA);
 				page = d(`page${index}`);
@@ -343,12 +333,12 @@
 	}
 
 	function buildList (linksList, isTab) {
-		var node = $('#edit .list .tree')[0],
+		let node = $('#edit .list .tree')[0],
 			list = document.createDocumentFragment(),
 			protocol = /^https?:/,
 			item;
-		[].slice.call(node.children).forEach(function(link){node.removeChild(link);});
-		for (var i = 0; i < linksList.length; i++) {
+		[].slice.call(node.children).forEach((link) => node.removeChild(link));
+		for (let i = 0; i < linksList.length; i++) {
 			if (protocol.test(linksList[i].url)) {
 				item = document.createElement('li');
 				item.style['background-image'] = `url(${(linksList[i].favIconUrl || 'chrome://favicon/'+linksList[i].url)})`;
@@ -364,28 +354,27 @@
 		node.appendChild(list);
 	}
 
-	function switchToTabs() {
-		var tabs = [];
-		chrome.windows.getAll({populate: true}, function (windows) {
-			for (var i = 0; i < windows.length; i++) {
+	function switchToTabs () {
+		let tabs = [];
+		chrome.windows.getAll({populate: true}, (windows) => {
+			for (let i = 0; i < windows.length; i++) {
 				tabs = tabs.concat(windows[i].tabs);
 			}
 			buildList(tabs, true);
 		});
 	}
-	function switchToHistory() {
+
+	function switchToHistory () {
 		chrome.history.search({
 			text: '',
 			startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
-		}, function (visitItems) {
-			buildList(visitItems);
-		});
+		}, (visitItems) => buildList(visitItems));
 	}
-	function switchToTop() {
-		chrome.topSites.get(function (topSites) {
-			buildList(topSites);
-		});
+
+	function switchToTop () {
+		chrome.topSites.get((topSites) => buildList(topSites));
 	}
+
 	function switchToBookmarks () {
 	}
 
@@ -400,7 +389,7 @@
 	}
 
 	function selectLink (event) {
-		var inputUrl = $('#link_url input')[0];
+		let inputUrl = $('#link_url input')[0];
 		inputUrl.value = this.url;
 		inputUrl.onchange();
 		currentItem && currentItem.classList.remove('selected');
@@ -408,7 +397,7 @@
 		this.classList.add('selected');
 		inputUrl.select();
 	}
-	function editPage() {
+	function editPage () {
 		if (edit_ok.disabled){return;}
 		back.editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
 		updatePage(currentEditPage.index);
@@ -420,7 +409,7 @@
 			setTimeout(urlChange, 1);
 			return;
 		}
-		var protocol = /^https?:\/\//,
+		let protocol = /^https?:\/\//,
 			domain = /^[\w]+[\w-\.]+/,
 			url = $('#link_url input')[0].value;
 		currentItem && currentItem.classList.remove('selected');
@@ -432,8 +421,8 @@
 		}
 	}
 
-	function current_index(){
-		var i = first_flow_page.index,
+	function current_index () {
+		let i = first_flow_page.index,
 			res = i,
 			classes;
 		for (; i<current_flow_page.index; i++) {
@@ -445,8 +434,8 @@
 		return res;
 	}
 
-	function getNextActivePage() {
-		var tmp;
+	function getNextActivePage () {
+		let tmp;
 		if (first_flow_page){
 			tmp = current_flow_page;
 		} else {
@@ -461,8 +450,8 @@
 			}
 		}
 	}
-	function getPrevActivePage(){
-		var tmp = current_flow_page;
+	function getPrevActivePage () {
+		let tmp = current_flow_page;
 		while (tmp = tmp.previousElementSibling){
 			if (!tmp.classList.contains('inactive')){
 				return tmp;
@@ -470,18 +459,18 @@
 		}
 	}
 
-	function setFlowPagesSize() {
-		var proportionW = d('set').clientWidth/100;
-		var n = 0;
-		var c = current_index();
-		$('.flow .page').forEach(function (page, i, arr) {
+	function setFlowPagesSize () {
+		let proportionW = d('set').clientWidth/100,
+			n = 0,
+			c = current_index();
+		$('.flow .page').forEach((page) => {
 			if (page.classList.contains('inactive')) {return;}
 			page.style.left = proportionW * ( (n < c ? -5*(19-n)-50 : n === c ? 0 : 5*n + 50 ) );
 			n++;
 		});
 	}
 
-	function flowTo(target) {
+	function flowTo (target) {
 		if(target){
 			current_flow_page.classList.remove('current');
 			current_flow_page = target;
@@ -490,7 +479,7 @@
 		}
 	}
 
-	function scrollFlow(e) {
+	function scrollFlow (e) {
 		if (!FLOW){return;}
 		if (e.wheelDelta < 0) {
 			flowTo(getNextActivePage());
@@ -499,7 +488,7 @@
 		}
 	}
 
-	function keyHandler(e) {
+	function keyHandler (e) {
 		if(e.keyCode === 27 && currentEditPage){
 			hideEditForm();
 		}
@@ -511,7 +500,7 @@
 		}
 	}
 
-	function toggleDisplay() {
+	function toggleDisplay () {
 		document.body.classList.toggle('flow');
 		document.body.classList.add('reflow');
 		FLOW = !FLOW;
@@ -525,17 +514,15 @@
 			current_flow_page.classList.add('current');
 			setFlowPagesSize(true);
 		}
-		setTimeout(function () {
-			document.body.classList.remove('reflow');
-		}, 0);
+		setTimeout(() => document.body.classList.remove('reflow'), 0);
 		chrome.extension.sendRequest({
 			action: 'toggleView',
 			FLOW: FLOW
-		}, function() {});
+		}, () => {});
 		setBackGradient();
 	}
 
-	function toggleCustomize() {
+	function toggleCustomize () {
 		window.customize.classList.toggle('open');
 	}
 
@@ -546,10 +533,10 @@
 		save && chrome.extension.sendRequest({
 			action: 'switchTheme',
 			theme: cuurentTheme
-		}, function() {});
+		}, () => {});
 	}
 
-	function setBackground(bg) {
+	function setBackground (bg) {
 		d('container').style['background-image'] = `url(${bg})`;
 	}
 
@@ -558,16 +545,16 @@
 			setTimeout(bgChange, 1);
 			return;
 		}
-		var bg = $('#background input')[0].value;
+		let bg = $('#background input')[0].value;
 		setBackground(bg);
 		chrome.extension.sendRequest({
 			action: 'setBackground',
 			back: bg
-		}, function() {});
+		}, () => {});
 	}
 
 	function init () {
-		var _width = window.innerWidth,
+		let _width = window.innerWidth,
 			_height = window.innerHeight,
 			styles = document.createElement('style');
 		document.head.appendChild(styles.cloneNode(true)).setAttribute('id','backgradient');
@@ -579,19 +566,19 @@
 		$('#customize h3')[0].innerText = chrome.i18n.getMessage('theme_label');
 		$('#customize h3')[1].innerText = chrome.i18n.getMessage('background_label');
 		document.onclick = clicksDelegate;
-		function ready(background) {
+		chrome.extension.getBackgroundPage().subscribe((background) => {
 			back = background;
 			slotsList = back.slotsList;
 			COLUMNS_COUNT = back.settings.COLUMNS_COUNT;
 			ROWS_COUNT = back.settings.ROWS_COUNT;
-			var wait = null;
+			let wait = null;
 			setPagesSize();
 			createPages();
 			back.settings.THEME && switchTheme(back.settings.THEME);
 			back.settings.BACK && setBackground(back.settings.BACK);
 			back.settings.FLOW && toggleDisplay();
 			listenMessages();
-			window.onresize = function () {
+			window.onresize = () => {
 				if (_width !== window.innerWidth || _height !== window.innerHeight) {
 					_width = window.innerWidth;
 					_height = window.innerHeight;
@@ -599,11 +586,11 @@
 					wait = setTimeout(FLOW ? setFlowPagesSize : setPagesSize, 100);
 				}
 			};
-			var inputUrl = $('#link_url input')[0];
+			let inputUrl = $('#link_url input')[0];
 			inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = urlChange;
-			var inputBack = $('#background input')[0];
+			let inputBack = $('#background input')[0];
 			inputBack.onpaste = inputBack.onkeyup = inputBack.onchange = bgChange;
-			inputUrl.onkeydown = function (event) {
+			inputUrl.onkeydown = (event) => {
 				if (event.keyCode === 13){
 					editPage();
 				}
@@ -611,18 +598,16 @@
 					event.stopPropagation();
 				}
 			};
-			$('#edit .tree')[0].onmousewheel = function (event) {
+			$('#edit .tree')[0].onmousewheel = (event) => {
 				if (event.wheelDeltaX === 0){event.stopPropagation();}
 			};
 			document.onkeydown = keyHandler;
 			document.onmousewheel = scrollFlow;
-		}
-		chrome.extension.getBackgroundPage().subscribe(ready);
+		});
 	}
 
-	function listenMessages (){
-	chrome.extension.onRequest.addListener(
-		function (request, sender, sendResponse) {
+	function listenMessages () {
+		chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {
 				switch (request.action) {
 				case 'updatePage':
@@ -633,8 +618,7 @@
 					break;
 				}
 			}
-		}
-	);
+		});
 	}
 
 	window.onload = init();

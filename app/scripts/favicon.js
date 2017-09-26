@@ -55,7 +55,7 @@ var getFavicon, resolveUrl;
 		});
 	}
 
-	function getSize(link) {
+	function getSize (link) {
 		let c = link.getAttribute('color'),
 			v = link.getAttribute('sizes'),
 			n = parseInt(v, 10),

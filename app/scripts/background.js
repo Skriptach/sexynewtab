@@ -15,7 +15,7 @@
 		urls_ready = false,
 		thumbs_ready = false;
 
-	function saveLocal() {
+	function saveLocal () {
 		let buferT = {};
 		slotsList.forEach((slot) => {
 			if (!slot || !slot.url){return;}
@@ -25,7 +25,7 @@
 		chrome.storage.local.set({'thumbs': thumbs});
 	}
 
-	function saveSync() {
+	function saveSync () {
 		let slots = slotsList.map((slot) => {
 				return slot && slot.url ? {
 					url: slot.url,
@@ -38,11 +38,11 @@
 		});
 	}
 
-	function refreshPages(slot_index) {
+	function refreshPages (slot_index) {
 		chrome.extension.sendRequest({action: 'updatePage', params: {index: slot_index, thumb: slotsList[slot_index].thumb }});
 	}
 
-	function createThumbOf() {
+	function createThumbOf () {
 		var savedTab,
 			processing,
 			current,
@@ -166,8 +166,8 @@
 		});
 	}
 
-	function init() {
-		function loaded() {
+	function init () {
+		function loaded () {
 			if (urls_ready && thumbs_ready) {
 				slotsList.forEach((slot) => {
 					slot && (slot.thumb = thumbs[slot.url]);
@@ -219,7 +219,7 @@
 		}
 	};
 
-	function announce() {
+	function announce () {
 		let back = {
 			slotsList: slotsList,
 			settings: settings,
@@ -279,7 +279,7 @@
 		}
 	}
 
-	function firstInit() {
+	function firstInit () {
 		chrome.topSites.get((topSites) => {
 			let length = Math.min(topSites.length, slotsList.length),
 				deniedCount = 0;
