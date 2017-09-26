@@ -47,7 +47,7 @@ var getFavicon, resolveUrl;
 			let img = document.createElement('img');
 			img.onload = () => {
 				if (img.width < 16 || img.height < 16){reject();}
-				else {resolve(src);}
+				else {resolve({href: src});}
 			};
 			img.onerror = () => reject();
 
@@ -55,29 +55,32 @@ var getFavicon, resolveUrl;
 		});
 	}
 
+	function getSize(link) {
+		let c = link.getAttribute('color'),
+			v = link.getAttribute('sizes'),
+			n = parseInt(v, 10),
+			h = link.getAttribute('href');
+		return (v === 'any' || (/\.svg$/).test(h) || c) ? Number.MAX_VALUE :
+			(n > 16) ? n :
+			(link.rel === 'apple-touch-icon-precomposed') ? 152 :
+			(link.rel === 'apple-touch-icon') ? 144 :
+			16;
+	}
+
 	function findLargest (links) {
-		if (!links.length){return;}
-		let c, at, atp,
-			link = links[links.length - 1],
-			href = link.getAttribute('href'),
-			size = parseInt(link.getAttribute('sizes'), 10) || 0;
-		[].slice.call(links).some((l) => {
-			c = l.getAttribute('color');
-			let v = l.getAttribute('sizes'),
-				h = l.getAttribute('href'),
-				s = (v === 'any' || (/\.svg$/).test(h) || c) ? Number.MAX_VALUE :
-					parseInt(v, 10) || 0;
-			if (l.rel === 'apple-touch-icon'){at = h;}
-			if (l.rel === 'apple-touch-icon-precomposed'){atp = h;}
-			if (s>size) {
-				href = h;
-				size = s;
-			}
-			return (size === Number.MAX_VALUE);
-		});
-		return  (size === Number.MAX_VALUE) ? {href: href, color: c} :
-				(size > 0) ? href :
-				atp || at || href;
+		let link = links[0];
+		return loadImage(link.href)
+			.then((favicon) => {
+				if (link.color || link.size === Number.MAX_VALUE){
+					favicon.color = link.color;
+				}
+				return favicon;
+			})
+			.catch(() => {
+				links.shift();
+				if (!links.length){throw new Error('No available icons in the list');}
+				return findLargest(links);
+			});
 	}
 
 	function tryGuess (byUrl) {
@@ -87,20 +90,24 @@ var getFavicon, resolveUrl;
 			.catch(() => loadImage(tryICO))
 			.catch(() => blankIcon);
 	}
+
 	getFavicon = function (url) {
 
 		return get(url)
 		.then((response) => {
 			let doc = parser.parseFromString(response.body, 'text/html'),
-				links = doc.querySelectorAll('link[rel*="icon"][href]'),
-				favicon;
-			favicon = findLargest(links);
-			if (favicon && favicon.href) {
-				favicon.href = resolveUrl(favicon.href, response.landingUrl || url, doc);
-				return favicon;
-			} else if (favicon) {
-				favicon = resolveUrl(favicon, response.landingUrl || url, doc);
-				return loadImage(favicon).catch(() => blankIcon);
+				links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
+					return {
+						href: resolveUrl(link.getAttribute('href'), response.landingUrl || url, doc),
+						color: link.getAttribute('color'),
+						size: getSize(link)
+					};
+				}).sort((a, b) => {
+					return b.size - a.size;
+				});
+			if (links.length) {
+				return findLargest(links)
+				.catch(() => tryGuess(response.landingUrl || url));
 			} else {
 				return tryGuess(response.landingUrl || url);
 			}

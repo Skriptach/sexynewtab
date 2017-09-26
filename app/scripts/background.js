@@ -180,7 +180,7 @@
 			if (res.slots && res.slots.length){
 				slotsList = res.slots;
 				slotsList.forEach((slot) => {
-					if(slot && slot.url && (!slot.favicon || slot.favicon.href === '/icons/document.svg') ){
+					if(slot && slot.url){
 						updateFavicon(slot);
 					}
 				});
