@@ -39,6 +39,7 @@
 	}
 
 	function refreshPages (slot_index) {
+		if (slot_index < 0){return;}
 		chrome.runtime.sendMessage({
 			action: 'updatePage',
 			params: {
@@ -155,6 +156,7 @@
 	function updateFavicon (slot) {
 		getFavicon(slot.url)
 		.then((response) => {
+			if (slotsList.indexOf(slot) < 0){return;}
 			slot.favicon = response;
 			saveSync();
 			refreshPages(slotsList.indexOf(slot));
