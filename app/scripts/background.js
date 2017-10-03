@@ -105,7 +105,10 @@
 				} else {
 					savedTab = savedTab || (current.id > -1 ? current : null);
 					// switch to requested tab
-					chrome.tabs.update(processing.tab.id, { active: true }, () => {
+					chrome.tabs.update(processing.tab.id, { active: true }, (tab) => {
+						if ((chrome.runtime.lastError && chrome.runtime.lastError.message.includes('No tab with id')) || !tab){
+							return;
+						}
 						chrome.windows.update(processing.tab.windowId, {focused: true}, () => {
 							setTimeout(takeScreenshot, 150);
 						});
