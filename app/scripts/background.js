@@ -13,7 +13,8 @@
 		callbacks = [],
 		redirectUrls = {},
 		urls_ready = false,
-		thumbs_ready = false;
+		thumbs_ready = false,
+		currentTab;
 
 	function saveLocal () {
 		let buferT = {};
@@ -52,27 +53,26 @@
 	function createThumbOf () {
 		var savedTab,
 			processing,
-			current,
 			queue = [];
 
-		function addToQueue (tab, func) {
+		function addToQueue (tab, slot_index) {
 			queue.push({
-				tab: tab,
-				callback: func,
-				tries: 3
+				tab,
+				slot_index,
+				tries: 5
 			});
 			process();
 		}
 
 		function takeScreenshot () {
-			if (current.url !== processing.tab.url){
+			if (currentTab.url !== processing.tab.url){
 				processing = null;
 				process();
 				return;
 			}
 			// take screenshot
 			chrome.tabs.captureVisibleTab(processing.tab.windowId, { format: 'png' }, (thumb) => {
-				if (current.url !== processing.tab.url){
+				if (currentTab.url !== processing.tab.url){
 					processing = null;
 					process();
 					return;
@@ -82,10 +82,15 @@
 					processing.tries--;
 					processing.tries && queue.unshift(processing);
 					processing = null;
-					process();
+					setTimeout(process, 10);
 					return;
 				}
-				processing.callback(thumb);
+				slotsList[processing.slot_index].thumb = thumb;
+				if (processing.tab.favIconUrl){
+					updateFavicon(slotsList[processing.slot_index]);
+				}
+				refreshPages(processing.slot_index);
+				saveLocal();
 				processing = null;
 				process();
 			});
@@ -94,16 +99,16 @@
 		function next () {
 			//get current tab
 			chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-				let currentTab = tabs[0];
-				if (currentTab.id === processing.tab.id){
-					current = currentTab;
+				let current = tabs[0];
+				if (current.id === processing.tab.id){
 					takeScreenshot();
 				} else {
-					savedTab = savedTab || (currentTab.id > -1 ? currentTab : null);
+					savedTab = savedTab || (current.id > -1 ? current : null);
 					// switch to requested tab
 					chrome.tabs.update(processing.tab.id, { active: true }, () => {
-						current = processing.tab;
-						setTimeout(takeScreenshot, 100);
+						chrome.windows.update(processing.tab.windowId, {focused: true}, () => {
+							setTimeout(takeScreenshot, 150);
+						});
 					});
 				}
 			});
@@ -116,14 +121,11 @@
 				next();
 			} else if (savedTab){
 				// switch back
-				chrome.tabs.update(savedTab.id, { active: true });
-				savedTab = null;
+				chrome.tabs.update(savedTab.id, { active: true }, () => {
+					chrome.windows.update(savedTab.windowId, {focused: true}, () => savedTab = null);
+				});
 			}
 		}
-
-		chrome.tabs.onActivated.addListener((activeInfo) => {
-			chrome.tabs.get(activeInfo.tabId, (tab) => current = tab);
-		});
 
 		if (createThumbOf !== addToQueue){
 			createThumbOf = addToQueue;
@@ -254,14 +256,7 @@
 		saveLocal();
 		saveSync();
 		if (requestedTab) {
-			createThumbOf(requestedTab, (thumb) => {
-				slotsList[slot_index].thumb = thumb;
-				if (requestedTab.favIconUrl){
-					updateFavicon(slotsList[slot_index]);
-				}
-				refreshPages(slot_index);
-				saveLocal();
-			});
+			createThumbOf(requestedTab, slot_index);
 		} else {
 			updateFavicon(slotsList[slot_index]);
 		}
@@ -294,21 +289,41 @@
 		}
 	});
 
+	let theTabRequests = {};
+
+	function screenActive (tab) {
+		let url = getOriginBy(tab.url);
+		if (theTabRequests[tab.id].url === url) {
+			let i = slotsList.findIndex(byUrl(url));
+			createThumbOf(tab, i);
+		}
+		delete theTabRequests[tab.id];
+	}
+
+	chrome.tabs.onActivated.addListener((activeInfo) => {
+		chrome.tabs.get(activeInfo.tabId, (tab) => {
+			currentTab = tab;
+			if (theTabRequests[tab.id] && tab.status === 'complete' && tab.active) {
+				setTimeout(screenActive.bind(window, tab), 100);
+			}
+		});
+	});
+
 	chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 		// check if sender tab url really added to fav pages
-		let url = getOriginBy(tab.url);
-		let i = slotsList.findIndex(byUrl(url));
-		if (url && i !== -1 && changeInfo.status === 'complete') {
-			createThumbOf(tab, (thumb) => {
-				// save it
-				slotsList[i].thumb = thumb || slotsList[i].thumb;
-				saveLocal();
-				if (tab.favIconUrl){
-					updateFavicon(slotsList[i]);
-				}
-				refreshPages(i);
-			});
+		if (theTabRequests[id] && changeInfo.status === 'complete' && tab.active) {
+			screenActive(tab);
 		}
+	});
+
+	chrome.webRequest.onCompleted.addListener((details) => {
+		let url = getOriginBy(details.url);
+		let i = slotsList.findIndex(byUrl(url));
+		if (url && i !== -1 && details.type === 'main_frame') {
+			theTabRequests[details.tabId] = {url};
+		}
+	}, {
+		urls: ["<all_urls>"]
 	});
 
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
