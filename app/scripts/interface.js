@@ -512,7 +512,7 @@
 			first_flow_page = current_flow_page = getNextActivePage();
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
-			setFlowPagesSize(true);
+			setFlowPagesSize();
 		}
 		setTimeout(() => document.body.classList.remove('reflow'), 0);
 		chrome.runtime.sendMessage({
