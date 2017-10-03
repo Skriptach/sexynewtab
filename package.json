@@ -31,6 +31,7 @@
     "grunt-usemin": "^3.*.*",
     "grunt-zip": "^0.*.*",
     "jit-grunt": "^0.*.*",
-    "time-grunt": "^1.*.*"
+    "time-grunt": "^1.*.*",
+    "jshint": "^2.*.*"
   }
 }
