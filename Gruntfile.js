@@ -121,7 +121,6 @@ module.exports = function (grunt) {
 			dist: {
 				files: {
 					'.tmp/scripts/back.js': [
-						'<%= sexy.app %>/scripts/MD5.js',
 						'<%= sexy.app %>/scripts/favicon.js',
 						'<%= sexy.app %>/scripts/background.js'
 					],
@@ -207,7 +206,7 @@ module.exports = function (grunt) {
 				src: ['<%= sexy.app %>/manifest.json'],             // source files array (supports minimatch) 
 				dest: '<%= sexy.dist %>/',             // destination directory or file 
 				replacements: [{
-					from: '"scripts/MD5.js", "scripts/favicon.js", "scripts/background.js"',                   // string replacement 
+					from: '"scripts/favicon.js", "scripts/background.js"',                   // string replacement 
 					to: '"scripts/back.js"'
 				}]
 			}
