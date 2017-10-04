@@ -159,10 +159,13 @@
 	}
 
 	function updateFavicon (slot) {
+		// update favicon not more often than 24h
+		if (slot.favicon && (Date.now() - slot.favicon.lastUpdate < 24*60*60000 )) {return;}
 		getFavicon(slot.url)
 		.then((response) => {
 			if (slotsList.indexOf(slot) < 0){return;}
 			slot.favicon = response;
+			slot.favicon.lastUpdate = Date.now();
 			saveSync();
 			refreshPages(slotsList.indexOf(slot));
 		});
