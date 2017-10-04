@@ -378,14 +378,43 @@
 	function switchToBookmarks () {
 	}
 
+	function updateEditFormList () {
+		let currentType = $('#edit .header .tab.active')[0];
+		currentType.id === 'tabs' ? switchToTabs() :
+			currentType.id === 'history' ? switchToHistory() :
+			currentType.id === 'topsites' ? switchToTop()
+			: switchToBookmarks();
+	}
+
+	function onListChanged () {
+		if(currentEditPage) {
+			updateEditFormList();
+		}
+	}
+
+	window.onfocus = onListChanged;
+
+	chrome.tabs.onCreated.addListener(onListChanged);
+
+	chrome.tabs.onRemoved.addListener(onListChanged);
+	chrome.tabs.onReplaced.addListener(onListChanged);
+
+	chrome.tabs.onUpdated.addListener((id, changeInfo) => {
+		function hasChancged (prop) {
+			return prop in changeInfo;
+		}
+
+		let prop = ['url','favIconUrl','title'];
+		if ( prop.some(hasChancged)) {
+			onListChanged();
+		}
+	});
+
 	function switchList () {
 		if (this.disabled){return;}
 		$('#edit .header .tab.active')[0].classList.remove('active');
 		this.classList.add('active');
-		this.id === 'tabs' ? switchToTabs() :
-			this.id === 'history' ? switchToHistory() :
-			this.id === 'topsites' ? switchToTop()
-			: switchToBookmarks();
+		updateEditFormList();
 	}
 
 	function selectLink (event) {
