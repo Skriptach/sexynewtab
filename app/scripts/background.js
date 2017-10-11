@@ -65,7 +65,7 @@
 		}
 
 		function takeScreenshot () {
-			if (currentTab.url !== processing.tab.url){
+			if (currentTab.url !== processing.tab.url) {
 				processing = null;
 				process();
 				return;
@@ -318,6 +318,7 @@
 	chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 		// check if sender tab url really added to fav pages
 		if (theTabRequests[id] && changeInfo.status === 'complete' && tab.active) {
+			currentTab = tab;
 			screenActive(tab);
 		}
 	});
