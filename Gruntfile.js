@@ -65,7 +65,7 @@ module.exports = function (grunt) {
 					html: {
 						steps: {
 							js: ['concat', 'uglifyjs'],
-							css: ['cssmin']
+							css: ['concat', 'cssmin']
 						},
 						post: {}
 					}
@@ -75,7 +75,6 @@ module.exports = function (grunt) {
 
 		// Performs rewrites based on filerev and the useminPrepare configuration
 		usemin: {
-			html: ['<%= sexy.dist %>/{,*/}*.html'],
 			css: ['<%= sexy.dist %>/styles/{,*/}*.css'],
 			js: ['<%= sexy.dist %>/scripts/{,*/}*.js'],
 			options: {
@@ -94,12 +93,8 @@ module.exports = function (grunt) {
 			dist: {
 				files: {
 					'<%= sexy.dist %>/styles/main.css': [
-						'<%= sexy.app %>/styles/main.css'
-					],
-					'<%= sexy.dist %>/styles/themes.css': [
-						'<%= sexy.app %>/styles/themes.css'
-					],
-					'<%= sexy.dist %>/styles/fonts/fontello.css': [
+						'<%= sexy.app %>/styles/main.css',
+						'<%= sexy.app %>/styles/themes.css',
 						'<%= sexy.app %>/styles/fonts/fontello.css'
 					]
 				}
@@ -123,7 +118,7 @@ module.exports = function (grunt) {
 					'.tmp/scripts/back.js': [
 						'<%= sexy.app %>/scripts/favicon.js',
 						'<%= sexy.app %>/scripts/background.js'
-					],
+					]
 				}
 			}
 		},
@@ -203,11 +198,20 @@ module.exports = function (grunt) {
 
 		replace: {
 			dist: {
-				src: ['<%= sexy.app %>/manifest.json'],             // source files array (supports minimatch) 
-				dest: '<%= sexy.dist %>/',             // destination directory or file 
+				src: [
+					'<%= sexy.app %>/manifest.json',
+					'<%= sexy.dist %>/layout.html'
+					],
+				dest: '<%= sexy.dist %>/',
 				replacements: [{
-					from: '"scripts/favicon.js", "scripts/background.js"',                   // string replacement 
+					from: '"scripts/favicon.js", "scripts/background.js"',
 					to: '"scripts/back.js"'
+				}, {
+					from: /<[^>]*themes.*font[^>]*> /,
+					to: ''
+				}, {
+					from: '> <',
+					to: '><'
 				}]
 			}
 		},
@@ -243,8 +247,8 @@ module.exports = function (grunt) {
 		'cssmin',
 		'uglify',
 		'usemin',
+		'htmlmin',
 		'replace',
-		'htmlmin'
 	]);
 
 	grunt.registerTask('pack', [
