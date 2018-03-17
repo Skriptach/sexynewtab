@@ -1,6 +1,6 @@
 {
   "name": "sexynewtab",
-  "version": "0.7.0",
+  "version": "0.7.4",
   "description": "Sexy New Tab replace Top Sites with beautiful page. Display as gallery or as tile. Synchronizes.",
   "repository": {
     "type": "git",
@@ -17,21 +17,15 @@
   },
   "homepage": "https://github.com/Skripatch/sexynewtab#readme",
   "devDependencies": {
-    "grunt": "^1.*.*",
-    "grunt-concurrent": "^2.*.*",
-    "grunt-contrib-clean": "^1.*.*",
-    "grunt-contrib-concat": "^1.*.*",
-    "grunt-contrib-copy": "^1.*.*",
-    "grunt-contrib-cssmin": "^2.*.*",
-    "grunt-contrib-htmlmin": "^2.*.*",
-    "grunt-contrib-imagemin": "^2.*.*",
-    "grunt-contrib-uglify": "gruntjs/grunt-contrib-uglify#harmony",
-    "grunt-svgmin": "^4.*.*",
-    "grunt-text-replace": "^0.*.*",
-    "grunt-usemin": "^3.*.*",
-    "grunt-zip": "^0.*.*",
-    "jit-grunt": "^0.*.*",
-    "time-grunt": "^1.*.*",
+    "gulp": "^4.0.0",
+    "gulp-clean-css": "^3.9.3",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-json-transform": "git+https://github.com/thaggie/gulp-json-transform.git",
+    "gulp-newer": "^1.4.0",
+    "gulp-uglify-es": "^1.0.1",
+    "gulp-useref": "^3.1.5",
+    "gulp-zip": "^4.1.0",
     "jshint": "^2.*.*"
-  }
+  },
+  "dependencies": {}
 }

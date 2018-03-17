@@ -25,7 +25,7 @@ body.dark-side.flow .page:before {
 
 body.cosmos,
 body.cosmos.flow {
-	background-image: url('/styles/space.jpg');
+	background-image: url('/styles/img/space.jpg');
 	background-size: cover;}
 body.cosmos.flow .page .link {
 	-webkit-box-reflect: unset;}
