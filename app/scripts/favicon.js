@@ -1,13 +1,13 @@
-var getFavicon, resolveUrl;
-;(function (){
 'use strict';
 
-	let parser = new DOMParser(),
+;(function (){
+
+	const parser = new DOMParser(),
 		blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
 
-	resolveUrl = function (url, base_url, doc) {
+	window.resolveUrl = function (url, base_url, doc) {
 		doc = doc || parser.parseFromString('<html><head></head><body></body></html>', 'text/html');
-		let base = doc.getElementsByTagName('base')[0],
+		const base = doc.getElementsByTagName('base')[0],
 			head = doc.head || doc.getElementsByTagName('head')[0],
 			our_base = base || head.appendChild(doc.createElement('base')),
 			resolver = doc.createElement('a');
@@ -30,21 +30,21 @@ var getFavicon, resolveUrl;
 						landingUrl: xhr.responseURL
 					});
 				} else {
-					let error = new Error(xhr.statusText);
+					const error = new Error(xhr.statusText);
 					error.code = xhr.status;
 					error.responseURL = xhr.responseURL;
 					reject(error);
 				}
-				xhr = undefined;
+				xhr = null;
 			};
-			xhr.onerror = () => reject(new Error('Network Error. URL:' + url));
+			xhr.onerror = () => reject(new Error(`Network Error. URL:${url}`));
 			xhr.send();
 		});
 	}
 
 	function loadImage (src) {
 		return new Promise((resolve, reject) => {
-			let img = document.createElement('img');
+			const img = document.createElement('img');
 			img.onload = () => {
 				if (img.width < 16 || img.height < 16){reject();}
 				else {resolve({href: src});}
@@ -56,7 +56,7 @@ var getFavicon, resolveUrl;
 	}
 
 	function getSize (link) {
-		let c = link.getAttribute('color'),
+		const c = link.getAttribute('color'),
 			v = link.getAttribute('sizes'),
 			n = parseInt(v, 10),
 			h = link.getAttribute('href');
@@ -68,7 +68,7 @@ var getFavicon, resolveUrl;
 	}
 
 	function findLargest (links) {
-		let link = links[0];
+		const link = links[0];
 		return loadImage(link.href)
 			.then((favicon) => {
 				if (link.color || link.size === Number.MAX_VALUE){
@@ -84,33 +84,33 @@ var getFavicon, resolveUrl;
 	}
 
 	function tryGuess (byUrl) {
-		let tryPNG = resolveUrl('/favicon.png', byUrl),
-			tryICO = resolveUrl('/favicon.ico', byUrl);
+		const tryPNG = window.resolveUrl('/favicon.png', byUrl),
+			tryICO = window.resolveUrl('/favicon.ico', byUrl);
 		return loadImage(tryPNG)
 			.catch(() => loadImage(tryICO))
 			.catch(() => blankIcon);
 	}
 
-	getFavicon = function (url) {
+	window.getFavicon = function (url) {
 
 		return get(url)
-		.then((response) => {
-			let doc = parser.parseFromString(response.body, 'text/html'),
-				links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
-					return {
-						href: resolveUrl(link.getAttribute('href'), response.landingUrl || url, doc),
-						color: link.getAttribute('color'),
-						size: getSize(link)
-					};
-				}).sort((a, b) => {
-					return b.size - a.size;
-				});
-			if (links.length) {
-				return findLargest(links)
-				.catch(() => tryGuess(response.landingUrl || url));
-			} else {
+			.then((response) => {
+				const doc = parser.parseFromString(response.body, 'text/html'),
+					links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
+						return {
+							href: window.resolveUrl(link.getAttribute('href'), response.landingUrl || url, doc),
+							color: link.getAttribute('color'),
+							size: getSize(link)
+						};
+					}).sort((a, b) => {
+						return b.size - a.size;
+					});
+				if (links.length) {
+					return findLargest(links)
+						.catch(() => tryGuess(response.landingUrl || url));
+				}
+
 				return tryGuess(response.landingUrl || url);
-			}
-		}, (error) => tryGuess(error.responseURL || url));
+			}, (error) => tryGuess(error.responseURL || url));
 	};
 }());

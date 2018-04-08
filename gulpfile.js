@@ -1,3 +1,4 @@
+'use strict';
 
 const gulp = require('gulp');
 const concat = require('gulp-concat');
@@ -64,23 +65,23 @@ function html () {
 
 function manifest () {
 	return gulp.src(paths.manifest.src)
-	.pipe(jsonTransform(function(data, file) {
-		paths.background.src = data.background.scripts.map((filename) => `app/${filename}`);
-		data.background.scripts = ['/scripts/' + paths.background.min];
-		return data;
-	}))
-	.pipe(gulp.dest(paths.manifest.dest));
+		.pipe(jsonTransform((data, file) => {
+			paths.background.src = data.background.scripts.map((filename) => `app/${filename}`);
+			data.background.scripts = [`/scripts/${paths.background.min}`];
+			return data;
+		}))
+		.pipe(gulp.dest(paths.manifest.dest));
 }
 
 function background () {
 	return gulp.src(paths.background.src, {base: paths.background.base})
-    	.pipe(uglify())
-    	.pipe(concat(paths.background.min))
+		.pipe(uglify())
+		.pipe(concat(paths.background.min))
 		.pipe(gulp.dest(paths.background.dest));
 };
 
 
-var build = gulp.series(
+const build = gulp.series(
 	html,
 	copyNewer(paths.locales),
 	copyNewer(paths.icons),
@@ -88,14 +89,14 @@ var build = gulp.series(
 	copyNewer(paths.img),
 	manifest,
 	background
-	);
+);
 
 gulp.task('build', build);
 gulp.task('zip', () => {
 	return gulp.src(paths.zip.src)
 		.pipe(zip(paths.zip.name))
-		.pipe(gulp.dest(paths.zip.dest))
-	});
+		.pipe(gulp.dest(paths.zip.dest));
+});
 
 gulp.task('pack', gulp.series('build', 'zip'));
 
