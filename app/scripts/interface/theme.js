@@ -42,7 +42,7 @@
 			first_flow_page = current_flow_page = null;
 			setPagesSize();
 		} else {
-			first_flow_page = current_flow_page = getNextActivePage();
+			first_flow_page = current_flow_page = getFirstPage();
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
 			setBackGradient();

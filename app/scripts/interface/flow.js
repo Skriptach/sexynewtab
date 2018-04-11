@@ -2,33 +2,26 @@
 
 ;(() => {
 
-	window.getNextActivePage = () => {
-		let tmp;
-		if (first_flow_page){
-			tmp = current_flow_page;
-		} else {
-			tmp = d('set').firstElementChild;
-			if (!tmp.classList.contains('inactive')) {
-				return tmp;
-			}
+	window.getFirstPage = () => {
+		const tmp = d('set').firstElementChild;
+		if (
+			!tmp.classList.contains('inactive')
+		) {
+			return tmp;
 		}
-		tmp = tmp.nextElementSibling;
-		while (tmp) {
-			if (!tmp.classList.contains('inactive')) {
-				return tmp;
-			}
-			tmp = tmp.nextElementSibling;
-		}
+		return getPage('next', tmp);
 	};
 
-	window.getPrevActivePage = () => {
-		let tmp = current_flow_page;
-		tmp = tmp.previousElementSibling;
+	window.getPage = ( dir = 'next', current = current_flow_page ) => {
+		const direction = `${dir}ElementSibling`;
+		let tmp = current[direction];
 		while (tmp) {
-			if (!tmp.classList.contains('inactive')){
+			if (
+				!tmp.classList.contains('inactive')
+			) {
 				return tmp;
 			}
-			tmp = tmp.previousElementSibling;
+			tmp = tmp[direction];
 		}
 	};
 
@@ -68,9 +61,9 @@
 	function scrollFlow (e) {
 		if (!FLOW){return;}
 		if (e.wheelDelta < 0) {
-			flowTo(getNextActivePage());
+			flowTo(getPage('next'));
 		} else if (e.wheelDelta > 0) {
-			flowTo(getPrevActivePage());
+			flowTo(getPage('previous'));
 		}
 	}
 
@@ -80,9 +73,9 @@
 		}
 		if (!FLOW){return;}
 		if (e.keyCode === 39) {
-			flowTo(getNextActivePage());
+			flowTo(getPage('next'));
 		} else if (e.keyCode === 37) {
-			flowTo(getPrevActivePage());
+			flowTo(getPage('previous'));
 		}
 	}
 

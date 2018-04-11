@@ -25,8 +25,8 @@
         "setBackGradient": true,
         "setPagesSize": true,
         "setFlowPagePosition": true,
-        "getNextActivePage": true,
-        "getPrevActivePage": true,
+        "getFirstPage": true,
+        "getPage": true,
         "flowTo": true,
         "prepareDrag": true,
         "updatePage": true

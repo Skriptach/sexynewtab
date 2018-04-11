@@ -16,10 +16,10 @@
 			page.classList.add('inactive');
 			if (FLOW){
 				if (page === first_flow_page){
-					first_flow_page = getNextActivePage();
+					first_flow_page = getFirstPage();
 				}
 				page.classList.add('deleting');
-				flowTo(getNextActivePage() || getPrevActivePage());
+				flowTo(getPage('next') || getPage('previous'));
 				setTimeout(() => page.classList.remove('deleting'), 500);
 			}
 			page.querySelector('.thumbnail').removeAttribute('style');
