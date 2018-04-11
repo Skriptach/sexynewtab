@@ -1,6 +1,6 @@
 'use strict';
 
-;(function (){
+;(() => {
 
 	const parser = new DOMParser(),
 		blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
@@ -83,9 +83,9 @@
 			});
 	}
 
-	function tryGuess (byUrl) {
-		const tryPNG = window.resolveUrl('/favicon.png', byUrl),
-			tryICO = window.resolveUrl('/favicon.ico', byUrl);
+	function tryGuess (url) {
+		const tryPNG = resolveUrl('/favicon.png', url),
+			tryICO = resolveUrl('/favicon.ico', url);
 		return loadImage(tryPNG)
 			.catch(() => loadImage(tryICO))
 			.catch(() => blankIcon);
@@ -98,7 +98,7 @@
 				const doc = parser.parseFromString(response.body, 'text/html'),
 					links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
 						return {
-							href: window.resolveUrl(link.getAttribute('href'), response.landingUrl || url, doc),
+							href: resolveUrl(link.getAttribute('href'), response.landingUrl || url, doc),
 							color: link.getAttribute('color'),
 							size: getSize(link)
 						};
@@ -113,4 +113,5 @@
 				return tryGuess(response.landingUrl || url);
 			}, (error) => tryGuess(error.responseURL || url));
 	};
-}());
+
+})();

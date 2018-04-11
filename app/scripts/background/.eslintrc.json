@@ -1,0 +1,28 @@
+{
+    "globals": {
+        "chrome": true,
+
+        "byUrl": true,
+        "getOriginBy": true,
+
+        "resolveUrl": true,
+        "getFavicon": true,
+
+        "slotsList": true,
+        "settings": true,
+        "thumbs": true,
+        "redirectUrls": true,
+        "currentTab": true,
+        "tabRequests": true,
+
+        "saveLocal": true,
+        "saveSync": true,
+        "createThumbOf": true,
+
+        "refreshPages": true,
+        "updateFavicon": true,
+        "swap": true,
+        "editPage": true
+
+    }
+}

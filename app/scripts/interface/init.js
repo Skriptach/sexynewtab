@@ -25,7 +25,7 @@
 
 	window.addEventListener('load', () => {
 		seti18nLabels();
-		chrome.runtime.getBackgroundPage( (bgWindow) => bgWindow.subscribe(ready) );
+		chrome.runtime.getBackgroundPage( (bg) => bg.load().then(ready) );
 	});
 
 })();

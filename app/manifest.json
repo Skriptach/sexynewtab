@@ -4,7 +4,19 @@
 	"description":"__MSG_descript__",
 	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "history", "webRequest", "unlimitedStorage"],
 	"background": {
-		"scripts":["scripts/favicon.js", "scripts/background.js"]
+		"scripts":[
+			"scripts/background/globals.js",
+			"scripts/background/favicon.js",
+			"scripts/background/urlHelpers.js",
+			"scripts/background/save.js",
+			"scripts/background/takeScreenshot.js",
+			"scripts/background/pageOperations.js",
+			"scripts/background/messaging.js",
+			"scripts/background/tabListener.js",
+			"scripts/background/webListener.js",
+			"scripts/background/init.js",
+			"scripts/background/firstRun.js"
+		]
 	},
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
@@ -17,7 +29,7 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.7.4",
-	"version_name": "0.7.4",
+	"version": "0.7.6",
+	"version_name": "0.7.6",
 	"author": "Liubomudr Nazariev"
 }
