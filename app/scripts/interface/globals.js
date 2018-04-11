@@ -8,6 +8,7 @@
 	window.PAGE_WIDTH = null;
 	window.PAGE_HEIGHT = null;
 	window.FLOW = false;
+	window.EDIT = false;
 	window.currentEditPage = null;
 	window.back = null;
 	window.slotsList = null;

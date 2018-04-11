@@ -61,7 +61,7 @@
 	};
 
 	function scrollFlow (e) {
-		if (!FLOW){return;}
+		if (!FLOW || EDIT){return;}
 		if (e.wheelDelta < 0) {
 			flowTo(getPage('next'));
 		} else if (e.wheelDelta > 0) {

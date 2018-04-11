@@ -11,6 +11,7 @@
         "PAGE_WIDTH": true,
         "PAGE_HEIGHT": true,
         "FLOW": true,
+        "EDIT": true,
         "currentEditPage": true,
         "back": true,
         "slotsList": true,

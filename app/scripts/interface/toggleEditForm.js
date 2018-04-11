@@ -3,6 +3,7 @@
 ;(() => {
 
 	function showEditForm () {
+		EDIT = true;
 		const inputUrl = $('#link_url input')[0];
 		currentEditPage.appendChild(d('edit'));
 		$('#edit .header .tab.active')[0].click();
@@ -13,6 +14,7 @@
 	}
 
 	window.hideEditForm = () => {
+		EDIT = false;
 		currentEditPage.classList.remove('turned');
 		setTimeout(() => {
 			currentEditPage.classList.remove('ontop');
