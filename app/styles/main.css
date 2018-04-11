@@ -392,6 +392,9 @@ input[type="text"] {
 	transition-duration: .5s;
 	backface-visibility: hidden;}
 
+.flow .page.hack:before {
+	content: none;}
+
 .flow .page.current {
 	transform: rotateY(0);
 	transform-origin: 50%;}

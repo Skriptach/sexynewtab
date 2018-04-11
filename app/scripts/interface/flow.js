@@ -6,6 +6,7 @@
 		const tmp = d('set').firstElementChild;
 		if (
 			!tmp.classList.contains('inactive')
+			&& !tmp.classList.contains('hack')
 		) {
 			return tmp;
 		}
@@ -18,6 +19,7 @@
 		while (tmp) {
 			if (
 				!tmp.classList.contains('inactive')
+				&& !tmp.classList.contains('hack')
 			) {
 				return tmp;
 			}
@@ -41,7 +43,7 @@
 	window.setFlowPagePosition = () => {
 		const proportionW = d('set').clientWidth/100,
 			c = current_index();
-		let n = 0;
+		let n = -1;
 		$('.flow .page').forEach((page) => {
 			if (page.classList.contains('inactive')) {return;}
 			page.style.left = proportionW * ( (n < c ? -5*(19-n)-50 : n === c ? 0 : 5*n + 50 ) );
