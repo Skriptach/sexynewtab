@@ -322,13 +322,14 @@ input[type="text"] {
 	text-decoration:none;
 	cursor:default;}
 
-.flow .link {
+.flow .page .link {
 	width: 100%;
 	height: 100%;
-	display: inline-block;}
-
-.flow .page .link {
-	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);}
+	display: inline-block;
+	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);
+	transition-property: height, margin-top;
+	transition-duration: .1s;
+}
 
 .panel {
 	position:fixed;
@@ -370,10 +371,10 @@ input[type="text"] {
 .flow .page {
 	width: 100% !important;
 	height: 100% !important;
-	top: 0 !important;
+	top: 0;
 	transition-property: left, width, height, top, transform, transform-origin;
 	transition-duration: .5s;
-	transform: rotateY(45deg) translateZ(-1500px);
+	transform: rotateY(45deg) translateZ(-3000px);
 	transform-origin: 0%;}
 
 .flow .page.deleting {
@@ -381,7 +382,7 @@ input[type="text"] {
 	visibility: hidden;
 	transition-property: width, transform, transform-origin;}
 
-.flow .page:before {  /* temporary till be fixed http://crbug.com/139596 */
+.flow .page:before {
 	content: '';
 	width: 100%;
 	height: 100%;
@@ -390,17 +391,25 @@ input[type="text"] {
 	top: 100%;
 	transition-property: transform;
 	transition-duration: .5s;
-	backface-visibility: hidden;}
-
-.flow .page.hack:before {
-	content: none;}
+	backface-visibility: hidden;
+	pointer-events: none;
+	transition-property: top;
+	transition-duration: .1s;
+}
 
 .flow .page.current {
 	transform: rotateY(0);
 	transform-origin: 50%;}
+.flow .page:not(.current):hover .link {
+	height: 150%;
+	margin-top: -25%;
+	}
+.flow .page:not(.current):hover:before {
+	top: 153%;
+	}
 
 .flow .current ~ .page {
-	transform: rotateY(-45deg) translateZ(-1500px);
+	transform: rotateY(-45deg) translateZ(-3000px);
 	transform-origin: 100%;}
 
 .flow .page:hover {

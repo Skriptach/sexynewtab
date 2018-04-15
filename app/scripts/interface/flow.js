@@ -41,6 +41,7 @@
 			const s = Math.sign(n-c),
 				left = step*(n-c) + s*shift;
 			page.style.left = proportionW * left;
+			page.style.top = '';
 		});
 	};
 
