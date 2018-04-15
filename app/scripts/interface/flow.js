@@ -28,16 +28,8 @@
 	};
 
 	function current_index () {
-		let i = first_flow_page.index,
-			res = i,
-			classes;
-		for (; i<current_flow_page.index; i++) {
-			classes = d(`page${i}`).classList;
-			if (!classes.contains('inactive') && !classes.contains('deleting')) {
-				res++;
-			}
-		}
-		return res;
+		const pages = $('.page:not(.inactive):not(.deleting)');
+		return Array.prototype.slice.call(pages).indexOf(current_flow_page);
 	}
 
 	window.setFlowPagePosition = () => {
