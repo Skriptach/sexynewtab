@@ -6,7 +6,6 @@
 		const tmp = d('set').firstElementChild;
 		if (
 			!tmp.classList.contains('inactive')
-			&& !tmp.classList.contains('hack')
 		) {
 			return tmp;
 		}
@@ -19,7 +18,6 @@
 		while (tmp) {
 			if (
 				!tmp.classList.contains('inactive')
-				&& !tmp.classList.contains('hack')
 			) {
 				return tmp;
 			}

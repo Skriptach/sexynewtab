@@ -1,30 +1,30 @@
-body.metal {
+body.metal #container {
 	background-image: linear-gradient(90deg, #19191F 0%, #121216 50%, #19191F 100%);}
-body.metal.flow {
+body.metal.flow #container {
 	background-image: linear-gradient(180deg, #1E1E1E 0%, #32323C 45%, #232328 45%, #5A5A64 100%);}
 body.metal.flow .page:before {
 	background-color: #32323C;}
 #customize a.theme[data="metal"] span {background: #5A5A64;}
 
 /* \m/ */
-body.deep-purple {
+body.deep-purple #container {
 	background-image: linear-gradient(90deg, #140014 0%, #0F000F 50%, #140014 100%);}
-body.deep-purple.flow {
+body.deep-purple.flow #container {
 	background-image: linear-gradient(180deg, #0F000F 0%, #140014 45%, #0A000A 45%, #1F0017 100%);}
 body.deep-purple.flow .page:before {
 	background-color: #140014;}
 #customize a.theme[data="deep-purple"] span {background: #1F0017;}
 
-body.dark-side {
+body.dark-side #container {
 	background-image: linear-gradient(90deg, #0F0F0F 0%, #0A0A0A 45%, #0F0F0F 100%);}
-body.dark-side.flow {
+body.dark-side.flow #container {
 	background-image: linear-gradient(180deg, #0F0F0F 0%, #141414 45%, #0A0A0A 45%, #1E1E1E 100%);}
 body.dark-side.flow .page:before {
 	background-color: #141414;}
 #customize a.theme[data="dark-side"] span {background: #1E1E1E;}
 
 body.cosmos,
-body.cosmos.flow {
+body.cosmos.flow #container {
 	background-image: url('/styles/img/space.jpg');
 	background-size: cover;}
 body.cosmos.flow .page .link {
