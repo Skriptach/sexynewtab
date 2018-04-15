@@ -30,14 +30,17 @@
 		return Array.prototype.slice.call(pages).indexOf(current_flow_page);
 	}
 
+	const step = 10,
+		shift = 30;
+
 	window.setFlowPagePosition = () => {
 		const proportionW = d('set').clientWidth/100,
 			c = current_index();
-		let n = -1;
-		$('.flow .page').forEach((page) => {
-			if (page.classList.contains('inactive')) {return;}
-			page.style.left = proportionW * ( (n < c ? -5*(19-n)-50 : n === c ? 0 : 5*n + 50 ) );
-			n++;
+		const nodes = $('.page:not(.inactive)');
+		nodes.forEach((page, n) => {
+			const s = Math.sign(n-c),
+				left = step*(n-c) + s*shift;
+			page.style.left = proportionW * left;
 		});
 	};
 
