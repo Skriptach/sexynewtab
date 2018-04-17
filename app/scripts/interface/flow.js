@@ -34,6 +34,17 @@
 		shift = 30;
 
 	window.setFlowPagePosition = () => {
+		const depth = 156.41293013555787*innerWidth/100;
+		const perspective = 41.71011470281543*innerWidth/100;
+		const css = 
+		`.flow #main {
+			perspective: ${perspective}px;}
+		.flow .page {
+			transform: rotateY(45deg) translateZ(-${depth}px);}
+		.flow .current ~ .page {
+			transform: rotateY(-45deg) translateZ(-${depth}px);}`;
+		d('depth_style').innerHTML = css;
+
 		const proportionW = d('set').clientWidth/100,
 			c = current_index();
 		const nodes = $('.page:not(.inactive)');

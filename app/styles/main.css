@@ -358,9 +358,6 @@ input[type="text"] {
 #main #toggle_button .st-coverflow {
 	display: inline;}
 
-.flow #main {
-	perspective: 800px;}
-
 .flow #set {
 	width: 50% !important;
 	height: 50% !important;
@@ -374,7 +371,6 @@ input[type="text"] {
 	top: 0;
 	transition-property: left, width, height, top, transform, transform-origin;
 	transition-duration: .5s;
-	transform: rotateY(45deg) translateZ(-3000px);
 	transform-origin: 0%;}
 
 .flow .page.deleting {
@@ -409,7 +405,6 @@ input[type="text"] {
 	}
 
 .flow .current ~ .page {
-	transform: rotateY(-45deg) translateZ(-3000px);
 	transform-origin: 100%;}
 
 .flow .page:hover {
