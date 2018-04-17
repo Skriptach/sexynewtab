@@ -2,32 +2,25 @@
 
 ;(() => {
 
-	let _width = innerWidth,
-		_height = innerHeight,
-		wait = null;
+	let wait = null;
 
 	function calcSize () {
-		const PROPORTION = _height / _width;
-		PAGE_WIDTH = FLOW ? _width / 2 : (_width - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
-		PAGE_HEIGHT = FLOW ? _height / 2 : PAGE_WIDTH * PROPORTION;
-		if (!FLOW && PAGE_HEIGHT * ROWS_COUNT + ((ROWS_COUNT + 1) * DELTA) > _height) {
-			PAGE_HEIGHT = (_height - (DELTA * (ROWS_COUNT + 1))) / ROWS_COUNT;
+		const PROPORTION = innerHeight / innerWidth;
+		PAGE_WIDTH = FLOW ? innerWidth / 2 : (innerWidth - (DELTA * (COLUMNS_COUNT + 1))) / COLUMNS_COUNT;
+		PAGE_HEIGHT = FLOW ? innerHeight / 2 : PAGE_WIDTH * PROPORTION;
+		if (!FLOW && PAGE_HEIGHT * ROWS_COUNT + ((ROWS_COUNT + 1) * DELTA) > innerHeight) {
+			PAGE_HEIGHT = (innerHeight - (DELTA * (ROWS_COUNT + 1))) / ROWS_COUNT;
 			PAGE_WIDTH = PAGE_HEIGHT / PROPORTION;
 		}
 	}
 
 	window.setBackGradient = () => {
 		calcSize();
-		const grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
-			grad_radiusF = Math.sqrt(innerWidth * innerWidth / 4 + innerHeight * innerHeight / 3);
+		const grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
 		d('backgradient').innerHTML =
 		`.backgradient {
 			background-image: -webkit-gradient(radial, center top, 5, center 30%,
 					${grad_radius}, from(#000065), to(#000010))
-			}
-		.full .backgradient {
-			background-image: -webkit-gradient(radial, center top, 5, center 30%,
-					${grad_radiusF}, from(#000065), to(#000010))
 			}`;
 	};
 
@@ -74,14 +67,10 @@
 	};
 
 	window.addEventListener('resize', () => {
-		if (_width !== innerWidth || _height !== innerHeight) {
-			_width = innerWidth;
-			_height = innerHeight;
-			clearTimeout(wait);
-			wait = setTimeout(() => {
-				FLOW ? (setBackGradient(),setFlowPagePosition()) : setPagesSize();
-			}, 100);
-		}
+		clearTimeout(wait);
+		wait = setTimeout(() => {
+			FLOW ? (setBackGradient(),setFlowPagePosition()) : setPagesSize();
+		}, 150);
 	});
 
 })();
