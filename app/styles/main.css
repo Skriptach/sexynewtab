@@ -396,11 +396,11 @@ input[type="text"] {
 .flow .page.current {
 	transform: rotateY(0);
 	transform-origin: 50%;}
-.flow .page:not(.current):hover .link {
+.flow #main:not(.scrolling) .page:not(.current):hover .link {
 	height: 150%;
 	margin-top: -25%;
 	}
-.flow .page:not(.current):hover:before {
+.flow #main:not(.scrolling) .page:not(.current):hover:before {
 	top: 153%;
 	}
 

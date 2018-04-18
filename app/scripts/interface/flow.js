@@ -65,13 +65,19 @@
 		}
 	};
 
+	let scrolling = false;
 	function scrollFlow (e) {
 		if (!FLOW || EDIT){return;}
-		if (e.wheelDelta < 0) {
-			flowTo(getPage('next'));
-		} else if (e.wheelDelta > 0) {
-			flowTo(getPage('previous'));
-		}
+		scrolling = true;
+		d('main').classList.add('scrolling');
+		flowTo(getPage(e.deltaY > 0 ? 'next' : 'previous'));
+		setTimeout(() => {
+			scrolling = false;
+		}, 800);
+	}
+
+	function revertScrolling () {
+		!scrolling && d('main').classList.remove('scrolling');
 	}
 
 	function keyHandler (e) {
@@ -90,5 +96,7 @@
 		document.onkeydown = keyHandler;
 		document.onmousewheel = scrollFlow;
 	});
+
+	document.addEventListener('mousemove', revertScrolling);
 
 })();
