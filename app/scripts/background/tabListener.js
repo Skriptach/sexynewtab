@@ -2,30 +2,28 @@
 
 ;(() => {
 
-	window.tabRequests = {};
 	window.currentTab = null;
 
 	function screenActive (tab) {
+		// check if sender tab url really added to fav pages
 		const url = getOriginBy(tab.url);
-		if (tabRequests[tab.id].url === url) {
-			const i = slotsList.findIndex(byUrl(url));
+		const i = slotsList.findIndex(byUrl(url));
+		if (url && i !== -1) {
 			createThumbOf(tab, i);
 		}
-		delete tabRequests[tab.id];
 	}
 
 	chrome.tabs.onActivated.addListener((activeInfo) => {
 		chrome.tabs.get(activeInfo.tabId, (tab) => {
 			currentTab = tab;
-			if (tabRequests[tab.id] && tab.status === 'complete' && tab.active) {
+			if (tab.status === 'complete' && tab.active) {
 				setTimeout(screenActive.bind(window, tab), 100);
 			}
 		});
 	});
 
 	chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
-		// check if sender tab url really added to fav pages
-		if (tabRequests[id] && changeInfo.status === 'complete' && tab.active) {
+		if (changeInfo.status === 'complete' && tab.active) {
 			currentTab = tab;
 			screenActive(tab);
 		}

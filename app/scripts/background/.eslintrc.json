@@ -13,7 +13,6 @@
         "thumbs": true,
         "redirectUrls": true,
         "currentTab": true,
-        "tabRequests": true,
 
         "saveLocal": true,
         "saveSync": true,
