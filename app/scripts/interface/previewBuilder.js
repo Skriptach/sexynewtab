@@ -23,7 +23,7 @@
 			flowTo(page);
 		} else {
 			if (event.button !== 0) {return;}
-			setTimeout(() => page.classList.add('full'), 10);
+			page.classList.add('full');
 		}
 	}
 
