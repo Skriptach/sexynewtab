@@ -16,6 +16,6 @@
 	window.currentItem = null;
 	window.first_flow_page = null;
 	window.current_flow_page = null;
-	window.cuurentTheme = 'deep-purple';
+	window.currentTheme = 'deep-purple';
 
 })();

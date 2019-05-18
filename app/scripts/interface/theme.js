@@ -7,12 +7,12 @@
 	}
 
 	function switchTheme (newTheme, save) {
-		document.body.classList.remove(cuurentTheme);
-		cuurentTheme = newTheme;
-		document.body.classList.add(cuurentTheme);
+		document.body.classList.remove(currentTheme);
+		currentTheme = newTheme;
+		document.body.classList.add(currentTheme);
 		save && chrome.runtime.sendMessage({
 			action: 'switchTheme',
-			theme: cuurentTheme
+			theme: currentTheme
 		});
 	}
 
