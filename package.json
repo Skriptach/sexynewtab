@@ -17,15 +17,15 @@
   },
   "homepage": "https://github.com/Skripatch/sexynewtab#readme",
   "devDependencies": {
-    "eslint": "^4.17.0",
-    "gulp": "^4.0.0",
-    "gulp-clean-css": "^3.9.3",
-    "gulp-htmlmin": "^4.0.0",
+    "eslint": "^5.16.0",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-htmlmin": "^5.0.1",
     "gulp-json-transform": "git+https://github.com/thaggie/gulp-json-transform.git",
     "gulp-newer": "^1.4.0",
-    "gulp-uglify-es": "^1.0.1",
-    "gulp-useref": "^3.1.5",
-    "gulp-zip": "^4.1.0"
+    "gulp-uglify-es": "^1.0.4",
+    "gulp-useref": "^3.1.6",
+    "gulp-zip": "^4.2.0"
   },
   "dependencies": {}
 }
