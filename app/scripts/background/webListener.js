@@ -15,11 +15,15 @@
 		types: ['main_frame']
 	}, ['responseHeaders']);
 
-	/*chrome.webRequest.onBeforeSendHeaders.addListener((details) => {
-		console.log(details);
+	chrome.webRequest.onHeadersReceived.addListener((details) => {
+		return {
+			responseHeaders: details.initiator === `chrome-extension://${chrome.runtime.id}` ?
+				details.responseHeaders.filter(header => header.name !== 'link') :
+				details.responseHeaders
+		};
 	}, {
 		urls: ['<all_urls>'],
-		types: ['main_frame']
-	}, ['requestHeaders']);*/
+		types: ['xmlhttprequest']
+	}, ['blocking', 'responseHeaders']);
 
 })();

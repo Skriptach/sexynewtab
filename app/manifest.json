@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Sexy New Tab",
 	"description":"__MSG_descript__",
-	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "history", "webRequest", "unlimitedStorage"],
+	"permissions": ["tabs", "<all_urls>", "activeTab", "bookmarks", "storage", "topSites", "history", "webRequest", "webRequestBlocking", "unlimitedStorage"],
 	"background": {
 		"scripts":[
 			"scripts/background/globals.js",
