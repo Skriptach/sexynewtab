@@ -25,7 +25,6 @@
         "eqeqeq" :                      ["error", "always"],
         "getter-return":                "error",
         "indent":                       ["error", "tab", { "flatTernaryExpressions": true } ],
-        "linebreak-style":              ["error","unix" ],
         "no-alert":                     "error",
         "no-array-constructor":         "error",
         "no-await-in-loop":             "error",
