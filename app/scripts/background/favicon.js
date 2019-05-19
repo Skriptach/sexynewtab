@@ -114,4 +114,15 @@
 			}, (error) => tryGuess(error.responseURL || url));
 	};
 
+	chrome.webRequest.onHeadersReceived.addListener((details) => {
+		return {
+			responseHeaders: details.initiator === `chrome-extension://${chrome.runtime.id}` ?
+				details.responseHeaders.filter(header => header.name.toLowerCase() !== 'link') :
+				details.responseHeaders
+		};
+	}, {
+		urls: ['<all_urls>'],
+		types: ['xmlhttprequest']
+	}, ['blocking', 'responseHeaders']);
+
 })();
