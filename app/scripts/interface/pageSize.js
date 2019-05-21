@@ -25,7 +25,7 @@
 	};
 
 	window.setPagesSize = () => {
-		let index, leftPos, topPos;
+		let index;
 		setBackGradient();
 		const setWidth = ((PAGE_WIDTH + DELTA) * COLUMNS_COUNT - DELTA);
 		const setHeight = ((PAGE_HEIGHT + DELTA) * ROWS_COUNT - DELTA);
@@ -54,12 +54,10 @@
 		let page;
 		for (let i = 0; i < ROWS_COUNT; i++) {
 			for (let j = 0; j < COLUMNS_COUNT; j++) {
-				leftPos = j * (PAGE_WIDTH + DELTA);
-				topPos = i * (PAGE_HEIGHT + DELTA);
 				page = d(`page${index}`);
 				if (page) {
-					page.style.left = leftPos;
-					page.style.top = topPos;
+					page.style.left = `${j * (PAGE_WIDTH + DELTA)}px`;
+					page.style.top = `${i * (PAGE_HEIGHT + DELTA)}px`;
 					index++;
 				}
 			}

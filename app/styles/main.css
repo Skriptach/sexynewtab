@@ -1,4 +1,8 @@
-﻿body {
+html, body {
+	height: 100%;
+}
+
+body {
 	background-color:#1A0019;
 	margin:0;
 	overflow:hidden;
@@ -165,7 +169,7 @@ body:not(.flow) .page.turned {
 
 #customize {
 	position: fixed;
-	padding: 14;
+	padding: 14px;
 	background-color:#fafafa;
 	border-radius:6px;
 	box-sizing: border-box;
@@ -203,7 +207,7 @@ body:not(.flow) .page.turned {
 	position:absolute;
 	width: 100%;
 	height: 100%;
-	padding: 14;
+	padding: 14px;
 	box-sizing: border-box;
 	background-color:#fafafa;
 	border-radius:6px;
@@ -215,8 +219,8 @@ body:not(.flow) .page.turned {
 
 #edit div.list {
 	position: relative;
-	margin-bottom: 7;
-	padding: 3 0 3 6;
+	margin-bottom: 7px;
+	padding: 3px 0 3px 6px;
 	height: calc(100% - 31px - 35px - 14px); /* height of tabs, height of input URL, height of margin  */
 	background-color:#FFF;
 	cursor:default;}
@@ -242,7 +246,7 @@ body:not(.flow) .page.turned {
 	text-decoration: none;
 	color: inherit;
 	font-size:16px;
-	margin-right: 5;
+	margin-right: 5px;
 	background-color: #E5E5E5;
 	padding: 5px;
 	cursor: pointer;
@@ -258,8 +262,8 @@ body:not(.flow) .page.turned {
 	background-position:top left;
 	background-repeat:no-repeat;
 	background-size:16px;
-	padding-left:20;
-	margin-top:3;
+	padding-left:20px;
+	margin-top:3px;
 	text-overflow:ellipsis;
 	overflow: hidden;
 	white-space: nowrap;}
@@ -281,16 +285,20 @@ input[type="text"] {
 	border: 1px solid #1544AD;
 	width: 100%;
 	height: 35px;
-	padding: 5 40 5 35;
-	font-size: 16px;}
+	padding: 5px 40px 5px 35px;
+	font-size: 16px;
+	box-sizing: border-box;
+}
 
 #link_url i,
 #background i {
 	position: absolute;
 	font-size: 22px;
-	margin-top: 6px;
-	margin-left: 4px;
-	color: #ababab;}
+	color: #ababab;
+}
+i.st-link:before {
+    line-height: 35px;
+}
 
 #edit_ok {
 	position: absolute;
@@ -310,7 +318,7 @@ input[type="text"] {
 	width: 25px;
 	height: 25px;
 	float: right;
-	margin-top: -5;}
+	margin-top: -5px;}
 #edit_cancel .st-back:before{
 	margin: 0;}
 

@@ -22,8 +22,8 @@
 			moved,
 			tmpPosX,
 			tmpPosY;
-		dragPage.style.left = p_left;
-		dragPage.style.top = p_top;
+		dragPage.style.left = `${p_left}px`;
+		dragPage.style.top = `${p_top}px`;
 		if ((position >= 0) && (position < ROWS_COUNT * COLUMNS_COUNT) && (position !== dragPage.index)) {
 			if (Math.abs(p_left - col * (PAGE_WIDTH + DELTA)) < PAGE_WIDTH / 2) {
 				TargetPosX = pagePosX;
@@ -35,8 +35,8 @@
 					moved = d(`page${i}`);
 					tmpPosX = parseFloat(moved.style.left);
 					tmpPosY = parseFloat(moved.style.top);
-					moved.style.left = TargetPosX;
-					moved.style.top = TargetPosY;
+					moved.style.left = `${TargetPosX}px`;
+					moved.style.top = `${TargetPosY}px`;
 					TargetPosX = tmpPosX;
 					TargetPosY = tmpPosY;
 					moved.setAttribute('id', `page${i - modificator}`);
@@ -57,8 +57,8 @@
 		dragPage.ondragover = null;
 		dragPage.style.zIndex = null;
 		dragPage.classList.remove('draged');
-		dragPage.style.left = pagePosX;
-		dragPage.style.top = pagePosY;
+		dragPage.style.left = `${pagePosX}px`;
+		dragPage.style.top = `${pagePosY}px`;
 		dragPage.style.width = '';
 		dragPage.style.height = '';
 		back.swap(lastPosition, dragPage.index);
