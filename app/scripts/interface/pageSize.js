@@ -16,11 +16,16 @@
 
 	window.setBackGradient = () => {
 		calcSize();
-		const grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3);
+		const grad_radius = Math.sqrt(PAGE_WIDTH * PAGE_WIDTH / 4 + PAGE_HEIGHT * PAGE_HEIGHT / 3),
+			grad_radiusF = Math.sqrt(innerWidth * innerWidth / 4 + innerHeight * innerHeight / 3);
 		d('backgradient').innerHTML =
 		`.backgradient {
 			background-image: -webkit-gradient(radial, center top, 5, center 30%,
 					${grad_radius}, from(#000065), to(#000010))
+			}
+		.full .backgradient {
+			background-image: -webkit-gradient(radial, center top, 5, center 30%,
+					${grad_radiusF}, from(#000065), to(#000010))
 			}`;
 	};
 
