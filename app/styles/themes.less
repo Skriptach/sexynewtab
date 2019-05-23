@@ -21,60 +21,59 @@
 	);
 }
 
-.metal {
-	#container {
-		.l-gradient(240, 10%, 4%);
+@colors: {
+	@metal: {
+		h: 240;
+		s: 10%;
+		l: 4%;
 	}
-	&.flow {
-		#container {
-			.p-gradient(240, 10%, 4%);
-		}
-		.page:before {
-			background-color: hsl(240, 10%, 8%);
-		}
+	@deep-purple: {
+		h: 300;
+		s: 100%;
+		l: 1%;
 	}
-
-	a.theme[data="metal"] span {
-		.outline();
-	}
-}
-
-/* \m/ */
-.deep-purple {
-	#container {
-		.l-gradient(300, 100%, 1%);
-	}
-	&.flow {
-		#container {
-			.p-gradient(300, 100%, 1%);
-		}
-		.page:before {
-			background-color: hsl(300, 100%, 4%);
-		}
-	}
-
-	a.theme[data="deep-purple"] span {
-		.outline();
+	@dark-side: {
+		h: 0;
+		s: 0;
+		l: 2%;
 	}
 }
+@themes	:	 ~"metal", ~"deep-purple", ~"dark-side";
 
-.dark-side {
-	#container {
-		.l-gradient(0, 0%, 2%);
-	}
-	&.flow {
+.lets-rock(@index) when (@index > 0) {
+	.lets-rock(@index - 1);
+
+	@theme	:	extract(@themes, @index);
+	@h		:	@colors[@@theme][h];
+	@s		:	@colors[@@theme][s];
+	@l		:	@colors[@@theme][l];
+
+	.@{theme} {
 		#container {
-			.p-gradient(0, 0%, 2%);
+			.l-gradient(@h, @s, @l);
 		}
-		.page:before {
-			background-color: hsl(0, 0%, 4%);
+		&.flow {
+			#container {
+				.p-gradient(@h, @s, @l);
+			}
+			.page:before {
+				background-color: hsl(@h, @s, @l * 2);
+			}
+		}
+
+		a.theme[data="@{theme}"] span {
+			.outline();
 		}
 	}
 
-	a.theme[data="dark-side"] span {
-		.outline();
+	// theme color preview rect appears dark to human eye 
+	// make it slightly brighter
+	#customize a.theme[data="@{theme}"] span {
+		background: hsl(@h, @s, 6* ( @l + 1) );
 	}
+
 }
+.lets-rock(length(@themes));
 
 .cosmos {
 	background-image: url('/styles/img/space.jpg');
@@ -93,16 +92,4 @@
 	a.theme[data="cosmos"] span {
 		.outline();
 	}
-}
-
-// theme color preview rect appears dark to human eye 
-// make it slightly brighter
-#customize a.theme[data="metal"] span {
-	background: hsl(240, 10%, 24%+6);
-}
-#customize a.theme[data="deep-purple"] span {
-	background: hsl(315, 100%, 6%+6);
-}
-#customize a.theme[data="dark-side"] span {
-	background: hsl(0, 0%, 12%+6);
 }
