@@ -1,6 +1,6 @@
 {
   "name": "sexynewtab",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Sexy New Tab replace Top Sites with beautiful page. Display as gallery or as tile. Synchronizes.",
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "gulp-clean-css": "^4.2.0",
     "gulp-htmlmin": "^5.0.1",
     "gulp-json-transform": "git+https://github.com/thaggie/gulp-json-transform.git",
+    "gulp-less": "^4.0.1",
     "gulp-newer": "^1.4.0",
     "gulp-uglify-es": "^1.0.4",
     "gulp-useref": "^3.1.6",

@@ -5,6 +5,7 @@ const concat = require('gulp-concat');
 const useref = require('gulp-useref');
 const gulpif = require('gulp-if');
 const uglify = require('gulp-uglify-es').default;
+const less = require('gulp-less');
 const cleanCSS = require('gulp-clean-css');
 const htmlmin = require('gulp-htmlmin');
 const newer = require('gulp-newer');
@@ -58,6 +59,7 @@ function html () {
 	return gulp.src(paths.interface.src)
 		.pipe(useref())
 		.pipe(gulpif('*.js', uglify()))
+		.pipe(gulpif('*.css', less()))
 		.pipe(gulpif('*.css', cleanCSS()))
 		.pipe(gulpif('*.html', htmlmin({collapseWhitespace: true})))
 		.pipe(gulp.dest(paths.interface.dest));
