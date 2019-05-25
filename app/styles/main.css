@@ -59,6 +59,7 @@ button[disabled] {
 
 #main {
 	display: flex;
+	background-size: cover;
 	width: 100%;
 	height: 100%;}
 
@@ -281,7 +282,7 @@ input[type="button"] {
 	position: relative;
 	display: block;}
 
-input[type="text"] {
+input[type="url"] {
 	border: 1px solid #1544AD;
 	width: 100%;
 	height: 35px;

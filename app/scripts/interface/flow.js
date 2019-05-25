@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 ;(() => {
 
@@ -84,7 +84,9 @@
 		if(e.keyCode === 27 && currentEditPage){
 			window.hideEditForm();
 		}
-		if (!FLOW){return;}
+		if (!FLOW ||
+			e.target.nodeName === 'INPUT'
+		){return;}
 		if (e.keyCode === 39) {
 			flowTo(getPage('next'));
 		} else if (e.keyCode === 37) {

@@ -17,20 +17,26 @@
 	}
 
 	function setBackground (bg) {
-		d('container').style['background-image'] = `url(${bg})`;
+		d('main').style['background-image'] = bg.length ? `url(${bg})` : null;
+		if (bg.length){
+			document.body.classList.add('custom-bg');
+		} else {
+			document.body.classList.remove('custom-bg');
+		}
+		chrome.runtime.sendMessage({
+			action: 'setBackground',
+			back: bg
+		});
 	}
+
+	const inputBack = $('#background input')[0];
 
 	function bgChange () {
 		if (event && event.type === 'paste'){
 			setTimeout(bgChange, 1);
 			return;
 		}
-		const bg = $('#background input')[0].value;
-		setBackground(bg);
-		chrome.runtime.sendMessage({
-			action: 'setBackground',
-			back: bg
-		});
+		setBackground(inputBack.value);
 	}
 
 	function toggleDisplay () {
@@ -58,7 +64,7 @@
 
 	window.addEventListener('ready', () => {
 		back.settings.THEME && switchTheme(back.settings.THEME);
-		back.settings.BACK && setBackground(back.settings.BACK);
+		back.settings.BACK && (setBackground(back.settings.BACK), inputBack.value = back.settings.BACK);
 		back.settings.FLOW && toggleDisplay();
 
 		$click.on('#toggle_button *', toggleDisplay);
@@ -67,7 +73,6 @@
 			switchTheme(target.getAttribute('data'), true);
 		});
 
-		const inputBack = $('#background input')[0];
 		inputBack.onpaste = inputBack.onkeyup = inputBack.onchange = inputBack.onblur = bgChange;
 	});
 

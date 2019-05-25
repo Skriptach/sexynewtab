@@ -76,20 +76,24 @@
 .lets-rock(length(@themes));
 
 .cosmos {
-	background-image: url('/styles/img/space.jpg');
-	background-size: cover;
-
-	&.flow {
-		.page .link {
-			-webkit-box-reflect: unset;
-
-			&:before {
-				content: none;
-			}
-		}
+	#container {
+		background-image: url('/styles/img/space.jpg');
 	}
 
 	a.theme[data="cosmos"] span {
 		.outline();
+	}
+}
+
+.custom-bg.flow,
+.cosmos.flow {
+	.page {
+		.link {
+			-webkit-box-reflect: unset;
+		}
+
+		&:before {
+			content: none;
+		}
 	}
 }

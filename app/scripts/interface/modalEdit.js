@@ -116,9 +116,6 @@
 			if (event.keyCode === 13){
 				editPage();
 			}
-			if (FLOW && (event.keyCode === 39 || event.keyCode === 37)){
-				event.stopPropagation();
-			}
 		};
 
 		$('#edit .tree')[0].onmousewheel = () => {
