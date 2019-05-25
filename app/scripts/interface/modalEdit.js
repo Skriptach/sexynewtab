@@ -69,8 +69,9 @@
 		updateEditFormList();
 	}
 
+	const inputUrl = $('#link_url input')[0];
+
 	function selectLink (target) {
-		const inputUrl = $('#link_url input')[0];
 		inputUrl.value = target.url;
 		inputUrl.onchange();
 		currentItem && currentItem.classList.remove('selected');
@@ -78,9 +79,10 @@
 		currentItem.classList.add('selected');
 		inputUrl.select();
 	}
+
 	function editPage () {
-		if (d('edit_ok').disabled){return;}
-		back.editPage($('#link_url input')[0].value, currentEditPage.index, currentItem && currentItem.tab);
+		if (d('edit_ok').disabled || !inputUrl.validity.valid){return;}
+		back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab);
 		updatePage(currentEditPage.index);
 		hideEditForm();
 	}
@@ -90,12 +92,9 @@
 			setTimeout(urlChange, 1);
 			return;
 		}
-		const protocol = /^https?:\/\//,
-			domain = /^[\w]+[\w-.]+/,
-			url = $('#link_url input')[0].value;
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = null;
-		if (!protocol.test(url) && !domain.test(url)){
+		if (!inputUrl.validity.valid){
 			d('edit_ok').setAttribute('disabled', '');
 		} else {
 			d('edit_ok').removeAttribute('disabled');
@@ -109,7 +108,6 @@
 		chrome.tabs.onRemoved.addListener(onListChanged);
 		chrome.tabs.onReplaced.addListener(onListChanged);
 
-		const inputUrl = $('#link_url input')[0];
 		inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = inputUrl.onblur = urlChange;
 
 		inputUrl.onkeydown = () => {

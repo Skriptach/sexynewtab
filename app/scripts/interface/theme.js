@@ -36,6 +36,9 @@
 			setTimeout(bgChange, 1);
 			return;
 		}
+		if (!inputBack.validity.valid){
+			return;
+		}
 		setBackground(inputBack.value);
 	}
 

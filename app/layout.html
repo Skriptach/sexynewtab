@@ -42,7 +42,8 @@
 			<ul class="tree"></ul>
 		</div>
 		<label id="link_url">
-			<i class="st-link"></i><input type="text" placeholder="http://">
+			<i class="st-link"></i>
+			<input type="url" placeholder="https://link.to/your-favorite-site/page" pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?" >
 			<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
 		</label>
 	</div>
@@ -57,9 +58,12 @@
 	</div>
 	<h3>Background Image</h3>
 	<div id="background">
-		<i class="st-link"></i><input type="text" placeholder="http://">
+		<!-- TODO  WebComponent -->
+		<i class="st-link"></i>
+		<input type="url" placeholder="https://picsum.photos/1920/1080"  pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
 	</div>
 </div>
+<div id="one-google-end-of-body"></div>
 </body>
 <!-- build:js scripts/interface.min.js -->
 <script type="text/javascript" src="scripts/interface/globals.js"></script>
