@@ -1,37 +1,9 @@
-html, body {
-	height: 100%;
-}
-
-body {
-	background-color:#1A0019;
-	margin:0;
-	overflow:hidden;
-	user-select: none;
-	font-size:12px;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
-
-button {
-	cursor: pointer;
-	border: none;
-	outline: none;
-	color: #FFF;
-	font-size: 22px;
-	width: 35px;
-	height: 35px;
-	padding: 0;}
-button[disabled] {
-	background: buttonface !important;
-	cursor: default !important;
-	color: graytext !important;}
-
 .ontop {
 	z-index: 100;}
 
 .plus {
 	position:absolute;
 	display: table;
-	width:100%;
-	height:100%;
 	background-size:20%;
 	background-repeat: no-repeat;
 	background-position: 50%;
@@ -52,16 +24,13 @@ button[disabled] {
 	color: #0000C0;}
 
 #container {
-	height: 100%;
-	width: 100%;
 	background-size: cover;
 	background-position: center center;}
 
 #main {
 	display: flex;
 	background-size: cover;
-	width: 100%;
-	height: 100%;}
+}
 
 #set {
 	position:relative;
@@ -88,8 +57,6 @@ body.reflow .page {
 .flipper {
 	top: 0;
 	left: 0;
-	width:100%;
-	height:100%;
 	position:absolute;
 	transition-property: left, top, width, height, transform, margin;
 	transition-duration: .5s;
@@ -116,15 +83,11 @@ body:not(.flow) .page.turned {
 	transform: rotate3d(0, 1, 0, 0deg) perspective(800px);}
 
 .backgradient {
-	width:100%;
-	height:100%;
 	background-size:100% 100%;
 	border-radius:6px;
 	position:absolute;}
 
 .thumbnail {
-	width:100%;
-	height:100%;
 	background-size: cover;
 	background-position: center;
 	border-radius:6px;
@@ -206,8 +169,6 @@ body:not(.flow) .page.turned {
 
 #edit {
 	position:absolute;
-	width: 100%;
-	height: 100%;
 	padding: 14px;
 	box-sizing: border-box;
 	background-color:#fafafa;
@@ -273,23 +234,10 @@ body:not(.flow) .page.turned {
 	border:dotted 1px grey;
 	background-color:lightblue;}
 
-input[type="button"] {
-	width:77;
-	height:23;}
-
 #link_url,
 #background {
 	position: relative;
 	display: block;}
-
-input[type="url"] {
-	border: 1px solid #1544AD;
-	width: 100%;
-	height: 35px;
-	padding: 5px 40px 5px 35px;
-	font-size: 16px;
-	box-sizing: border-box;
-}
 
 #link_url i,
 #background i {
@@ -332,8 +280,6 @@ i.st-link:before {
 	cursor:default;}
 
 .flow .page .link {
-	width: 100%;
-	height: 100%;
 	display: inline-block;
 	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);
 	transition-property: height, margin-top;
@@ -389,8 +335,6 @@ i.st-link:before {
 
 .flow .page:before {
 	content: '';
-	width: 100%;
-	height: 100%;
 	border-radius:7px;
 	position: absolute;
 	top: 100%;
@@ -421,17 +365,6 @@ i.st-link:before {
 
 .flow .page.inactive {
 	display:none;}
-
-::-webkit-scrollbar {
-	width: 6px;}
-
-::-webkit-scrollbar-thumb {
-	border-radius: 6px;
-	background-color: rgba(0,0,0,0.4);}
-::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(0,0,0,0.6);}
-::-webkit-scrollbar-thumb:active {
-	background-color: rgba(0,0,0,0.8);}
 
 
 @media screen and (max-width: 1500px) {

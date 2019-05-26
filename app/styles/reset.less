@@ -1,0 +1,76 @@
+html, body {
+	height: 100%;
+}
+
+#container,
+#main,
+.flipper,
+.backgradient,
+.thumbnail,
+#edit,
+.flow .page .link,
+.flow .page:before,
+.plus {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color:hsl(300, 100%, 5%);
+
+	font-size:12px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+    margin:0;
+    
+    user-select: none;
+	overflow:hidden;
+}
+
+button {
+	border: none;
+	color: #FFF;
+	font-size: 22px;
+	outline: none;
+
+    cursor: pointer;
+
+    width: 35px;
+	height: 35px;
+    padding: 0;
+ 
+    &[disabled] {
+        background: buttonface !important;
+        color: graytext !important;
+
+        cursor: default !important;
+    }
+}
+
+input[type="url"] {
+	border: 1px solid #1544AD;
+	font-size: 16px;
+
+    width: 100%;
+	height: 35px;
+	padding: 5px 40px 5px 35px;
+
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    
+    &-thumb {
+        border-radius: 6px;
+        background-color: rgba(0,0,0,0.4);
+
+        &:hover {
+            background-color: rgba(0,0,0,0.6);
+        }
+        &:active {
+            background-color: rgba(0,0,0,0.8);
+        }
+    }
+    
+}
