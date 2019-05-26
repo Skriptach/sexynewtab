@@ -21,10 +21,6 @@ const paths = {
 		src: 'app/icons/**',
 		dest: 'dist/icons/',
 	},
-	fonts: {
-		src: 'app/styles/fonts/**',
-		dest: 'dist/styles/fonts/',
-	},
 	img: {
 		src: 'app/styles/img/**',
 		dest: 'dist/styles/img/',
@@ -87,7 +83,6 @@ const build = gulp.series(
 	html,
 	copyNewer(paths.locales),
 	copyNewer(paths.icons),
-	copyNewer(paths.fonts),
 	copyNewer(paths.img),
 	manifest,
 	background
