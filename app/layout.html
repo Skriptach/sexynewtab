@@ -8,6 +8,7 @@
 	<link rel="stylesheet/less" type="text/css" href="styles/reset.less" />
 	<link rel="stylesheet" href="styles/main.css" />
 	<link rel="stylesheet/less" type="text/css" href="styles/edit.less" />
+	<link rel="stylesheet/less" type="text/css" href="styles/url-input.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/footer.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/customize.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/plus.less" />
@@ -48,7 +49,7 @@
 		<div class="list">
 			<ul class="tree"></ul>
 		</div>
-		<div id="link_url">
+		<div id="link_url" class="url-input">
 			<i class="st-link"></i>
 			<input type="url" placeholder="https://link.to/your-favorite-site/page" pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?" >
 			<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
@@ -73,7 +74,7 @@
 		<a class="theme" data="cosmos"><span></span><br>Space</a>
 	</div>
 	<h3>Background Image</h3>
-	<div id="background">
+	<div id="background" class="url-input">
 		<!-- TODO  WebComponent -->
 		<i class="st-link"></i>
 		<input type="url" placeholder="https://picsum.photos/1920/1080"  pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">

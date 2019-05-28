@@ -115,21 +115,6 @@ body:not(.flow) .page.turned {
 	opacity: 0;
 }
 
-#link_url,
-#background {
-	position: relative;
-}
-
-#link_url i,
-#background i {
-	position: absolute;
-	font-size: 22px;
-	color: #ababab;
-}
-i.st-link:before {
-    line-height: 35px;
-}
-
 .link {
 	text-decoration:none;
 	cursor:default;}
