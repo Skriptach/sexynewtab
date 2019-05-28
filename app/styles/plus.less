@@ -1,0 +1,26 @@
+.plus {
+	position:absolute;
+	display: table;
+	background-size:20%;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	-webkit-mask-size: 20%;
+	-webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 50%;
+
+    i {
+        color: #000070;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+
+        .page:not(.inactive) & {
+            visibility: hidden;
+        }
+        
+        .page:hover & {
+            color: #0000C0;
+        }
+    }
+    
+}
