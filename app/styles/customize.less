@@ -1,0 +1,43 @@
+#customize {
+    font-size: 12px;
+
+    position: fixed;
+	padding: 14px;
+	background-color:#FFF;
+	border-radius:6px;
+	box-sizing: border-box;
+	width: 360px;
+	right: 15px;
+	bottom: 0px;
+	opacity: 0;
+	z-index: 100;
+
+    visibility: hidden;
+	transition-duration: .5s;
+	transition-property: all;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+
+    &.open {
+        bottom: 70px;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    h3:first-child {
+        margin-top: 0;
+    }
+
+    .theme {
+        text-align: center;
+        display: inline-block;
+        width: 80px;
+        cursor: pointer;
+    
+        span {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #000;
+        }
+    }
+}
