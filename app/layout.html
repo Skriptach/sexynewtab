@@ -7,7 +7,7 @@
 	<!-- build:css styles/main.min.css -->
 	<link rel="stylesheet/less" type="text/css" href="styles/reset.less" />
 	<link rel="stylesheet" href="styles/main.css" />
-	<link rel="stylesheet/less" type="text/css" href="styles/panel.less" />
+	<link rel="stylesheet/less" type="text/css" href="styles/footer.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/plus.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/themes.less" />
 	<link rel="stylesheet" href="styles/fontello.css" />
@@ -24,14 +24,6 @@
 <div id="container">
 	<div id="main">
 		<div id="set"></div>
-		<div class="panel">
-			<button id="customize_button">
-				<i class="st-brush"></i>
-			</button>
-			<button class="toggle">
-				<i class="st-coverflow"></i>
-			</button>
-		</div>
 	</div>
 	<div id="edit">
 		<div class="header">
@@ -51,6 +43,15 @@
 		</label>
 	</div>
 </div>
+<footer>
+	<div class="controls">
+		<button class="customize">
+			<i class="st-brush"></i>
+		</button>
+		<button class="toggle">
+			<i class="st-coverflow"></i>
+		</button>
+	</div>
 <div id="customize">
 	<h3>Theme</h3>
 	<div>
@@ -66,6 +67,7 @@
 		<input type="url" placeholder="https://picsum.photos/1920/1080"  pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
 	</div>
 </div>
+</footer>
 <div id="one-google-end-of-body"></div>
 </body>
 <!-- build:js scripts/interface.min.js -->

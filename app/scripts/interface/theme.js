@@ -4,6 +4,7 @@
 
 	function toggleCustomize () {
 		d('customize').classList.toggle('open');
+		$('button.customize')[0].classList.toggle('active');
 	}
 
 	function switchTheme (newTheme, save) {
@@ -71,7 +72,7 @@
 		back.settings.FLOW && toggleDisplay();
 
 		$click.on('button.toggle *', toggleDisplay);
-		$click.on('#customize_button *', toggleCustomize);
+		$click.on('button.customize *', toggleCustomize);
 		$click.on('#customize .theme *', (target) => {
 			switchTheme(target.getAttribute('data'), true);
 		});
