@@ -7,6 +7,7 @@
 	<!-- build:css styles/main.min.css -->
 	<link rel="stylesheet/less" type="text/css" href="styles/reset.less" />
 	<link rel="stylesheet" href="styles/main.css" />
+	<link rel="stylesheet/less" type="text/css" href="styles/edit.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/footer.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/customize.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/plus.less" />
@@ -28,20 +29,30 @@
 	</div>
 	<div id="edit">
 		<div class="header">
-			<button id="tabs" class="tab active"><i class="st-tab"></i><span></span></button
-			><button id="bookmarks" class="tab" disabled title="Coming soon..."><i class="st-bookmarks"></i><span></span></button
-			><button id="history" class="tab"><i class="st-history"></i><span></span></button
-			><button id="topsites" class="tab"><i class="st-star"></i><span></span></button
-			><button id="edit_cancel"><i class="st-back"></i></button>
+			<button id="tabs" class="tab active">
+				<i class="st-tab"></i><span></span>
+			</button>
+			<button id="bookmarks" class="tab" disabled title="Coming soon...">
+				<i class="st-bookmarks"></i><span></span>
+			</button>
+			<button id="history" class="tab">
+				<i class="st-history"></i><span></span>
+			</button>
+			<button id="topsites" class="tab">
+				<i class="st-star"></i><span></span>
+				</button>
+			<button id="edit_cancel">
+				<i class="st-back"></i>
+			</button>
 		</div>
 		<div class="list">
 			<ul class="tree"></ul>
 		</div>
-		<label id="link_url">
+		<div id="link_url">
 			<i class="st-link"></i>
 			<input type="url" placeholder="https://link.to/your-favorite-site/page" pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?" >
 			<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
-		</label>
+		</div>
 	</div>
 </div>
 <footer>

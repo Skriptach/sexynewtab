@@ -1,0 +1,115 @@
+#edit {
+    display: flex;
+    flex-direction: column;
+
+	position:absolute;
+	padding: 14px;
+	box-sizing: border-box;
+	background-color:#FFF;
+	border-radius:6px;
+	box-shadow: 35px 35px 65px rgba(0,0,0,0.8);
+	transition-property: transform, margin;
+	transition-duration: .5s;
+	transform: rotate3d(0, 1, 0, 180deg);
+    backface-visibility: hidden;
+    
+    .list {
+        flex-grow: 1;
+        overflow: auto;
+    
+        position: relative;
+        margin: 14px 0;
+        background-color:#FFF;
+        cursor:default;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-shadow: inset 0 12px 12px -5px #FFF, inset 0 -12px 12px -5px #FFF;
+            pointer-events: none;
+        }
+
+        .tree {
+            height: 100%;
+            overflow: auto;
+            padding-right: 6px;
+            margin: 0;
+            padding: 0;
+        }
+
+    }
+
+    .tab {
+        cursor: pointer;
+        display: inline-block;
+
+        color: inherit;
+        font-size:14px;
+        background-color: #e0e0e0;
+        margin-right: 5px;
+        padding: 5px;
+        width: auto;
+        height: auto;
+
+        &.active {
+            cursor: default;
+            background-color: #f5f5f5;
+            font-size:16px;
+        }
+    }
+    
+    .item {
+        border: 1px solid transparent;
+        background-position:2px center;
+        background-repeat:no-repeat;
+        
+        background-size:16px;
+        padding: 4px 2px 2px 22px;
+        margin-top:3px;
+        
+        text-overflow:ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
+    .selected {
+        border:dotted 1px grey;
+        background-color:lightblue;
+    }
+
+}
+
+#edit_ok {
+	position: absolute;
+	right: 0;
+    bottom: 0;
+    background: linear-gradient(#0a6, #064);
+    
+    &:hover,
+    &:focus {
+        background: #0a6;
+    }
+    &:active {
+        background: linear-gradient(#064, #0a6);
+    }
+}
+
+#edit_cancel {
+	color: #000;
+	background: none;
+	width: 25px;
+	height: 25px;
+	float: right;
+    
+    & .st-back:before {
+        margin: 0;
+    }
+    &:hover,
+    &:focus {
+        color: #DC0000;
+    }
+}

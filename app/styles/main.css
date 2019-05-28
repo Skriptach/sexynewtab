@@ -115,77 +115,10 @@ body:not(.flow) .page.turned {
 	opacity: 0;
 }
 
-#edit {
-	position:absolute;
-	padding: 14px;
-	box-sizing: border-box;
-	background-color:#fafafa;
-	border-radius:6px;
-	box-shadow: 35px 35px 65px rgba(0,0,0,0.8);
-	transition-property: transform, margin;
-	transition-duration: .5s;
-	transform: rotate3d(0, 1, 0, 180deg);
-	backface-visibility: hidden;}
-
-#edit div.list {
-	position: relative;
-	margin-bottom: 7px;
-	padding: 3px 0 3px 6px;
-	height: calc(100% - 31px - 35px - 14px); /* height of tabs, height of input URL, height of margin  */
-	background-color:#FFF;
-	cursor:default;}
-
-#edit div.list:after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	box-shadow: inset 0 12px 12px -5px #FFF, inset 0 -12px 12px -5px #FFF;
-	pointer-events: none;}
-
-#edit .list .tree {
-	height: 100%;
-	overflow: auto;
-	padding-right: 6px;
-	margin: 0;
-	padding: 0;}
-
-#edit .tab {
-	text-decoration: none;
-	color: inherit;
-	font-size:16px;
-	margin-right: 5px;
-	background-color: #E5E5E5;
-	padding: 5px;
-	cursor: pointer;
-	display: inline-block;
-	width: auto;
-	height: auto;}
-
-#edit .tab.active {
-	cursor: default;
-	background-color: #FFF;}
-
-#edit .item {
-	background-position:top left;
-	background-repeat:no-repeat;
-	background-size:16px;
-	padding-left:20px;
-	margin-top:3px;
-	text-overflow:ellipsis;
-	overflow: hidden;
-	white-space: nowrap;}
-
-#edit .selected {
-	border:dotted 1px grey;
-	background-color:lightblue;}
-
 #link_url,
 #background {
 	position: relative;
-	display: block;}
+}
 
 #link_url i,
 #background i {
@@ -196,32 +129,6 @@ body:not(.flow) .page.turned {
 i.st-link:before {
     line-height: 35px;
 }
-
-#edit_ok {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	background: linear-gradient(#0a6, #064);}
-
-#edit_ok:hover, #edit_ok:focus {
-	background: #0a6;}
-
-#edit_ok:active {
-	background: linear-gradient(#064, #0a6);}
-
-#edit_cancel {
-	color: #000;
-	background: none;
-	width: 25px;
-	height: 25px;
-	float: right;
-	margin-top: -5px;}
-#edit_cancel .st-back:before{
-	margin: 0;}
-
-#edit_cancel:hover,
-#edit_cancel:focus {
-	color: #DC0000;}
 
 .link {
 	text-decoration:none;
