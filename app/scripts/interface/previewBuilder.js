@@ -9,8 +9,8 @@
 					<div class="plus"><i class="st-plus-circle"></i></div>
 					<div class="thumbnail"></div>
 				</a>
-				<button class="edit" title="${chrome.i18n.getMessage('m_edit')}"><i class="st-pencil"></i></button>
-				<button class="remove" title="${chrome.i18n.getMessage('m_clear')}"><i class="st-trash"></i></button>
+				<button class="operation edit" title="${chrome.i18n.getMessage('m_edit')}"><i class="st-pencil"></i></button>
+				<button class="operation remove" title="${chrome.i18n.getMessage('m_clear')}"><i class="st-trash"></i></button>
 			</div>`,
 		thumbnailnode = document.createElement('div'),
 		pages = document.createDocumentFragment();

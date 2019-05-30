@@ -1,0 +1,134 @@
+.page {
+	position:absolute;
+	border-radius:7px;
+	box-shadow: 0 0 0;
+	transition-property: left, top, width, height, box-shadow, min-width;
+	transition-duration: .3s;
+	transition-timing-function: ease-out;
+
+	&:hover {
+		box-shadow: 0px 0px 15px 3px #00C0FF;
+	}
+
+	&.draged {
+		box-shadow: 15px 15px 25px #222;
+		transition-property: transform;
+	}
+
+	&.turned {
+		width: 30%;
+		height: 80%;
+
+		&:hover {
+			box-shadow: none;
+		}
+		
+		#edit {
+			transform: rotateY(0deg);
+		}
+		
+	}
+
+	body:not(.flow) & {
+		transform-style: preserve-3d;
+    	perspective: 3400px;
+
+		&.turned {
+			top: 10% !important;
+			left: 35% !important;
+		}
+	}
+
+	&.full {
+		z-index: 1000;
+		transition-duration: .2s;
+		
+		.flipper {
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			border-radius: 0;
+			transition-duration: .4s;
+		}
+		
+		.thumbnail {
+			border-radius: 0;
+		}
+
+	}
+
+	.flipper {
+		top: 0;
+		left: 0;
+		position:absolute;
+		transition-property: left, top, width, height, transform, margin;
+		transition-duration: .5s;
+		transform-style: preserve-3d;
+		transform: rotateY(0deg);
+		transition-timing-function: ease-out;
+		backface-visibility: hidden;
+	}		
+
+	.operation {
+		position: absolute;
+		background: rgba(51, 51, 51, 0.5);
+		border-radius: 3px;
+		display: none;
+		opacity: 0.3;
+		
+		&.edit {
+			right: 10px;
+			top: 10px;
+		}
+		
+		&.remove {
+			right: 10px;
+			bottom: 10px;
+		}
+
+	}
+
+	// do not animate on switch mode
+	body.reflow & {
+		transition-property: none;
+	}
+}
+
+.page:not(.inactive) {
+	&:hover .operation {
+		display: initial;
+	}
+
+	& .operation:hover {
+		opacity: 0.8;
+	}
+}
+.page.full .operation,
+.flow .page:not(.current) .operation {
+	display: none !important;
+}
+
+.page.turned .flipper,
+.flow .page.turned:before {
+	transform: rotateY(180deg);
+}
+
+.backgradient {
+	background-size:100% 100%;
+	border-radius:6px;
+	position:absolute;
+}
+
+.thumbnail {
+	background-size: cover;
+	background-position: center;
+	border-radius:6px;
+	position:absolute;
+}
+
+.link {
+	display: inline-block;
+	text-decoration:none;
+	cursor:default;
+}

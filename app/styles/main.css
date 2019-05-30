@@ -16,111 +16,12 @@
 	position:relative;
 	margin:auto;}
 
-body.reflow .page {
-	transition-property: none;}
-
-.page {
-	position:absolute;
-	border-radius:7px;
-	box-shadow: 0 0 0;
-	transition-property: left, top, width, height, box-shadow, min-width;
-	transition-duration: .3s;
-	transition-timing-function: ease-out;}
-
-.page:hover {
-	box-shadow: 0px 0px 15px 3px #00C0FF;}
-
-.page.draged {
-	box-shadow: 15px 15px 25px #222;
-	transition-property: transform;}
-
-.flipper {
-	top: 0;
-	left: 0;
-	position:absolute;
-	transition-property: left, top, width, height, transform, margin;
-	transition-duration: .5s;
-	transform-style: preserve-3d;
-	transform: rotate3d(0, 1, 0, 0deg);
-	backface-visibility: hidden;}
-
-.page.turned {
-	width: 30%;
-	height: 80%;}
-
-body:not(.flow) .page.turned {
-	top: 10% !important;
-	left: 35% !important;}
-
-.page.turned:hover {
-	box-shadow: none;}
-
-.page.turned .flipper,
-.flow .page.turned:before {
-	transform: rotate3d(0, 1, 0, 180deg) perspective(800px);}
-
-.page.turned #edit {
-	transform: rotate3d(0, 1, 0, 0deg) perspective(800px);}
-
-.backgradient {
-	background-size:100% 100%;
-	border-radius:6px;
-	position:absolute;}
-
-.thumbnail {
-	background-size: cover;
-	background-position: center;
-	border-radius:6px;
-	position:absolute;}
-
-.page.full {
-	z-index: 1000;
-	transition-duration: .2s;
-	}
-
-.page.full .flipper {
-	top: -50%;
-	left: -50%;
-	width: 200%;
-	height: 200%;
-	border-radius: 0;
-	transition-duration: .4s;}
-
-.page.full .thumbnail {
-	border-radius: 0;}
-
-.page .flipper button {
-	position: absolute;
-	background: rgba(51, 51, 51, 0.5);
-	border-radius: 3px;
-	display: none;
-	opacity: 0;}
-
-.page .flipper button.edit {
-	right: 10px;
-	top: 10px;}
-.page .flipper button.remove {
-	right: 10px;
-	bottom: 10px;}
-
-.page:not(.inactive):not(.full):hover .flipper button {
-	display: initial;
-	opacity: 0.3;}
-.flow .page:not(.current):hover .flipper button {
-	display: none;}
-.page:not(.inactive):hover .flipper button:hover {
-	opacity: 0.8;}
-
 #customize {
 	opacity: 0;
 }
 
-.link {
-	text-decoration:none;
-	cursor:default;}
 
 .flow .page .link {
-	display: inline-block;
 	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);
 	transition-property: height, margin-top;
 	transition-duration: .1s;
