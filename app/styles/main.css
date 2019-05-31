@@ -1,8 +1,6 @@
 .ontop {
 	z-index: 100;}
 
-
-
 #container {
 	background-size: cover;
 	background-position: center center;}
@@ -18,28 +16,4 @@
 
 #customize {
 	opacity: 0;
-}
-
-
-
-@media screen and (max-width: 1500px) {
-
-	.page {
-		min-width: 0;}
-	.page.turned {
-		left: 50% !important;}
-	body:not(.flow) .page.turned {
-		min-width: 450px;}
-
-	body:not(.flow) .page.turned .flipper,
-	body:not(.flow) .page.turned #edit {
-		margin-left: -50%;}
-
-	#edit {
-		margin: 0;}
-}
-
-@media screen and (max-width: 880px) {
-	.flow #edit .header button span {
-		display: none;}
 }

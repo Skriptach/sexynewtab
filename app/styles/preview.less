@@ -2,7 +2,7 @@
 	position:absolute;
 	border-radius:7px;
 	box-shadow: 0 0 0;
-	transition-property: left, top, width, height, box-shadow, min-width;
+	transition-property: left, top, width, height, box-shadow;
 	transition-duration: .3s;
 	transition-timing-function: ease-out;
 
@@ -36,6 +36,12 @@
 		&.turned {
 			top: 10% !important;
 			left: 35% !important;
+			min-width: 450px;
+
+			@media screen and (max-width: 1200px) {
+				left: 10% !important;
+			}
+
 		}
 	}
 
