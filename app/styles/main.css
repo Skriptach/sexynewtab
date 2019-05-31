@@ -21,65 +21,6 @@
 }
 
 
-.flow .page .link {
-	-webkit-box-reflect: below 0px linear-gradient(transparent, #000 300%, #000);
-	transition-property: height, margin-top;
-	transition-duration: .1s;
-}
-
-.flow #set {
-	width: 50% !important;
-	height: 50% !important;
-	transform-style: preserve-3d;
-	position: relative;
-	z-index: 100;}
-
-.flow .page {
-	width: 100% !important;
-	height: 100% !important;
-	top: 0;
-	transition-property: left, width, height, top, transform, transform-origin;
-	transition-duration: .5s;
-	transform-origin: 0%;}
-
-.flow .page.deleting {
-	width: 0 !important;
-	visibility: hidden;
-	transition-property: width, transform, transform-origin;}
-
-.flow .page:before {
-	content: '';
-	border-radius:7px;
-	position: absolute;
-	top: 100%;
-	transition-property: transform;
-	transition-duration: .5s;
-	backface-visibility: hidden;
-	pointer-events: none;
-	transition-property: top;
-	transition-duration: .1s;
-}
-
-.flow .page.current {
-	transform: rotateY(0);
-	transform-origin: 50%;}
-.flow #main:not(.scrolling) .page:not(.current):hover .link {
-	height: 150%;
-	margin-top: -25%;
-	}
-.flow #main:not(.scrolling) .page:not(.current):hover:before {
-	top: 153%;
-	}
-
-.flow .current ~ .page {
-	transform-origin: 100%;}
-
-.flow .page:hover {
-	box-shadow: none;}
-
-.flow .page.inactive {
-	display:none;}
-
 
 @media screen and (max-width: 1500px) {
 
