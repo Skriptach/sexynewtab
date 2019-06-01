@@ -1,9 +1,11 @@
-.ontop {
-	z-index: 100;}
+﻿.ontop {
+	z-index: 100;
+}
 
 #container {
 	background-size: cover;
-	background-position: center center;}
+	background-position: center center;
+}
 
 #main {
 	display: flex;
@@ -12,7 +14,23 @@
 
 #set {
 	position:relative;
-	margin:auto;}
+	margin:auto;
+}
+
+body.reflow #set {
+	visibility: hidden;
+}
+
+body:not(.flow) #set {
+	--cols: 5;
+	--rows: 4;
+	--gap: 10px;
+	--page-width: calc( (100vw - var(--gap)) / var(--cols) - var(--gap));
+	--page-height: calc(var(--page-width) * var(--aspect-ratio));
+
+	width: calc( 100vw - 2*var(--gap) );
+	height: calc( (var(--page-height) + var(--gap)) * var(--rows) - var(--gap) );
+}
 
 #customize {
 	opacity: 0;

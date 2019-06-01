@@ -4,7 +4,7 @@
 
 	window.COLUMNS_COUNT = null;
 	window.ROWS_COUNT = null;
-	window.DELTA = 10;
+	window.GAP = 10;
 	window.PAGE_WIDTH = null;
 	window.PAGE_HEIGHT = null;
 	window.FLOW = false;

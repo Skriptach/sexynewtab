@@ -39,8 +39,8 @@
 				page.draggable = true;
 				page.setAttribute('id', `page${index}`);
 				page.index = index;
-				page.style.left = `${j * (PAGE_WIDTH + DELTA)}px`;
-				page.style.top  = `${i * (PAGE_HEIGHT + DELTA)}px`;
+				page.setAttribute('data-col', j);
+				page.setAttribute('data-row', i);
 				pages.appendChild(page);
 				updatePage(index, page);
 				index++;

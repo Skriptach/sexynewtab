@@ -5,6 +5,23 @@
 	let pagePosX, pagePosY, _offsetX, _offsetY;
 	let dragPage = null;
 
+	function getParams (page) {
+		const res = {
+			col: page.getAttribute('data-col'),
+			row: page.getAttribute('data-row'),
+			id: page.getAttribute('id'),
+			index: page.index,
+		};
+		return res;
+	}
+
+	function setParams(page, params) {
+		page.setAttribute('data-col', params.col);
+		page.setAttribute('data-row', params.row);
+		page.setAttribute('id', params.id || `page${params.index}`);
+		page.index = params.index;
+	}
+
 	function onDrag (e) {
 		if (e.screenX <= 0 || e.screenY <= 0) {
 			return;
@@ -12,55 +29,36 @@
 
 		const p_left = e.x - _offsetX,
 			p_top = e.y - _offsetY,
-			col = Math.floor((p_left + PAGE_WIDTH / 2 + DELTA) / (PAGE_WIDTH + DELTA)),
-			row = Math.floor((p_top + PAGE_HEIGHT / 2 + DELTA) / (PAGE_HEIGHT + DELTA)),
+			col = Math.floor((p_left + PAGE_WIDTH / 2 + GAP) / (PAGE_WIDTH + GAP)),
+			row = Math.floor((p_top + PAGE_HEIGHT / 2 + GAP) / (PAGE_HEIGHT + GAP)),
 			position = row * COLUMNS_COUNT + col;
-		let TargetPosX,
-			TargetPosY,
-			modificator,
-			i,
-			moved,
-			tmpPosX,
-			tmpPosY;
+
 		dragPage.style.left = `${p_left}px`;
 		dragPage.style.top = `${p_top}px`;
 		if ((position >= 0) && (position < ROWS_COUNT * COLUMNS_COUNT) && (position !== dragPage.index)) {
-			if (Math.abs(p_left - col * (PAGE_WIDTH + DELTA)) < PAGE_WIDTH / 2) {
-				TargetPosX = pagePosX;
-				TargetPosY = pagePosY;
-				modificator = (position > dragPage.index) ? 1 : -1;
-				i = dragPage.index;
-				do {
-					i += modificator;
-					moved = d(`page${i}`);
-					tmpPosX = parseFloat(moved.style.left);
-					tmpPosY = parseFloat(moved.style.top);
-					moved.style.left = `${TargetPosX}px`;
-					moved.style.top = `${TargetPosY}px`;
-					TargetPosX = tmpPosX;
-					TargetPosY = tmpPosY;
-					moved.setAttribute('id', `page${i - modificator}`);
-					moved.index = i - modificator;
-				} while (i !== position);
-				pagePosX = TargetPosX;
-				pagePosY = TargetPosY;
-				dragPage.index = position;
-				dragPage.setAttribute('id', `page${position}`);
-				d('set').insertBefore(dragPage, d(`page${position + 1}`));
-			}
+			const sign = Math.sign(position - dragPage.index);
+			const from = sign > 0 ? dragPage.index + sign : position;
+			const to = sign < 0 ? dragPage.index + sign : position;
+			const range = $(`.page:nth-child(n+${from + 1}):nth-child(-n+${to + 1})`);
+			Array.prototype.slice.apply( range )
+				.sort((a, b) => (a.index - b.index) * sign)
+				.reduce((prev, current, i, arr) => {
+					const stash = getParams(current);
+					setParams(current, prev);
+					return stash;
+				}, getParams(dragPage));
+			setParams(dragPage, { col, row, index: position });
+			d('set').insertBefore(dragPage, d(`page${position + 1}`));
 		}
 	}
 
 	function stopDrag () {
 		document.ondrag = null;
 		document.ondragend = null;
-		dragPage.ondragover = null;
 		dragPage.style.zIndex = null;
 		dragPage.classList.remove('draged');
-		dragPage.style.left = `${pagePosX}px`;
-		dragPage.style.top = `${pagePosY}px`;
-		dragPage.style.width = '';
-		dragPage.style.height = '';
+		dragPage.style.left = null;
+		dragPage.style.top = null;
 		back.swap(lastPosition, dragPage.index);
 		lastPosition = null;
 	}
@@ -78,8 +76,6 @@
 		pagePosY = dragPage.offsetTop;
 		_offsetX = e.x - pagePosX;
 		_offsetY = e.y - pagePosY;
-		dragPage.style.width = PAGE_WIDTH + 15;
-		dragPage.style.height = PAGE_HEIGHT + 15;
 		document.ondrag = onDrag;
 		document.ondragend = stopDrag;
 	};

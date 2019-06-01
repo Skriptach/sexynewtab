@@ -34,7 +34,7 @@
 		shift = 30;
 
 	window.setFlowPagePosition = () => {
-		const proportionW = d('set').clientWidth/100,
+		const proportionW = innerWidth/200,
 			c = current_index();
 		const nodes = $('.page:not(.inactive)');
 		nodes.forEach((page, n) => {

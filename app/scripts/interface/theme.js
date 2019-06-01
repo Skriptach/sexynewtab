@@ -55,15 +55,14 @@
 			first_flow_page = current_flow_page = getFirstPage();
 			if (!first_flow_page){return;}
 			current_flow_page.classList.add('current');
-			setBackGradient();
+			setBackGradientSize();
 			setFlowPagePosition();
 		}
-		setTimeout(() => document.body.classList.remove('reflow'), 0);
+		setTimeout(() => document.body.classList.remove('reflow'), 50);
 		chrome.runtime.sendMessage({
 			action: 'toggleView',
 			FLOW
 		});
-		setBackGradient();
 	}
 
 	window.addEventListener('ready', () => {
@@ -77,6 +76,7 @@
 			switchTheme(target.getAttribute('data'), true);
 		});
 
+		setTimeout(() => document.body.classList.remove('reflow'), 50);
 		inputBack.onpaste = inputBack.onkeyup = inputBack.onchange = inputBack.onblur = bgChange;
 	});
 
