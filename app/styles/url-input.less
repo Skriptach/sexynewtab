@@ -1,5 +1,5 @@
 
-.url-input {
+url-input {
     display: flex;
     flex-shrink: 0;
     overflow: hidden;
@@ -17,5 +17,19 @@
         line-height: 35px;
         margin: 0 7px;
     }
+    
+    button {
+        background: linear-gradient(#0a6, #064);
+        flex-shrink: 0;
+        
+        &:hover,
+        &:focus {
+            background: #0a6;
+        }
+        &:active {
+            background: linear-gradient(#064, #0a6);
+        }
+    }
+
 }
 

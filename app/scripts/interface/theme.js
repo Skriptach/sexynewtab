@@ -30,17 +30,12 @@
 		});
 	}
 
-	const inputBack = $('#background input')[0];
+	const inputBack = $('#customize url-input')[0];
 
 	function bgChange () {
-		if (event && event.type === 'paste'){
-			setTimeout(bgChange, 1);
-			return;
+		if (inputBack.validity.valid){
+			setBackground(inputBack.value);
 		}
-		if (!inputBack.validity.valid){
-			return;
-		}
-		setBackground(inputBack.value);
 	}
 
 	function toggleDisplay () {
@@ -77,7 +72,7 @@
 		});
 
 		setTimeout(() => document.body.classList.remove('reflow'), 50);
-		inputBack.onpaste = inputBack.onkeyup = inputBack.onchange = inputBack.onblur = bgChange;
+		inputBack.addEventListener('change', bgChange);
 	});
 
 })();

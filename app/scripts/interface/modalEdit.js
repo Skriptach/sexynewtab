@@ -69,36 +69,25 @@
 		updateEditFormList();
 	}
 
-	const inputUrl = $('#link_url input')[0];
+	const inputUrl = $('#edit url-input')[0];
 
 	function selectLink (target) {
 		inputUrl.value = target.url;
-		inputUrl.onchange();
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = target;
 		currentItem.classList.add('selected');
-		inputUrl.select();
 	}
 
 	function editPage () {
-		if (d('edit_ok').disabled || !inputUrl.validity.valid){return;}
+		if (!inputUrl.validity.valid){return;}
 		back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab);
 		updatePage(currentEditPage.index);
 		hideEditForm();
 	}
 
 	function urlChange () {
-		if (event && event.type === 'paste'){
-			setTimeout(urlChange, 1);
-			return;
-		}
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = null;
-		if (!inputUrl.validity.valid){
-			d('edit_ok').setAttribute('disabled', '');
-		} else {
-			d('edit_ok').removeAttribute('disabled');
-		}
 	}
 
 
@@ -108,13 +97,8 @@
 		chrome.tabs.onRemoved.addListener(onListChanged);
 		chrome.tabs.onReplaced.addListener(onListChanged);
 
-		inputUrl.onpaste = inputUrl.onkeyup = inputUrl.onchange = inputUrl.onblur = urlChange;
-
-		inputUrl.onkeydown = () => {
-			if (event.keyCode === 13){
-				editPage();
-			}
-		};
+		inputUrl.addEventListener('ok', editPage);
+		inputUrl.addEventListener('change', urlChange);
 
 		$('#edit .tree')[0].onmousewheel = () => {
 			if (event.wheelDeltaX === 0) { event.stopPropagation(); }
@@ -122,7 +106,6 @@
 
 		$click.on('#edit .header .tab *', switchList);
 		$click.on('#edit_cancel *', hideEditForm);
-		$click.on('#edit_ok *', editPage);
 		$click.on('#edit .list .item', selectLink);
 
 		chrome.tabs.onUpdated.addListener((id, changeInfo) => {

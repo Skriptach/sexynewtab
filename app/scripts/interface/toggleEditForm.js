@@ -4,12 +4,9 @@
 
 	function showEditForm () {
 		EDIT = true;
-		const inputUrl = $('#link_url input')[0];
 		currentEditPage.appendChild(d('edit'));
 		$('#edit .header .tab.active')[0].click();
-		inputUrl.value = currentEditPage.url;
-		inputUrl.title = currentEditPage.url || '';
-		inputUrl.onchange();
+		$('#edit url-input')[0].value = currentEditPage.url;
 		setTimeout(() => currentEditPage.classList.add('turned', 'ontop'), 10);
 	}
 

@@ -32,7 +32,7 @@
 	window.updatePage = (slotIndex, page, thumb) => {
 		page = page || d(`page${slotIndex}`);
 		const oldUrl = page.url;
-		page.url = slotsList[slotIndex] ? slotsList[slotIndex].url : null;
+		page.url = slotsList[slotIndex] ? slotsList[slotIndex].url : '';
 		page.thumb = thumb ? thumb :
 			slotsList[slotIndex] && slotsList[slotIndex].thumb ? slotsList[slotIndex].thumb :
 			(oldUrl === page.url) ? page.thumb : '';

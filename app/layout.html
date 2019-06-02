@@ -48,11 +48,7 @@
 		<div class="list">
 			<ul class="tree"></ul>
 		</div>
-		<div id="link_url" class="url-input">
-			<i class="st-link"></i>
-			<input type="url" placeholder="https://link.to/your-favorite-site/page" pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?" >
-			<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
-		</div>
+		<url-input ok-button />
 	</div>
 </div>
 <footer>
@@ -73,19 +69,22 @@
 		<a class="theme" data="cosmos"><span></span><br>Space</a>
 	</div>
 	<h3>Background Image</h3>
-	<div id="background" class="url-input">
-		<!-- TODO  WebComponent -->
-		<i class="st-link"></i>
-		<input type="url" placeholder="https://picsum.photos/1920/1080"  pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
-	</div>
+	<url-input placeholder="https://picsum.photos/1920/1080" />
 </div>
 </footer>
 <div id="one-google-end-of-body"></div>
+<template id="x-url-input">
+	<i class="st-link"></i>
+	<input type="url" placeholder="https://link.to/your-favorite-site/page"
+		pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
+	<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
+</template>
 </body>
 <!-- build:js scripts/interface.min.js -->
 <script type="text/javascript" src="scripts/interface/globals.js"></script>
 <script type="text/javascript" src="scripts/interface/helpers.js"></script>
 <script type="text/javascript" src="scripts/interface/clickHandlers.js"></script>
+<script type="text/javascript" src="scripts/interface/urlInputComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/pageSize.js"></script>
 <script type="text/javascript" src="scripts/interface/dragPage.js"></script>
 <script type="text/javascript" src="scripts/interface/modalEdit.js"></script>
