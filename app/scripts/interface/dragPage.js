@@ -64,7 +64,7 @@
 	}
 
 	window.prepareDrag = (e) => {
-		dragPage = closest(e.target, '.page');
+		dragPage = event.target.closest('.page');
 		if (dragPage.classList.contains('turned') || FLOW) {
 			e.preventDefault();
 			return;

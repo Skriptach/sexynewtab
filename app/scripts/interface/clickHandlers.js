@@ -13,7 +13,7 @@
 	function clicksDelegate () {
 		for (const selector in handlers){
 			if (event.target.matches(selector) || event.target.matches(selector.replace('*', ''))){
-				const target = closest(event.target, selector.replace('*', ''));
+				const target = event.target.closest(selector.replace('*', ''));
 				handlers[selector].call(target, target);
 				return;
 			}

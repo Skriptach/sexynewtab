@@ -4,7 +4,6 @@
         "d": true,
         "$": true,
         "$click": true,
-        "closest": true,
         "COLUMNS_COUNT": true,
         "ROWS_COUNT": true,
         "GAP": true,

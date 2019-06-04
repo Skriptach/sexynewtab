@@ -5,7 +5,7 @@
 	function clearPage (target) {
 		chrome.runtime.sendMessage({
 			action: 'clear',
-			index: closest(target, '.page').index
+			index: target.closest('.page').index
 		});
 	}
 

@@ -16,7 +16,7 @@
 		pages = document.createDocumentFragment();
 
 	function pageClickHandler (target) {
-		const page = closest(target, '.page');
+		const page = target.closest('.page');
 		if (FLOW && !page.classList.contains('current')){
 			event.preventDefault();
 			if (event.button !== 0) {return;}

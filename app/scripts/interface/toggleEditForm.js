@@ -35,7 +35,10 @@
 	}
 
 	window.addEventListener('ready', () => {
-		function toggle (target) { toggleEditForm(closest(target, '.page'));}
+		function toggle (target) {
+			toggleEditForm(target.closest('.page'));
+		}
+
 		$click.on('.page .flipper .edit *', toggle );
 		$click.on('.page.inactive .flipper a *', toggle );
 	});
