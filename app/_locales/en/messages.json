@@ -14,10 +14,10 @@
 	"fn_top":{
 		"message":"Top"
 	},
-	"m_edit":{
+	"edit":{
 		"message":"Edit…"
 	},
-	"m_clear":{
+	"clear":{
 		"message":"Clear"
 	},
 	"theme_label":{

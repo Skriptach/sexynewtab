@@ -56,7 +56,9 @@
 	};
 
 	window.addEventListener('ready', () => {
-		$click.on('.page .flipper .remove *', clearPage);
+		document.addEventListener('clear', () => {
+			clearPage(event.target);
+		});
 
 		chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {

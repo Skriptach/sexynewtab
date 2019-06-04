@@ -45,7 +45,7 @@
 .st-stack:before { content: '\e802'; } /* '' */
 .st-spin:before { content: '\e803'; } /* '' */
 .st-brush:before { content: '\e804'; } /* '' */
-.st-pencil:before { content: '\e805'; } /* '' */
+.st-edit:before { content: '\e805'; } /* '' */
 .st-cancel:before { content: '\e80f'; } /* '' */
 .st-plus:before { content: '\e814'; } /* '' */
 .st-plus-circle:before { content: '\e816'; } /* '' */
@@ -58,4 +58,4 @@
 .st-ok-3:before { content: '\e829'; } /* '' */
 .st-back:before { content: '\e82c'; } /* '' */
 .st-link:before { content: '\e831'; } /* '' */
-.st-trash:before { content: '\e835'; } /* '' */
+.st-clear:before { content: '\e835'; } /* '' */

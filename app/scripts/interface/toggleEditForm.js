@@ -39,7 +39,9 @@
 			toggleEditForm(target.closest('.page'));
 		}
 
-		$click.on('.page .flipper .edit *', toggle );
+		document.addEventListener('edit', () => {
+			toggle(event.target);
+		});
 		$click.on('.page.inactive .flipper a *', toggle );
 	});
 

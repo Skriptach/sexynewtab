@@ -14,10 +14,10 @@
 	"fn_top":{
 		"message":"Топ"
 	},
-	"m_edit":{
+	"edit":{
 		"message":"Редактировать…"
 	},
-	"m_clear":{
+	"clear":{
 		"message":"Удалить"
 	},
 	"theme_label":{

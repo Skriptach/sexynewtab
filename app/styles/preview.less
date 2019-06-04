@@ -111,7 +111,7 @@
 		backface-visibility: hidden;
 	}		
 
-	.operation {
+	icon-btn {
 		position: absolute;
 		background: rgba(51, 51, 51, 0.5);
 		border-radius: 3px;
@@ -123,7 +123,7 @@
 			top: 10px;
 		}
 		
-		&.remove {
+		&.clear {
 			right: 10px;
 			bottom: 10px;
 		}
@@ -141,16 +141,16 @@
 }
 
 .page:not(.inactive) {
-	&:hover .operation {
+	&:hover icon-btn {
 		display: initial;
 	}
 
-	& .operation:hover {
+	& icon-btn:hover {
 		opacity: 0.8;
 	}
 }
-.page.full .operation,
-.flow .page:not(.current) .operation {
+.page.full icon-btn,
+.flow .page:not(.current) icon-btn {
 	display: none !important;
 }
 
