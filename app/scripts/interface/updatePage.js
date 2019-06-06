@@ -2,10 +2,10 @@
 
 ;(function () {
 
-	function clearPage (target) {
+	function clearPage () {
 		chrome.runtime.sendMessage({
 			action: 'clear',
-			index: target.closest('.page').index
+			index: event.target.closest('.page').index
 		});
 	}
 
@@ -55,10 +55,8 @@
 		}
 	};
 
-	window.addEventListener('ready', () => {
-		document.addEventListener('clear', () => {
-			clearPage(event.target);
-		});
+	window.on('ready', () => {
+		document.on('clear', clearPage);
 
 		chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.i18n.getMessage('@@extension_id')) {

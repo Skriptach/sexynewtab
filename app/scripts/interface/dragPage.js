@@ -53,8 +53,8 @@
 	}
 
 	function stopDrag () {
-		document.ondrag = null;
-		document.ondragend = null;
+		document.off('drag', onDrag);
+		document.off('dragend', stopDrag);
 		dragPage.style.zIndex = null;
 		dragPage.classList.remove('draged');
 		dragPage.style.left = null;
@@ -76,8 +76,8 @@
 		pagePosY = dragPage.offsetTop;
 		_offsetX = e.x - pagePosX;
 		_offsetY = e.y - pagePosY;
-		document.ondrag = onDrag;
-		document.ondragend = stopDrag;
+		document.on('drag', onDrag);
+		document.on('dragend', stopDrag);
 	};
 
 })();

@@ -20,6 +20,6 @@
 		}
 	};
 
-	document.addEventListener('click', clicksDelegate);
+	document.on('click', clicksDelegate);
 
 })();

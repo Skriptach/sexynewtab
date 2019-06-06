@@ -11,7 +11,7 @@
 			this.classList.add(type);
 			this.innerHTML = `<i class="st-${type}"></i>`;
 
-			this.addEventListener('click', () => {
+			this.on('click', () => {
 				this.dispatchEvent( new Event(type, { bubbles: true }) );
 			});
 

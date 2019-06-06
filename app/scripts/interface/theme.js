@@ -60,7 +60,7 @@
 		});
 	}
 
-	window.addEventListener('ready', () => {
+	window.on('ready', () => {
 		back.settings.THEME && switchTheme(back.settings.THEME);
 		back.settings.BACK && (setBackground(back.settings.BACK), inputBack.value = back.settings.BACK);
 		back.settings.FLOW && toggleDisplay();
@@ -72,7 +72,7 @@
 		});
 
 		setTimeout(() => document.body.classList.remove('reflow'), 50);
-		inputBack.addEventListener('change', bgChange);
+		inputBack.on('change', bgChange);
 	});
 
 })();

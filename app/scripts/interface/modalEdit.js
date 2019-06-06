@@ -91,18 +91,18 @@
 	}
 
 
-	window.addEventListener('ready', () => {
-		window.addEventListener('focus', onListChanged);
+	window.on('ready', () => {
+		window.on('focus', onListChanged);
 		chrome.tabs.onCreated.addListener(onListChanged);
 		chrome.tabs.onRemoved.addListener(onListChanged);
 		chrome.tabs.onReplaced.addListener(onListChanged);
 
-		inputUrl.addEventListener('ok', editPage);
-		inputUrl.addEventListener('change', urlChange);
+		inputUrl.on('ok', editPage);
+		inputUrl.on('change', urlChange);
 
-		$('#edit .tree')[0].onmousewheel = () => {
+		$('#edit .tree')[0].on('mousewheel', () => {
 			if (event.wheelDeltaX === 0) { event.stopPropagation(); }
-		};
+		});
 
 		$click.on('#edit .header .tab *', switchList);
 		$click.on('#edit_cancel *', hideEditForm);

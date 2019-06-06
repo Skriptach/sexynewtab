@@ -47,10 +47,10 @@
 			}
 		}
 		d('set').appendChild(pages);
-		document.addEventListener('dragstart', prepareDrag);
+		document.on('dragstart', prepareDrag);
 	};
 
-	window.addEventListener('ready', () => {
+	window.on('ready', () => {
 		$click.on('.page:not(.inactive) .flipper a *', pageClickHandler);
 	});
 

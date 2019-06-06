@@ -83,11 +83,11 @@
 		}
 	}
 
-	window.addEventListener('ready', () => {
-		document.onkeydown = keyHandler;
-		document.onmousewheel = scrollFlow;
+	window.on('ready', () => {
+		document.on('keydown', keyHandler);
+		document.on('mousewheel', scrollFlow);
 	});
 
-	document.addEventListener('mousemove', revertScrolling);
+	document.on('mousemove', revertScrolling);
 
 })();

@@ -2,8 +2,6 @@
 
 ;(() => {
 
-	const readyEvt = new Event('ready');
-
 	function ready (background) {
 		back = background;
 		slotsList = background.slotsList;
@@ -11,7 +9,7 @@
 		ROWS_COUNT = background.settings.ROWS_COUNT;
 		setPagesSize();
 		createPages();
-		window.dispatchEvent(readyEvt);
+		window.dispatchEvent(new Event('ready'));
 	}
 
 	function seti18nLabels () {
@@ -23,7 +21,7 @@
 		$('#customize h3')[1].innerText = chrome.i18n.getMessage('background_label');
 	}
 
-	window.addEventListener('load', () => {
+	window.on('load', () => {
 		seti18nLabels();
 		chrome.runtime.getBackgroundPage( (bg) => bg.load().then(ready) );
 	});

@@ -26,7 +26,7 @@
 		d('set').style.setProperty('--aspect-ratio', innerHeight / innerWidth);
 	};
 
-	window.addEventListener('resize', () => {
+	window.on('resize', () => {
 		clearTimeout(wait);
 		wait = setTimeout(() => {
 			FLOW ? (setBackGradientSize(),setFlowPagePosition()) : setPagesSize();

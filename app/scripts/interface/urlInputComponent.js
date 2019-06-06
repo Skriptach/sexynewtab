@@ -35,13 +35,13 @@
 				button.remove();
 			} else {
 				this._isOkButton = true;
-				button.addEventListener('click', triggerOk);
+				button.on('click', triggerOk);
 			}
 			
-			input.addEventListener('change', setValue.bind(this));
-			input.addEventListener('keyup', setValue.bind(this));
-			input.addEventListener('paste', setValue.bind(this));
-			this.addEventListener('keydown', () => {
+			input.on('change', setValue.bind(this));
+			input.on('keyup', setValue.bind(this));
+			input.on('paste', setValue.bind(this));
+			this.on('keydown', () => {
 				if (event.keyCode === 13) {
 					triggerOk();
 				}

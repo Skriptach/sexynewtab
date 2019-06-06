@@ -34,12 +34,12 @@
 		}
 	}
 
-	window.addEventListener('ready', () => {
+	window.on('ready', () => {
 		function toggle (target) {
 			toggleEditForm(target.closest('.page'));
 		}
 
-		document.addEventListener('edit', () => {
+		document.on('edit', () => {
 			toggle(event.target);
 		});
 		$click.on('.page.inactive .flipper a *', toggle );
