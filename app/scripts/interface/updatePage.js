@@ -22,8 +22,10 @@
 				flowTo(getPage('next') || getPage('previous'));
 				setTimeout(() => page.classList.remove('deleting'), 500);
 			}
-			page.querySelector('.thumbnail').removeAttribute('style');
-			page.querySelector('.plus').removeAttribute('style');
+			page.style.setProperty('--fav-image', null);
+			page.style.setProperty('--fav-mask', null);
+			page.style.setProperty('--fav-color', null);
+			page.style.setProperty('--thumb-image', null);
 			page.style.webkitTransform = 'scale(1)';
 			setTimeout(() => {page.style.webkitTransform = '';}, 10);
 		}, 200);
@@ -38,20 +40,15 @@
 			(oldUrl === page.url) ? page.thumb : '';
 		if (page.url) {
 			page.querySelector('a').setAttribute('href', page.url);
-			if(!page.thumb){
-				const icon = page.querySelector('.plus');
-				if (slotsList[slotIndex].favicon && slotsList[slotIndex].favicon.color){
-					icon.style['background-image'] = '';
-					icon.style['-webkit-mask-image'] = `url(${slotsList[slotIndex].favicon.href})`;
-					icon.style['background-color'] = slotsList[slotIndex].favicon.color || '#FFF';
-				} else {
-					icon.style['background-color'] = '';
-					icon.style['-webkit-mask-image'] = '';
-					icon.style['background-image'] = `url(${slotsList[slotIndex].favicon.href})`;
-				}
-			}
 			page.classList.remove('inactive');
-			page.querySelector('.thumbnail').style['background-image'] = `url(${page.thumb})`;
+			if (!page.thumb){
+				const isVector = !!slotsList[slotIndex].favicon.color;
+				const url = slotsList[slotIndex].favicon.url;
+				page.style.setProperty('--fav-image', isVector ? null : `url("${url}")`);
+				page.style.setProperty('--fav-mask', isVector ? `url("${url}")` : null);
+				page.style.setProperty('--fav-color', isVector ? slotsList[slotIndex].favicon.color || '#FFF' : null);
+			}
+			page.style.setProperty('--thumb-image', page.thumb ? `url("${page.thumb}")` : null);
 		}
 	};
 

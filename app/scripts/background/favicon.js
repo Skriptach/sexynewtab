@@ -91,7 +91,7 @@
 			const img = document.createElement('img');
 			img.onload = () => {
 				if (img.width < 16 || img.height < 16){reject();}
-				else {resolve({href: src});}
+				else {resolve({url: src});}
 			};
 			img.onerror = () => reject();
 

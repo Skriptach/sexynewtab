@@ -8,11 +8,16 @@
 	-webkit-mask-repeat: no-repeat;
     -webkit-mask-position: 50%;
 
+    background-image: var(--fav-image);
+    -webkit-mask-image: var(--fav-mask);
+    background-color: var(--fav-color);
+
     i {
         color: #000070;
         display: table-cell;
         vertical-align: middle;
         text-align: center;
+        font-size: calc(var(--page-height)  * 35.457 / 100);
 
         .page:not(.inactive) & {
             visibility: hidden;
@@ -22,5 +27,5 @@
             color: #0000C0;
         }
     }
-    
+
 }

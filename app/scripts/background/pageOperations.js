@@ -37,7 +37,7 @@
 		const oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
 		slotsList[slot_index] = {
 			url,
-			favicon: {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'}
+			favicon: {url: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'}
 		};
 		if (!slotsList.find(byUrl(oldUrl))) {
 			delete redirectUrls[oldUrl];

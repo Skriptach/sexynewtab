@@ -134,10 +134,6 @@
 	body.reflow & {
 		transition-property: none;
 	}
-	
-	.plus i {
-		font-size: calc(var(--page-height)  * 35.457 / 100);
-	}
 }
 
 .page:not(.inactive) {
@@ -176,6 +172,8 @@
 	background-position: center;
 	border-radius:6px;
 	position:absolute;
+
+	background-image: var(--thumb-image);
 }
 
 a[is="thumb-link"] {
