@@ -34,15 +34,8 @@
 		}
 	}
 
-	window.on('ready', () => {
-		function toggle (target) {
-			toggleEditForm(target.closest('.page'));
-		}
-
-		document.on('edit', () => {
-			toggle(event.target);
-		});
-		$click.on('.page.inactive .flipper a *', toggle );
+	document.on('edit', () => {
+		toggleEditForm(event.target.closest('.page'));
 	});
 
 })();

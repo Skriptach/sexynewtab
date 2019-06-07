@@ -3,8 +3,7 @@
 ; (() => {
 
 	class IconBtn extends HTMLElement {
-		constructor () {
-			super();
+		connectedCallback () {
 
 			const type = this.getAttribute('type');
 			this.title = chrome.i18n.getMessage(type);
