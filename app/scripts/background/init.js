@@ -4,6 +4,7 @@
 
 	let urls_ready = false,
 		thumbs_ready = false,
+		thumbs,
 		resolve;
 
 	const ready = new Promise((res) => {
@@ -54,11 +55,7 @@
 		});
 
 		chrome.storage.local.get(['thumbs'], (res) => {
-			if (res.thumbs) {
-				for (const i in res.thumbs) {
-					thumbs[i] = res.thumbs[i];
-				}
-			}
+			thumbs = res.thumbs || {};
 			thumbs_ready = true;
 			loaded();
 		});

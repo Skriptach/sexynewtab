@@ -9,7 +9,6 @@
 		FLOW : false,
 		THEME: 'deep-purple'
 	};
-	window.thumbs = {};
 
 
 })();

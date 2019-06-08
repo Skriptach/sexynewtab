@@ -10,7 +10,6 @@
 
         "slotsList": true,
         "settings": true,
-        "thumbs": true,
         "redirectUrls": true,
         "currentTab": true,
 
