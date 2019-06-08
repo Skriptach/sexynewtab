@@ -70,6 +70,7 @@
 	}
 
 	const inputUrl = $('#edit url-input')[0];
+	let currentItem = null;
 
 	function selectLink (target) {
 		inputUrl.value = target.url;
@@ -83,6 +84,7 @@
 		back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab);
 		updatePage(currentEditPage.index);
 		hideEditForm();
+		currentItem = null;
 	}
 
 	function urlChange () {

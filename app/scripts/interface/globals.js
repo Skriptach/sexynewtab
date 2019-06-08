@@ -13,7 +13,6 @@
 	window.back = null;
 	window.slotsList = null;
 	window.lastPosition = null;
-	window.currentItem = null;
 	window.first_flow_page = null;
 	window.current_flow_page = null;
 	window.currentTheme = 'deep-purple';

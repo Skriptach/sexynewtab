@@ -15,7 +15,6 @@
         "back": true,
         "slotsList": true,
         "lastPosition": true,
-        "currentItem": true,
         "first_flow_page": true,
         "current_flow_page": true,
         "currentTheme": true,
