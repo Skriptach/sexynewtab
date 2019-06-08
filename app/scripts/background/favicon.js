@@ -5,14 +5,7 @@
 	Promise.any = function (fetchers) {
 		const errors = [];
 		return Promise.race(fetchers.map(f => {
-			return f.promise.then(r => {
-				if (r.ok) {
-					f.response = r;
-					return f;
-				}
-
-				throw new Error(r.status);
-			}).catch(e => {
+			return f.promise.catch(e => {
 				errors.push(e);
 				if (errors.length >= fetchers.length) {throw errors;}
 				
@@ -22,11 +15,19 @@
 	};
 
 	class Fetcher {
-		constructor (url, isOmit) {
+		constructor (url, isInclude) {
+			const _self = this;
 			this.controller = new AbortController();
 			this.promise = fetch(url, {
 				signal : this.controller.signal,
-				credentials: isOmit ? 'omit' : undefined,
+				credentials: isInclude ? 'include' : 'omit',
+			}).then(r => {
+				if (r.ok) {
+					_self.response = r;
+					return _self;
+				}
+
+				throw new Error(r.status);
 			});
 		}
 
@@ -74,7 +75,8 @@
 		*/
 		const ofRequest = [
 			new Fetcher(url),
-			new Fetcher(url, true),
+			/* https://www.chromestatus.com/feature/5088147346030592
+			new Fetcher(url, true),*/
 		];
 		return Promise.any(ofRequest).then(f => {
 			ofRequest.forEach(v => {
@@ -86,16 +88,26 @@
 		});
 	}
 
-	function loadImage (src) {
+	function convertBlobToBase64 (blob) {
 		return new Promise((resolve, reject) => {
-			const img = document.createElement('img');
-			img.onload = () => {
-				if (img.width < 16 || img.height < 16){reject();}
-				else {resolve({url: src});}
+			const reader = new FileReader;
+			reader.onerror = reject;
+			reader.onload = () => {
+				resolve(reader.result);
 			};
-			img.onerror = () => reject();
+			reader.readAsDataURL(blob);
+		});
+	}
 
-			img.src = src;
+	function loadImage (href) {
+		return new Fetcher(href).promise.then((fetcher) => {
+			return fetcher.response.blob()
+				.then(convertBlobToBase64)
+				.then((dataUrl) => {
+					return {
+						dataUrl
+					};
+				});
 		});
 	}
 

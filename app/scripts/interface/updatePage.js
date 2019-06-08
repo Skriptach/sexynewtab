@@ -43,7 +43,7 @@
 			page.classList.remove('inactive');
 			if (!page.thumb){
 				const isVector = !!slotsList[slotIndex].favicon.color;
-				const url = slotsList[slotIndex].favicon.url;
+				const url = slotsList[slotIndex].favicon.dataUrl;
 				page.style.setProperty('--fav-image', isVector ? null : `url("${url}")`);
 				page.style.setProperty('--fav-mask', isVector ? `url("${url}")` : null);
 				page.style.setProperty('--fav-color', isVector ? slotsList[slotIndex].favicon.color || '#FFF' : null);
