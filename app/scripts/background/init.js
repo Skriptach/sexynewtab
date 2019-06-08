@@ -5,6 +5,7 @@
 	let urls_ready = false,
 		thumbs_ready = false,
 		thumbs,
+		favicons,
 		resolve;
 
 	const ready = new Promise((res) => {
@@ -28,7 +29,11 @@
 		function loaded () {
 			if (urls_ready && thumbs_ready) {
 				slotsList.forEach((slot) => {
-					slot && (slot.thumb = thumbs[slot.url]);
+					if (slot && slot.url) {
+						slot.thumb = thumbs[slot.url];
+						slot.favicon = favicons[slot.url];
+						updateFavicon(slot);
+					}
 				});
 				done();
 			}
@@ -37,11 +42,6 @@
 		chrome.storage.sync.get(['slots', 'settings'], (res) => {
 			if (res.slots && res.slots.length){
 				slotsList = res.slots;
-				slotsList.forEach((slot) => {
-					if(slot && slot.url){
-						updateFavicon(slot);
-					}
-				});
 			}
 			if (res.settings) {
 				settings.COLUMNS_COUNT = res.settings.COLUMNS_COUNT;
@@ -54,8 +54,9 @@
 			loaded();
 		});
 
-		chrome.storage.local.get(['thumbs'], (res) => {
+		chrome.storage.local.get(['thumbs', 'favicons'], (res) => {
 			thumbs = res.thumbs || {};
+			favicons = res.favicons || {};
 			thumbs_ready = true;
 			loaded();
 		});

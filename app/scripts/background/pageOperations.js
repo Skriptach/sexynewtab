@@ -10,7 +10,7 @@
 				if (slotsList.indexOf(slot) < 0){return;}
 				slot.favicon = response;
 				slot.favicon.lastUpdate = Date.now();
-				saveSync();
+				saveLocal();
 				refreshPages(slotsList.indexOf(slot));
 			});
 	};

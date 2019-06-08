@@ -3,20 +3,20 @@
 ;(() => {
 
 	window.saveLocal = () => {
-		const buferT = {};
+		const thumbs = {};
+		const favicons = {};
 		slotsList.forEach((slot) => {
 			if (!slot || !slot.url){return;}
-			buferT[slot.url] = slot.thumb;
+			thumbs[slot.url] = slot.thumb;
+			favicons[slot.url] = slot.favicon;
 		});
-		thumbs = buferT;
-		chrome.storage.local.set({thumbs});
+		chrome.storage.local.set({ thumbs, favicons });
 	};
 
 	window.saveSync = () => {
 		const slots = slotsList.map((slot) => {
 			return slot && slot.url ? {
 				url: slot.url,
-				favicon: slot.favicon
 			} : null;
 		});
 		chrome.storage.sync.set({
