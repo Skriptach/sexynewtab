@@ -1,6 +1,6 @@
 'use strict';
 
-; (() => {
+;(() => {
 
 	const template = d('x-url-input');
 

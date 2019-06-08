@@ -82,7 +82,7 @@
 	function editPage () {
 		if (!inputUrl.validity.valid){return;}
 		back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab);
-		updatePage(currentEditPage.index);
+		currentEditPage.update();
 		hideEditForm();
 		currentItem = null;
 	}

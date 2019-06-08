@@ -27,6 +27,6 @@
         "getPage": true,
         "flowTo": true,
         "prepareDrag": true,
-        "updatePage": true
+        "ThumbPage": true
     }
 }
