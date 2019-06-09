@@ -20,7 +20,7 @@
 
 	window.setPagesSize = () => {
 		setBackGradientSize();
-		$('.page').forEach((p) => {
+		$('thumb-page').forEach((p) => {
 			p.style.width = p.style.height = p.style.top = p.style.left = null;
 		});
 		d('set').style.setProperty('--aspect-ratio', innerHeight / innerWidth);

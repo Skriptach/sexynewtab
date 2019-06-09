@@ -14,7 +14,7 @@
 			}
 
 			this.on('click', () => {
-				const page = event.target.closest('.page');
+				const page = event.target.closest('thumb-page');
 				if (page.classList.contains('inactive')) {
 					event.target.dispatchEvent(new Event('edit', { bubbles: true }) );
 					return;

@@ -26,7 +26,7 @@
 	};
 
 	function current_index () {
-		const pages = $('.page:not(.inactive):not(.deleting)');
+		const pages = $('thumb-page:not(.inactive):not(.deleting)');
 		return Array.prototype.slice.call(pages).indexOf(current_flow_page);
 	}
 
@@ -36,7 +36,7 @@
 	window.setFlowPagePosition = () => {
 		const proportionW = innerWidth/200,
 			c = current_index();
-		const nodes = $('.page:not(.inactive)');
+		const nodes = $('thumb-page:not(.inactive)');
 		nodes.forEach((page, n) => {
 			const s = Math.sign(n-c),
 				left = step*(n-c) + s*shift;

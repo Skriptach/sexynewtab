@@ -5,7 +5,7 @@
 	function clearPage () {
 		chrome.runtime.sendMessage({
 			action: 'clear',
-			index: event.target.closest('.page').index
+			index: event.target.closest('thumb-page').index
 		});
 	}
 

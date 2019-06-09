@@ -35,7 +35,7 @@
 	}
 
 	document.on('edit', () => {
-		toggleEditForm(event.target.closest('.page'));
+		toggleEditForm(event.target.closest('thumb-page'));
 	});
 
 })();

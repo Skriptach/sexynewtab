@@ -14,7 +14,7 @@
 	}	
 }	
 
-.page {
+thumb-page {
 	position:absolute;
 	border-radius:7px;
 	box-shadow: 0 0 0;
@@ -136,7 +136,7 @@
 	}
 }
 
-.page:not(.inactive) {
+thumb-page:not(.inactive) {
 	&:hover icon-btn {
 		display: initial;
 	}
@@ -145,13 +145,13 @@
 		opacity: 0.8;
 	}
 }
-.page.full icon-btn,
-.flow .page:not(.current) icon-btn {
+thumb-page.full icon-btn,
+.flow thumb-page:not(.current) icon-btn {
 	display: none !important;
 }
 
-.page.turned .flipper,
-.flow .page.turned:before {
+thumb-page.turned .flipper,
+.flow thumb-page.turned:before {
 	transform: rotateY(180deg);
 }
 

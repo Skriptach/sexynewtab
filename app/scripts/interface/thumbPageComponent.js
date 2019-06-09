@@ -16,7 +16,7 @@
 			this.setAttribute('id', `page${index}`);
 			this.setAttribute('data-col', col);
 			this.setAttribute('data-row', row);
-			this.classList.add('page', 'inactive');
+			this.classList.add('inactive');
 			
 		}
 

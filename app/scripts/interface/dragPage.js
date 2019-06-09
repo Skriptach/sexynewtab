@@ -39,7 +39,7 @@
 			const sign = Math.sign(position - dragPage.index);
 			const from = sign > 0 ? dragPage.index + sign : position;
 			const to = sign < 0 ? dragPage.index + sign : position;
-			const range = $(`.page:nth-child(n+${from + 1}):nth-child(-n+${to + 1})`);
+			const range = $(`thumb-page:nth-child(n+${from + 1}):nth-child(-n+${to + 1})`);
 			Array.prototype.slice.apply( range )
 				.sort((a, b) => (a.index - b.index) * sign)
 				.reduce((prev, current, i, arr) => {
@@ -64,7 +64,7 @@
 	}
 
 	window.prepareDrag = (e) => {
-		dragPage = event.target.closest('.page');
+		dragPage = event.target.closest('thumb-page');
 		if (dragPage.classList.contains('turned') || FLOW) {
 			e.preventDefault();
 			return;
