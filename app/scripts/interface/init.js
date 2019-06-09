@@ -2,6 +2,20 @@
 
 ;(() => {
 
+	function createPages () {
+		let index = 0;
+		const pages = document.createDocumentFragment();
+		for (let r = 0; r < ROWS_COUNT; r++) {
+			for (let c = 0; c < COLUMNS_COUNT; c++) {
+				const page = new ThumbPage(index, c, r);
+				page.update();
+				pages.appendChild(page);
+				index++;
+			}
+		}
+		d('set').appendChild(pages);
+	};
+
 	function ready (background) {
 		back = background;
 		slotsList = background.slotsList;

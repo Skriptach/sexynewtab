@@ -63,7 +63,7 @@
 		lastPosition = null;
 	}
 
-	window.prepareDrag = (e) => {
+	function prepareDrag (e) {
 		dragPage = event.target.closest('thumb-page');
 		if (dragPage.classList.contains('turned') || FLOW) {
 			e.preventDefault();
@@ -79,5 +79,7 @@
 		document.on('drag', onDrag);
 		document.on('dragend', stopDrag);
 	};
+
+	document.on('dragstart', prepareDrag);
 
 })();

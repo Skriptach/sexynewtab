@@ -18,7 +18,6 @@
         "first_flow_page": true,
         "current_flow_page": true,
         "currentTheme": true,
-        "createPages": true,
         "hideEditForm": true,
         "setBackGradientSize": true,
         "setPagesSize": true,
@@ -26,7 +25,6 @@
         "getFirstPage": true,
         "getPage": true,
         "flowTo": true,
-        "prepareDrag": true,
         "ThumbPage": true
     }
 }

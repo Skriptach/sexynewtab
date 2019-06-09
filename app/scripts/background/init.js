@@ -65,18 +65,13 @@
 		});
 	}
 
-	function init() {
-		Promise.all([
-			getSync(),
-			getLocal(),
-		]).then(update)
-			.then(() => {
-				saveLocal();
-				done();
-			});
-
-	}
-
-	init();
+	Promise.all([
+		getSync(),
+		getLocal(),
+	]).then(update)
+		.then(() => {
+			saveLocal();
+			done();
+		});
 
 })();

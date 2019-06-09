@@ -32,7 +32,7 @@
 	};
 
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-		if (sender.tab && sender.id === chrome.i18n.getMessage('@@extension_id')) {
+		if (sender.tab && sender.id === chrome.runtime.id) {
 			request.action === 'clear' ? onRemove(request.index) :
 				request.action === 'toggleView'    ? (settings.FLOW  = request.FLOW,  saveSync()) :
 				request.action === 'switchTheme'   ? (settings.THEME = request.theme, saveSync()) :
