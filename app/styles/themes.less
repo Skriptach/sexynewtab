@@ -1,5 +1,5 @@
 .outline() {
-	box-shadow: 0 0 4px 1px #306ad5;
+	box-shadow: 0 0 6px 0 #00C0FF;
 }
 
 .l-gradient(@h, @s, @l) {
@@ -61,8 +61,12 @@
 			}
 		}
 
-		.theme[data="@{theme}"] span {
-			.outline();
+		.theme[data="@{theme}"] {
+			font-weight: bold;
+
+			span {
+				.outline();
+			}
 		}
 	}
 
@@ -80,8 +84,12 @@
 		background-image: url('/styles/img/space.jpg');
 	}
 
-	a.theme[data="cosmos"] span {
-		.outline();
+	.theme[data="cosmos"] {
+		font-weight: bold;
+
+		span {
+			.outline();
+		}
 	}
 }
 
