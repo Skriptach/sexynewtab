@@ -15,6 +15,12 @@
 #set {
 	position:relative;
 	margin:auto;
+	
+	--thumb-image: url();
+	--fav-image: url();
+
+	--small-bg: -webkit-gradient(radial, center top, 5, center 30%, var(--R), from(#000065), to(#000010));
+	--full-bg: -webkit-gradient(radial, center top, 5, center 30%, var(--Rf), from(#000065), to(#000010));
 }
 
 body.reflow #set {
