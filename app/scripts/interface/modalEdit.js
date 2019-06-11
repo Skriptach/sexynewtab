@@ -107,7 +107,7 @@
 		});
 
 		$click.on('#edit .header .tab *', switchList);
-		$click.on('#edit_cancel *', hideEditForm);
+		document.on('back', hideEditForm);
 		$click.on('#edit .list .item', selectLink);
 
 		chrome.tabs.onUpdated.addListener((id, changeInfo) => {

@@ -9,7 +9,7 @@
 			super();
 
 			const content = template.content.cloneNode(true);
-			const button = content.querySelector('button');
+			const button = content.querySelector('action-btn');
 			const input = content.querySelector('input');
 
 			const triggerOk = () => {
@@ -73,9 +73,9 @@
 		validate () {
 			if (this._isOkButton){
 				if (this.validity.valid) {
-					this.querySelector('button').removeAttribute('disabled');
+					this.querySelector('action-btn').removeAttribute('disabled');
 				} else {
-					this.querySelector('button').setAttribute('disabled', '');
+					this.querySelector('action-btn').setAttribute('disabled', '');
 				}
 			}
 		}

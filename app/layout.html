@@ -41,9 +41,7 @@
 			<button id="topsites" class="tab">
 				<i class="st-star"></i><span></span>
 				</button>
-			<button id="edit_cancel">
-				<i class="st-back"></i>
-			</button>
+			<action-btn type="back"></action-btn>
 		</div>
 		<div class="list">
 			<ul class="tree"></ul>
@@ -53,12 +51,8 @@
 </div>
 <footer>
 	<div class="controls">
-		<button class="customize">
-			<i class="st-brush"></i>
-		</button>
-		<button class="toggle">
-			<i class="st-coverflow"></i>
-		</button>
+		<action-btn type="customize"></action-btn>
+		<action-btn type="toggle"></action-btn>
 	</div>
 <div id="customize">
 	<h3>Theme</h3>
@@ -77,7 +71,7 @@
 	<i class="st-link"></i>
 	<input type="url" placeholder="https://link.to/your-favorite-site/page"
 		pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
-	<button id="edit_ok" disabled="disabled"><span class="st-ok"></button>
+	<action-btn type="ok" disabled></action-btn>
 </template>
 <template id="x-thumb">
 	<div class="backgradient"></div>
@@ -87,8 +81,8 @@
 <template id="x-page">
 	<div class="flipper">
 		<a is="thumb-link"></a>
-		<icon-btn type="edit" ></icon-btn>
-		<icon-btn type="clear" ></icon-btn>
+		<action-btn type="edit" ></action-btn>
+		<action-btn type="clear" ></action-btn>
 	</div>
 </template>
 </body>
@@ -98,7 +92,7 @@
 <script type="text/javascript" src="scripts/interface/clickHandlers.js"></script>
 <script type="text/javascript" src="scripts/interface/urlInputComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbLinkComponent.js"></script>
-<script type="text/javascript" src="scripts/interface/iconBtnComponent.js"></script>
+<script type="text/javascript" src="scripts/interface/iconBtnComponents.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbPageComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/pageSize.js"></script>
 <script type="text/javascript" src="scripts/interface/dragPage.js"></script>

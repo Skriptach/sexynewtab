@@ -41,10 +41,10 @@
 }
  
 .st-tile:before { content: '\e800'; } /* '' */
-.st-coverflow:before { content: '\e801'; } /* '' */
+.st-toggle:before { content: '\e801'; } /* '' */
 .st-stack:before { content: '\e802'; } /* '' */
 .st-spin:before { content: '\e803'; } /* '' */
-.st-brush:before { content: '\e804'; } /* '' */
+.st-customize:before { content: '\e804'; } /* '' */
 .st-edit:before { content: '\e805'; } /* '' */
 .st-cancel:before { content: '\e80f'; } /* '' */
 .st-plus:before { content: '\e814'; } /* '' */

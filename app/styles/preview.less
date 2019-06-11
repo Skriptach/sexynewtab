@@ -93,7 +93,7 @@ thumb-page {
 			border-radius: 0;
 			transition-duration: .4s;
 		}
-		
+
 		.thumbnail {
 			border-radius: 0;
 		}
@@ -110,26 +110,26 @@ thumb-page {
 		transform: rotateY(0deg);
 		transition-timing-function: ease-out;
 		backface-visibility: hidden;
-	}		
 
-	icon-btn {
-		position: absolute;
-		background: rgba(51, 51, 51, 0.5);
-		border-radius: 3px;
-		display: none;
-		opacity: 0.3;
-		
-		&.edit {
-			right: 10px;
-			top: 10px;
-		}
-		
-		&.clear {
-			right: 10px;
-			bottom: 10px;
-		}
+		action-btn {
+			position: absolute;
+			background: rgba(51, 51, 51, 0.5);
+			border-radius: 3px;
+			display: none;
+			opacity: 0.3;
 
-	}
+			&.edit {
+				right: 10px;
+				top: 10px;
+			}
+
+			&.clear {
+				right: 10px;
+				bottom: 10px;
+			}
+	
+		}
+	}				
 
 	// do not animate on switch mode
 	body.reflow & {
@@ -138,16 +138,16 @@ thumb-page {
 }
 
 thumb-page:not(.inactive) {
-	&:hover icon-btn {
+	&:hover action-btn {
 		display: initial;
 	}
 
-	& icon-btn:hover {
+	& action-btn:hover {
 		opacity: 0.8;
 	}
 }
-thumb-page.full icon-btn,
-.flow thumb-page:not(.current) icon-btn {
+thumb-page.full action-btn,
+.flow thumb-page:not(.current) action-btn {
 	display: none !important;
 }
 
