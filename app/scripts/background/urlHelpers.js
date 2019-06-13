@@ -28,4 +28,14 @@
 		return resolver.href;
 	};
 
+	window.urlBasedDom = function (html, base_url) {
+		const doc = parser.parseFromString(html, 'text/html');
+		const
+			head = doc.head || doc.getElementsByTagName('head')[0],
+			base = doc.getElementsByTagName('base')[0] || head.appendChild(doc.createElement('base'));
+
+		base.href = base.getAttribute('href') || base_url;
+		return doc;
+	};
+
 })();

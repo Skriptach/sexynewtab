@@ -138,10 +138,10 @@
 	window.getFavicon = function (url) {
 		return get(url)
 			.then((response) => {
-				const doc = parser.parseFromString(response.body, 'text/html'),
+				const doc = urlBasedDom(response.body, response.url || url),
 					links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
 						return {
-							href: resolveUrl(link.getAttribute('href'), response.url || url, doc),
+							href: link.href,
 							color: link.getAttribute('color'),
 							size: getSize(link)
 						};

@@ -6,6 +6,7 @@
         "getOriginBy": true,
 
         "resolveUrl": true,
+        "urlBasedDom": true,
         "getFavicon": true,
 
         "slotsList": true,
