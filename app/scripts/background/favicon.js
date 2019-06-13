@@ -99,15 +99,20 @@
 	}
 
 	function getSize (link) {
-		const c = link.getAttribute('color'),
-			v = link.getAttribute('sizes'),
-			n = parseInt(v, 10),
-			h = link.getAttribute('href');
-		return (v === 'any' || (/\.svg$/).test(h) || c) ? Number.MAX_VALUE :
-			(n > 512) ? 16 : // larger would be an overhead
+		const mostFitWidth = screen.width * 0.2 * window.devicePixelRatio,
+			hasColor = !!link.getAttribute('color'),
+			sizes = link.getAttribute('sizes'),
+			isMask = link.rel === 'mask-icon',
+			n = (sizes || '').split(' ').map(a => parseInt(a, 10)).sort((a, b) => b - a)[0],
+			href = link.getAttribute('href'),
+			type = link.getAttribute('type'),
+			isSVG = (/\.svg/).test(href) || (/iamge\/svg/).test(type);
+		return (sizes === 'any' || (isSVG && !hasColor && !isMask)) ? Number.MAX_SAFE_INTEGER : // sizes any
+			(isSVG || hasColor || isMask) ? Number.MAX_SAFE_INTEGER - 1 : // or SVG have highest priority
+			(n > mostFitWidth) ? Number.MAX_SAFE_INTEGER - (n - mostFitWidth) : // larger than 20% of screen width would be an overhead
 			(n >= 16) ? n :
-			(link.rel === 'apple-touch-icon-precomposed') ? 152 :
-			(link.rel === 'apple-touch-icon') ? 144 :
+			(link.rel === 'apple-touch-icon-precomposed') ? 57 :
+			(link.rel === 'apple-touch-icon') ? 57 :
 			16;
 	}
 
@@ -115,7 +120,7 @@
 		const link = links[0];
 		return loadImage(link.href)
 			.then((favicon) => {
-				if (link.color || link.size === Number.MAX_VALUE){
+				if (link.color){
 					favicon.color = link.color;
 				}
 				return favicon;
