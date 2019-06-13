@@ -14,4 +14,18 @@
 		}
 	};
 
+	const parser = new DOMParser();
+
+	window.resolveUrl = function (url, base_url, doc) {
+		doc = doc || parser.parseFromString('<html><head></head><body></body></html>', 'text/html');
+		const
+			head = doc.head || doc.getElementsByTagName('head')[0],
+			base = doc.getElementsByTagName('base')[0] || head.appendChild(doc.createElement('base')),
+			resolver = doc.createElement('a');
+
+		base.href = base_url;
+		resolver.href = url;
+		return resolver.href;
+	};
+
 })();

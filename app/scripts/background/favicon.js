@@ -53,20 +53,7 @@
 		}
 	}
 
-	const parser = new DOMParser(),
-		blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
-
-	window.resolveUrl = function (url, base_url, doc) {
-		doc = doc || parser.parseFromString('<html><head></head><body></body></html>', 'text/html');
-		const
-			head = doc.head || doc.getElementsByTagName('head')[0],
-			base = doc.getElementsByTagName('base')[0] || head.appendChild(doc.createElement('base')),
-			resolver = doc.createElement('a');
-
-		base.href = base_url;
-		resolver.href = url;
-		return resolver.href;
-	};
+	const blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
 
 	function get (url) {
 		/*	
