@@ -12,8 +12,8 @@
 			const button = content.querySelector('action-btn');
 			const input = content.querySelector('input');
 
-			const triggerOk = () => {
-				this.dispatchEvent(new Event('ok', { bubbles: true }));
+			const triggerDone = () => {
+				this.dispatchEvent(new Event('done', { bubbles: true }));
 			};
 
 			// use this setter for event to invoke setter and validator
@@ -35,7 +35,7 @@
 				button.remove();
 			} else {
 				this._isOkButton = true;
-				button.on('click', triggerOk);
+				button.on('ok', triggerDone); // click
 			}
 			
 			input.on('change', setValue.bind(this));
@@ -43,7 +43,7 @@
 			input.on('paste', setValue.bind(this));
 			this.on('keydown', () => {
 				if (event.keyCode === 13) {
-					triggerOk();
+					triggerDone();
 				}
 			});
 			

@@ -99,7 +99,7 @@
 		chrome.tabs.onRemoved.addListener(onListChanged);
 		chrome.tabs.onReplaced.addListener(onListChanged);
 
-		inputUrl.on('ok', editPage);
+		inputUrl.on('done', editPage);
 		inputUrl.on('change', urlChange);
 
 		$('#edit .tree')[0].on('mousewheel', () => {
