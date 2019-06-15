@@ -53,7 +53,7 @@
 		}
 	}
 
-	const blankIcon = {href: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
+	const blankIcon = { dataUrl: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
 
 	function get (url) {
 		/*	
