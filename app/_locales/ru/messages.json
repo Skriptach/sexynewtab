@@ -2,16 +2,16 @@
 	"descript":{
 		"message":"Sexy New Tab заменяет Top Sites на красивую страницу. Отображает в виде галереи или плитки. Синхронизируется."
 	},
-	"fn_tabs":{
+	"tabs":{
 		"message":"Вкладки"
 	},
-	"fn_bookmarks":{
+	"bookmarks":{
 		"message":"Закладки"
 	},
-	"fn_history":{
+	"history":{
 		"message":"История"
 	},
-	"fn_top":{
+	"top":{
 		"message":"Топ"
 	},
 	"edit":{

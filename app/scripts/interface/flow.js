@@ -71,7 +71,7 @@
 
 	function keyHandler (e) {
 		if(e.keyCode === 27 && currentEditPage){
-			window.hideEditForm();
+			hideEditForm();
 		}
 		if (!FLOW ||
 			e.target.nodeName === 'INPUT'

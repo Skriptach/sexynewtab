@@ -28,22 +28,17 @@
 	</div>
 	<div id="edit">
 		<div class="header">
-			<button id="tabs" class="tab active">
-				<i class="st-tab"></i><span></span>
-			</button>
-			<button id="bookmarks" class="tab" disabled title="Coming soon...">
-				<i class="st-bookmarks"></i><span></span>
-			</button>
-			<button id="history" class="tab">
-				<i class="st-history"></i><span></span>
-			</button>
-			<button id="topsites" class="tab">
-				<i class="st-star"></i><span></span>
-				</button>
 			<action-btn type="back"></action-btn>
 		</div>
-		<div class="list">
-			<ul class="tree"></ul>
+		<div class="accordion">
+			<accord-btn type="top"></accord-btn>
+			<ul is="link-list" type="top"></ul>
+			<accord-btn type="tabs"></accord-btn>
+			<ul is="link-list" type="tabs"></ul>
+			<accord-btn type="bookmarks"></accord-btn>
+			<ul is="link-list" type="bookmarks"></ul>
+			<accord-btn type="history"></accord-btn>
+			<ul is="link-list" type="history"></ul>
 		</div>
 		<url-input ok-button />
 	</div>
@@ -91,6 +86,7 @@
 <script type="text/javascript" src="scripts/interface/thumbLinkComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/iconBtnComponents.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbPageComponent.js"></script>
+<script type="text/javascript" src="scripts/interface/linkListComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/pageSize.js"></script>
 <script type="text/javascript" src="scripts/interface/dragPage.js"></script>
 <script type="text/javascript" src="scripts/interface/modalEdit.js"></script>

@@ -51,8 +51,8 @@
 .st-plus-circle:before { content: '\e816'; } /* '' */
 .st-bookmarks:before { content: '\e819'; } /* '' */
 .st-history:before { content: '\e81b'; } /* '' */
-.st-star:before { content: '\e81e'; } /* '' */
-.st-tab:before { content: '\e821'; } /* '' */
+.st-top:before { content: '\e81e'; } /* '' */
+.st-tabs:before { content: '\e821'; } /* '' */
 .st-folder:before { content: '\e822'; } /* '' */
 .st-ok:before { content: '\e826'; } /* '' */
 .st-ok-3:before { content: '\e829'; } /* '' */

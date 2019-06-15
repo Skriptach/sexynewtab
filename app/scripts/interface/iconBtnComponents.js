@@ -31,4 +31,22 @@
 
 	customElements.define('action-btn', ActionBtn);
 
+	class AccordBtn extends IconBtn {
+		constructor () {
+			super();
+
+			const label = document.createElement('span');
+			label.innerText = this.label;
+			this.appendChild(label);
+			this.on('click', () => {
+				this.parentElement.scroll({
+					top: this.nextElementSibling.offsetTop - this.offsetHeight - this.computedStyleMap().get('top').value,
+					behavior: 'smooth'
+				});
+			});
+		}
+	}
+
+	customElements.define('accord-btn', AccordBtn);
+
 })();

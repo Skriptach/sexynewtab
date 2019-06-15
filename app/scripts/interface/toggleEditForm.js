@@ -5,7 +5,7 @@
 	function showEditForm () {
 		EDIT = true;
 		currentEditPage.appendChild(d('edit'));
-		$('#edit .header .tab.active')[0].click();
+		d('edit').dispatchEvent(new Event('shown', {bubbles: true}));
 		$('#edit url-input')[0].value = currentEditPage.url;
 		setTimeout(() => currentEditPage.classList.add('turned', 'ontop'), 10);
 	}
