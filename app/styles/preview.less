@@ -21,6 +21,7 @@ thumb-page {
 	transition-property: left, top, width, height, box-shadow;
 	transition-duration: .3s;
 	transition-timing-function: ease-out;
+   	perspective: 3400px;
 
 	width: var(--page-width);
 	height: var(--page-height);
@@ -55,7 +56,6 @@ thumb-page {
 
 	body:not(.flow) & {
 		transform-style: preserve-3d;
-    	perspective: 3400px;
 
 		&.turned {
 			top: 10% !important;
