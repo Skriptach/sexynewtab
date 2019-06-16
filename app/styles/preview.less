@@ -181,6 +181,18 @@ thumb-page.turned .flipper,
 		height: 100%;
 		-webkit-mask: center / 20% no-repeat var(--fav-mask);
 		background-color: var(--fav-color);
+
+		.loading & {
+			background: center / 100% no-repeat conic-gradient(transparent, white 90%, transparent 90%);
+			border-radius: 50%;
+			width: calc(0.25 * var(--page-width));
+			height: calc(0.25 * var(--page-width));
+			margin: auto;
+			position: static;
+			-webkit-mask-image: radial-gradient(circle at 51% 48%,transparent 62%, black 65%);
+			filter: blur(1px);
+			animation: spin 1s linear infinite;
+		}
 	}
 
 	i {
@@ -189,7 +201,7 @@ thumb-page.turned .flipper,
 		font-size: calc(var(--page-height)  * 35.457 / 100);
 
         thumb-page:not(.inactive) & {
-            visibility: hidden;
+            display: none;
         }
         thumb-page:hover & {
             color: #0000C0;
@@ -201,4 +213,10 @@ a[is="thumb-link"] {
 	display: inline-block;
 	text-decoration:none;
 	cursor:default;
+}
+
+@keyframes spin {
+	100% {
+		transform: rotateZ(360deg);
+	}
 }

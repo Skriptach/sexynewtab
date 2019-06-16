@@ -20,10 +20,18 @@
 			
 		}
 
+		clear () {
+			this.style.setProperty('--fav-image', null);
+			this.style.setProperty('--fav-mask', null);
+			this.style.setProperty('--fav-color', null);
+			this.style.setProperty('--thumb-image', null);
+		}
+
 		remove () {
 			const page = this;
 			page.querySelector('a').removeAttribute('href');
 			page.style.webkitTransform = 'scale(0.3)';
+			this.classList.remove('loading');
 			setTimeout(() => {
 				page.classList.add('inactive');
 				if (FLOW) {
@@ -34,16 +42,14 @@
 					flowTo(getPage('next') || getPage('previous'));
 					setTimeout(() => page.classList.remove('deleting'), 500);
 				}
-				page.style.setProperty('--fav-image', null);
-				page.style.setProperty('--fav-mask', null);
-				page.style.setProperty('--fav-color', null);
-				page.style.setProperty('--thumb-image', null);
+				page.clear();
 				page.style.webkitTransform = 'scale(1)';
 				setTimeout(() => { page.style.webkitTransform = ''; }, 10);
 			}, 200);
 		}
 
 		update (thumb) {
+			this.classList.remove('loading');
 			const oldUrl = this.url;
 			this.url = slotsList[this.index] ? slotsList[this.index].url : '';
 			this.thumb = thumb ? thumb :
@@ -63,7 +69,12 @@
 				this.style.setProperty('--thumb-image', this.thumb ? `url("${this.thumb}")` : null);
 			}
 		}
-	
+
+		loading () {
+			this.clear();
+			this.classList.remove('inactive');
+			this.classList.add('loading');
+		}
 	};
 	
 	window.ThumbPage = ThumbPage;
