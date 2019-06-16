@@ -88,6 +88,10 @@
 
 	function loadImage (href) {
 		return new Fetcher(href).promise.then((fetcher) => {
+			const imageRX = /image\/*/;
+			if (!imageRX.test(fetcher.response.headers.get('content-type'))) {
+				throw new Error('Not an image');
+			}
 			return fetcher.response.blob()
 				.then(convertBlobToBase64)
 				.then((dataUrl) => {
