@@ -6,8 +6,9 @@
 	"background": {
 		"scripts":[
 			"scripts/background/globals.js",
-			"scripts/background/favicon.js",
+			"scripts/background/netHelpers.js",
 			"scripts/background/urlHelpers.js",
+			"scripts/background/favicon.js",
 			"scripts/background/save.js",
 			"scripts/background/takeScreenshot.js",
 			"scripts/background/pageOperations.js",
@@ -29,7 +30,7 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.9.37",
-	"version_name": "0.9.37",
+	"version": "0.9.38",
+	"version_name": "0.9.38",
 	"author": "Liubomudr Nazariev"
 }

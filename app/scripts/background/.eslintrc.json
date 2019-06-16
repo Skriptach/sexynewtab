@@ -5,6 +5,8 @@
         "byUrl": true,
         "getOriginBy": true,
 
+        "get": true,
+        "loadImage": true,
         "resolveUrl": true,
         "urlBasedDom": true,
         "getFavicon": true,
