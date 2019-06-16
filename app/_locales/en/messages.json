@@ -20,6 +20,9 @@
 	"remove":{
 		"message":"Remove"
 	},
+	"back":{
+		"message": "Cancel"
+	},
 	"theme_label":{
 		"message":"Color Theme"
 	},

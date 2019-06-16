@@ -20,6 +20,9 @@
 	"remove":{
 		"message":"Удалить"
 	},
+	"back": {
+		"message": "Отмена"
+	},
 	"theme_label":{
 		"message":"Цветовая тема"
 	},

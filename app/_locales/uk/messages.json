@@ -20,6 +20,9 @@
 	"remove":{
 		"message":"Видалити"
 	},
+	"back": {
+		"message": "Відміна"
+	},
 	"theme_label":{
 		"message":"Кольорова тема"
 	},
