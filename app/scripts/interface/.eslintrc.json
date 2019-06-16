@@ -25,6 +25,8 @@
         "getFirstPage": true,
         "getPage": true,
         "flowTo": true,
-        "ThumbPage": true
+        "ThumbPage": true,
+        "IconElement": true,
+        "ActionBtn": true
     }
 }

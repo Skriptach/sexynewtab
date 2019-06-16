@@ -2,36 +2,30 @@
 
 ; (() => {
 
-	class IconBtn extends HTMLElement {
+	window.ActionBtn = class ActionBtn extends IconElement {
 		constructor () {
 			super();
 
-			this.type = this.getAttribute('type');
-			this.label = chrome.i18n.getMessage(this.type);
-			this.innerHTML = `<i class="st-${this.type}"></i>`;
-
-		}
-	}
-
-	customElements.define('icon-btn', IconBtn);
-	
-	class ActionBtn extends IconBtn {
-		constructor () {
-			super();
-
-			this.title = this.label;
-			this.classList.add(this.type);
+			this.label && (this.title = this.label);
 
 			this.on('click', () => {
 				this.dispatchEvent(new Event(this.type, { bubbles: true }));
 			});
 
 		}
-	}
+
+		get type() {
+			return super.type;
+		}
+		set type(newVal) {
+			super.type = newVal;
+			this.title = this.label;
+		}
+	};
 
 	customElements.define('action-btn', ActionBtn);
 
-	class AccordBtn extends IconBtn {
+	class AccordBtn extends IconElement {
 		constructor () {
 			super();
 
