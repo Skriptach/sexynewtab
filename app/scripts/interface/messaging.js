@@ -2,15 +2,15 @@
 
 ;(function () {
 
-	function clearPage () {
+	function removePage () {
 		chrome.runtime.sendMessage({
-			action: 'clear',
+			action: 'remove',
 			index: event.target.closest('thumb-page').index
 		});
 	}
 
 	window.on('ready', () => {
-		document.on('clear', clearPage);
+		document.on('remove', removePage);
 
 		chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.runtime.id) {

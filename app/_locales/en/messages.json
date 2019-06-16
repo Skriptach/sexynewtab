@@ -17,8 +17,8 @@
 	"edit":{
 		"message":"Edit…"
 	},
-	"clear":{
-		"message":"Clear"
+	"remove":{
+		"message":"Remove"
 	},
 	"theme_label":{
 		"message":"Color Theme"
