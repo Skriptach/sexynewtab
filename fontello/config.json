@@ -1,37 +1,11 @@
 {
-  "name": "",
+  "name": "_",
   "css_prefix_text": "st-",
   "css_use_suffix": false,
   "hinting": true,
   "units_per_em": 1000,
   "ascent": 850,
   "glyphs": [
-    {
-      "uid": "6f6ea30f99399791c5459f0ecdd47e23",
-      "css": "stack",
-      "code": 59394,
-      "src": "custom_icons",
-      "selected": true,
-      "svg": {
-        "path": "M25.7 367.4V1000H974.3V367.4H25.7ZM873.9 327.2H901.1V164.2H98.9V327.2H126.1M781.2 127.8H806V0H194V127.8H218.8",
-        "width": 1000
-      },
-      "search": [
-        "rectangles23-proper"
-      ]
-    },
-    {
-      "uid": "2a6740fc2f9d0edea54205963f662594",
-      "css": "spin",
-      "code": 59395,
-      "src": "fontelico"
-    },
-    {
-      "uid": "b1887b423d2fd15c345e090320c91ca0",
-      "css": "tile",
-      "code": 59392,
-      "src": "fontawesome"
-    },
     {
       "uid": "12f4ece88e46abd864e40b35e05b11cd",
       "css": "ok",
@@ -40,7 +14,7 @@
     },
     {
       "uid": "f48ae54adfb27d8ada53d0fd9e34ee10",
-      "css": "trash",
+      "css": "remove",
       "code": 59445,
       "src": "fontawesome"
     },
@@ -58,44 +32,20 @@
     },
     {
       "uid": "39c4d0e225a1263a398a47523cb5b9bd",
-      "css": "brush",
+      "css": "customize",
       "code": 59396,
       "src": "entypo"
     },
     {
-      "uid": "83e7b366e9b39bc4006b821f7c5efa4d",
-      "css": "folder",
-      "code": 59426,
-      "src": "typicons"
-    },
-    {
       "uid": "97var6sq7rzo72ktzg1c6ph46u9pftbr",
-      "css": "pencil",
+      "css": "edit",
       "code": 59397,
       "src": "modernpics"
     },
     {
       "uid": "b392c847bf41826598f12c02be842253",
-      "css": "star",
+      "css": "top",
       "code": 59422,
-      "src": "mfglabs"
-    },
-    {
-      "uid": "ce50292e85eb5d6ee3be61b32bf2bdf3",
-      "css": "ok-3",
-      "code": 59433,
-      "src": "mfglabs"
-    },
-    {
-      "uid": "06301c50d89b5d3e651bd07ebd6d7de7",
-      "css": "cancel",
-      "code": 59407,
-      "src": "mfglabs"
-    },
-    {
-      "uid": "63e91725cfc5751fe4d772325fd50830",
-      "css": "plus",
-      "code": 59412,
       "src": "mfglabs"
     },
     {
@@ -112,21 +62,47 @@
     },
     {
       "uid": "d3fa106db96ff869d1ad75506ba5ff50",
-      "css": "coverflow",
+      "css": "toggle",
       "code": 59393,
       "src": "mfglabs"
     },
     {
       "uid": "3a9aa648fce45a316e70e1613bda57ac",
-      "css": "tab",
+      "css": "tabs",
       "code": 59425,
       "src": "elusive"
     },
     {
       "uid": "a66e72da83c98248ae3ef43808efc452",
-      "css": "plus-circle",
+      "css": "add",
       "code": 59414,
       "src": "websymbols"
+    },
+    {
+      "uid": "id8wp0cygl9trzbhlbd9o0fygiesi629",
+      "css": "search",
+      "code": 59394,
+      "src": "modernpics"
+    },
+    {
+      "uid": "3df1557e2d6e84ec32bd47aee5bfdf59",
+      "css": "clear",
+      "code": 59392,
+      "src": "typicons"
+    },
+    {
+      "uid": "6f6ea30f99399791c5459f0ecdd47e23",
+      "css": "stack",
+      "code": 59394,
+      "src": "custom_icons",
+      "selected": false,
+      "svg": {
+        "path": "M25.7 367.4V1000H974.3V367.4H25.7ZM873.9 327.2H901.1V164.2H98.9V327.2H126.1M781.2 127.8H806V0H194V127.8H218.8",
+        "width": 1000
+      },
+      "search": [
+        "rectangles23-proper"
+      ]
     }
   ]
 }
