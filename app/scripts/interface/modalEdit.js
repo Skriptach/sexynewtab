@@ -14,8 +14,9 @@
 
 	function editPage () {
 		if (!inputUrl.validity.valid){return;}
-		back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab);
-		currentEditPage.loading();
+		if (back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.tab)) {
+			currentEditPage.loading();
+		}
 		hideEditForm();
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = null;
