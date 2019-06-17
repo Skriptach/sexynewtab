@@ -80,13 +80,14 @@
 
 action-btn[type="back"] {
 	color: #000;
-	background: none;
-	width: 25px;
-	height: 25px;
-	float: right;
+    background: #FFF;
+    position: absolute;
+    left: -35px;
+    top: 0;
+    border-radius: 3px 0 0 3px;
     
-    & .st-back:before {
-        margin: 0;
+    &:before {
+        line-height: 35px;
     }
     &:hover,
     &:focus {
