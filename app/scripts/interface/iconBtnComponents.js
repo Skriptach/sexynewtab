@@ -3,8 +3,8 @@
 ; (() => {
 
 	window.ActionBtn = class ActionBtn extends IconElement {
-		constructor () {
-			super();
+		constructor (type) {
+			super(type);
 
 			this.label && (this.title = this.label);
 
@@ -26,8 +26,8 @@
 	customElements.define('action-btn', ActionBtn);
 
 	class AccordBtn extends IconElement {
-		constructor () {
-			super();
+		constructor(type) {
+			super(type);
 
 			const label = document.createElement('span');
 			label.innerText = this.label;

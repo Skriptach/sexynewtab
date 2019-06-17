@@ -10,7 +10,7 @@
 	<link rel="stylesheet/less" type="text/css" href="styles/preview.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/coverflow.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/edit.less" />
-	<link rel="stylesheet/less" type="text/css" href="styles/url-input.less" />
+	<link rel="stylesheet/less" type="text/css" href="styles/action-input.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/footer.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/customize.less" />
 	<link rel="stylesheet/less" type="text/css" href="styles/themes.less" />
@@ -38,7 +38,7 @@
 			<accord-btn type="history"></accord-btn>
 			<ul is="link-list" type="history"></ul>
 		</div>
-		<url-input ok-button />
+		<url-input action="ok"></url-input>
 	</div>
 </div>
 <footer>
@@ -55,16 +55,10 @@
 		<a class="theme" data="cosmos"><span></span><br>Space</a>
 	</div>
 	<h3>Background Image</h3>
-	<url-input placeholder="https://picsum.photos/1920/1080" />
+	<url-input placeholder="https://picsum.photos/1920/1080" ></url-input>
 </div>
 </footer>
 <div id="one-google-end-of-body"></div>
-<template id="x-url-input">
-	<i class="st-link"></i>
-	<input type="url" placeholder="https://link.to/your-favorite-site/page"
-		pattern="^https?:\/\/[\w]+[-.\w]+\.[\w]+(\/.*)?">
-	<action-btn type="ok" disabled></action-btn>
-</template>
 <template id="x-thumb">
 	<div class="preview"><i class="st-add"></i></div>
 </template>
@@ -82,7 +76,7 @@
 <script type="text/javascript" src="scripts/interface/clickHandlers.js"></script>
 <script type="text/javascript" src="scripts/interface/iconElementComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/iconBtnComponents.js"></script>
-<script type="text/javascript" src="scripts/interface/urlInputComponent.js"></script>
+<script type="text/javascript" src="scripts/interface/actionInputComponents.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbLinkComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbPageComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/linkListComponent.js"></script>

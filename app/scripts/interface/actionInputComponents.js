@@ -2,15 +2,42 @@
 
 ;(() => {
 
-	const template = d('x-url-input');
+	class ActionInput extends IconElement {
+		constructor (type, action) {
+			super(type);
 
-	class URLInput extends HTMLElement {
+			const input = document.createElement('input');
+			this.appendChild(input);
+			
+			action = action || this.getAttribute('action');
+			if (action) {
+				this.action = action;
+			}
+
+		}
+
+		get value() {
+			return this.querySelector('input').value;
+		}
+		
+		set action(newVal) {
+			if (!newVal) {
+				this._actBtn && this._actBtn.remove;
+				this._actBtn = undefined;
+			}
+			this._actBtn = this._actBtn || new ActionBtn();
+			this._actBtn.type = newVal;
+			this.appendChild(this._actBtn);
+		}
+	}
+
+	customElements.define('action-input', ActionInput);
+
+	class URLInput extends ActionInput {
 		constructor() {
-			super();
+			super('link');
 
-			const content = template.content.cloneNode(true);
-			const button = content.querySelector('action-btn');
-			const input = content.querySelector('input');
+			const input = this.querySelector('input');
 
 			const triggerDone = () => {
 				this.dispatchEvent(new Event('done', { bubbles: true }));
@@ -26,18 +53,12 @@
 				this.value = input.value;
 			};
 
-			const placeholder = this.getAttribute('placeholder');
-			if (this.getAttribute('placeholder') !== null) {
-				input.setAttribute('placeholder', placeholder);
-			}
-			if (this.getAttribute('ok-button') === null) {
-				this._isOkButton = false;
-				button.remove();
-			} else {
-				this._isOkButton = true;
-				button.on('ok', triggerDone); // click
-			}
+			const placeholder = this.getAttribute('placeholder') || 'https://link.to/your-favorite-site/page';
+			input.setAttribute('placeholder', placeholder);
+			const pattern = this.getAttribute('pattern') || '^https?:\\/\\/[\\w]+[-.\\w]+\\.[\\w]+(\\/.*)?';
+			input.setAttribute('pattern', pattern);
 			
+			this._actBtn && this._actBtn.on('ok', triggerDone); // click
 			input.on('change', setValue.bind(this));
 			input.on('keyup', setValue.bind(this));
 			input.on('paste', setValue.bind(this));
@@ -46,8 +67,6 @@
 					triggerDone();
 				}
 			});
-			
-			this.appendChild(content);
 		}
 
 		get validity () {
@@ -71,11 +90,11 @@
 		}
 
 		validate () {
-			if (this._isOkButton){
+			if (this._actBtn){
 				if (this.validity.valid) {
-					this.querySelector('action-btn').removeAttribute('disabled');
+					this._actBtn.removeAttribute('disabled');
 				} else {
-					this.querySelector('action-btn').setAttribute('disabled', '');
+					this._actBtn.setAttribute('disabled', '');
 				}
 			}
 		}
