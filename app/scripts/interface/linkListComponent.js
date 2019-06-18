@@ -38,7 +38,7 @@
 		},
 	};
 
-	function getItem (params) {
+	function getItem () {
 		const item = document.createElement('li');
 		item.setAttribute('class', 'item');
 		return item;
@@ -48,10 +48,11 @@
 		item.style['background-image'] = `url(${(params.favIconUrl || `chrome://favicon/${params.url}`)})`;
 		item.url = params.url;
 		item.innerText = params.title || params.url;
+		item.title = params.title;
 	}
 
 	class LinkList extends HTMLUListElement {
-		constructor () {
+		constructor (type) {
 			super();
 
 			const refresh = () => {
@@ -66,9 +67,9 @@
 				if (property.some(hasChancged)) {
 					refresh();
 				}
-			}
+			};
 
-			this.type = this.getAttribute('type');
+			this.type = type || this.getAttribute('type');
 			this.list = new Map();
 
 			document.on('shown', refresh);
