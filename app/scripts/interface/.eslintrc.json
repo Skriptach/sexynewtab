@@ -4,6 +4,7 @@
         "d": true,
         "$": true,
         "$click": true,
+        "debounce": true,
         "COLUMNS_COUNT": true,
         "ROWS_COUNT": true,
         "GAP": true,
