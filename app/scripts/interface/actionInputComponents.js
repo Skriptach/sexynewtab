@@ -6,8 +6,8 @@
 		constructor (type, action) {
 			super(type);
 
-			const input = document.createElement('input');
-			this.appendChild(input);
+			this.input = document.createElement('input');
+			this.appendChild(this.input);
 			
 			action = action || this.getAttribute('action');
 			if (action) {
@@ -17,9 +17,17 @@
 		}
 
 		get value() {
-			return this.querySelector('input').value;
+			return this.input.value;
 		}
-		
+
+		set value(newVal = '') {
+			const oldVal = this.input.title;
+			this.input.value = newVal;
+			this.input.title = this.input.value;
+			this._onbeforechange();
+			this.input.value !== oldVal && this.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+
 		set action(newVal) {
 			if (!newVal) {
 				this._actBtn && this._actBtn.remove;
@@ -29,6 +37,24 @@
 			this._actBtn.type = newVal;
 			this.appendChild(this._actBtn);
 		}
+
+		_bindChange() {
+			const setValue = () => {
+				if (event.type === 'paste') {
+					event.preventDefault();
+					this.value = event.clipboardData.getData('text');
+					return;
+				}
+
+				this.value = this.input.value;
+			};
+
+			this.input.on('paste', setValue.bind(this));
+			this.input.on('keyup', setValue.bind(this));
+			this.input.on('change', setValue.bind(this));
+		}
+
+		_onbeforechange (){}
 	}
 
 	customElements.define('action-input', ActionInput);
@@ -36,32 +62,18 @@
 	class URLInput extends ActionInput {
 		constructor() {
 			super('link');
-
-			const input = this.querySelector('input');
+			this._bindChange();
 
 			const triggerDone = () => {
 				this.dispatchEvent(new Event('done', { bubbles: true }));
 			};
 
-			// use this setter for event to invoke setter and validator
-			const setValue = () => {
-				if (event.type === 'paste') {
-					this.value = event.clipboardData.getData('text');
-					return;
-				}
-
-				this.value = input.value;
-			};
-
 			const placeholder = this.getAttribute('placeholder') || 'https://link.to/your-favorite-site/page';
-			input.setAttribute('placeholder', placeholder);
+			this.input.setAttribute('placeholder', placeholder);
 			const pattern = this.getAttribute('pattern') || '^https?:\\/\\/[\\w]+[-.\\w]+\\.[\\w]+(\\/.*)?';
-			input.setAttribute('pattern', pattern);
+			this.input.setAttribute('pattern', pattern);
 			
 			this._actBtn && this._actBtn.on('ok', triggerDone); // click
-			input.on('change', setValue.bind(this));
-			input.on('keyup', setValue.bind(this));
-			input.on('paste', setValue.bind(this));
 			this.on('keydown', () => {
 				if (event.keyCode === 13) {
 					triggerDone();
@@ -70,23 +82,16 @@
 		}
 
 		get validity () {
-			return this.querySelector('input').validity;
+			return this.input.validity;
 		}
 
-		get value () {
-			return this.querySelector('input').value;
-		}
-
-		set value (newVal = '') {
-			const input = this.querySelector('input');
-			const oldVal = input.title;
-			input.value = newVal;
-			input.title = input.value;
+		_onbeforechange () {
 			this.validate();
 			if (!event || event.type !== 'keyup'){
-				input.select();
+				setTimeout(() => {
+					this.input.select();
+				}, 10);
 			}
-			input.value !== oldVal && this.dispatchEvent(new Event('change', { bubbles: true }));
 		}
 
 		validate () {
@@ -101,4 +106,20 @@
 	}
 
 	customElements.define('url-input', URLInput);
+
+	class SearchInput extends ActionInput {
+		constructor() {
+			super('search', 'clear');
+			this._bindChange();
+
+			this._actBtn.on('click', () => {
+				this.value = '';
+				this.input.focus();
+			});
+		}
+
+	}
+
+	customElements.define('search-input', SearchInput);
+
 })();
