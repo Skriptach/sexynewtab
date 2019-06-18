@@ -2,7 +2,7 @@
 
 ; (() => {
 
-	window.ActionBtn = class ActionBtn extends IconElement {
+	window.ActionBtn = class extends IconElement {
 		constructor (type) {
 			super(type);
 
@@ -25,7 +25,7 @@
 
 	customElements.define('action-btn', ActionBtn);
 
-	class AccordBtn extends IconElement {
+	window.AccordBtn = class extends IconElement {
 		constructor(type) {
 			super(type);
 
@@ -39,7 +39,7 @@
 				});
 			});
 		}
-	}
+	};
 
 	customElements.define('accord-btn', AccordBtn);
 

@@ -28,6 +28,7 @@
         "flowTo": true,
         "ThumbPage": true,
         "IconElement": true,
-        "ActionBtn": true
+        "ActionBtn": true,
+        "AccordBtn": true
     }
 }

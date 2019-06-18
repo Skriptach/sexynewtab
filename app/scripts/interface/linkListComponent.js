@@ -147,4 +147,30 @@
 
 	customElements.define('link-list', LinkList, { extends: 'ul' } );
 
+	class SourceList extends HTMLElement {
+		constructor () {
+			super();
+
+			const children = [];
+			this.lists = [];
+			for (const source in get) {
+				if (get[source].then) {
+					const btn = new AccordBtn(source);
+					const list = new LinkList(source);
+					children.push(btn);
+					children.push(list);
+					this.lists.push(list);
+				}
+			}
+
+			this.append(...children);
+		}
+
+		search (text) {
+			get.searchText = text;
+			this.lists.forEach((list) => list.refresh());
+		}
+	}
+
+	customElements.define('source-list', SourceList);
 })();
