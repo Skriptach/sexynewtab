@@ -30,8 +30,8 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.10.6",
-	"version_name": "0.10.6",
+	"version": "0.10.7",
+	"version_name": "0.10.7",
 	"minimum_chrome_version": "69.0.0",
 	"author": "Liubomudr Nazariev"
 }

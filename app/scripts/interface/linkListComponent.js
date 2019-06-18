@@ -4,38 +4,58 @@
 
 	const get = {
 
+		searchText: '',
+
+		byText (link) {
+			return (link &&
+				(link.title && link.title.toLowerCase().includes(this.searchText.toLowerCase())) ||
+				(link.url && link.url.toLowerCase().includes(this.searchText.toLowerCase()))
+			);
+		},
+
+		get top() {
+			const _self = this;
+			return new Promise((resolve, reject) => {
+				chrome.topSites.get((topSites) => {
+					resolve(topSites.filter(_self.byText.bind(_self)));
+				});
+			});
+		},
+
 		get tabs() {
+			const _self = this;
 			return new Promise((resolve, reject) => {
 				let tabs = [];
 				chrome.windows.getAll({ populate: true }, (windows) => {
 					for (let i = 0; i < windows.length; i++) {
-						tabs = tabs.concat(windows[i].tabs);
+						tabs = tabs.concat(windows[i].tabs.filter(_self.byText.bind(_self)));
 					}
 					resolve(tabs);
 				});
 			});
 		},
-	
+
+		get bookmarks() {
+			const _self = this;
+			return new Promise((resolve, reject) => {
+				if (_self.searchText) {
+					chrome.bookmarks.search(_self.searchText, resolve);
+				} else {
+					chrome.bookmarks.getRecent(100, resolve);
+				}
+			});
+		},
+
 		get history() {
+			const _self = this;
 			return new Promise((resolve, reject) => {
 				chrome.history.search({
-					text: '',
+					text: _self.searchText,
 					startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
 				}, resolve);
 			});
 		},
-	
-		get top() {
-			return new Promise((resolve, reject) => {
-				chrome.topSites.get(resolve);
-			});
-		},
-	
-		get bookmarks() {
-			return new Promise((resolve, reject) => {
-				chrome.bookmarks.getRecent(100, resolve);
-			});
-		},
+
 	};
 
 	function getItem () {
