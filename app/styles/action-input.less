@@ -1,5 +1,6 @@
-
+@color : #ababab;
 action-input,
+search-input,
 url-input {
     display: flex;
     flex-shrink: 0;
@@ -14,7 +15,7 @@ url-input {
 
     &:not(.just-weight):before {
         font-size: 22px;
-        color: #ababab;
+        color: @color;
         line-height: 35px;
         margin: 0 7px;
         position: absolute;
@@ -40,8 +41,12 @@ url-input {
     
 }
 
-action-input action-btn {
-    color: inherit;
+action-input action-btn,
+search-input action-btn {
+    color: @color;
+    &:hover {
+        color: inherit;
+    }
 }
 
 url-input action-btn {
