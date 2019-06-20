@@ -1,6 +1,6 @@
 {
   "name": "sexynewtab",
-  "version": "0.10.8",
+  "version": "0.10.9",
   "description": "Sexy New Tab replace Top Sites with beautiful page. Display as gallery or as tile. Synchronizes.",
   "repository": {
     "type": "git",
@@ -17,8 +17,15 @@
   },
   "homepage": "https://github.com/Skripatch/sexynewtab#readme",
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-private-methods": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "babel-eslint": "^11.0.0-beta.0",
     "eslint": "^5.16.0",
     "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-htmlmin": "^5.0.1",
     "gulp-json-transform": "git+https://github.com/thaggie/gulp-json-transform.git",
@@ -26,7 +33,8 @@
     "gulp-newer": "^1.4.0",
     "gulp-uglify-es": "^1.0.4",
     "gulp-useref": "^3.1.6",
-    "gulp-zip": "^5.0.0"
+    "gulp-zip": "^5.0.0",
+    "lazypipe": "^1.0.2"
   },
   "dependencies": {}
 }

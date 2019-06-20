@@ -11,6 +11,9 @@ const htmlmin = require('gulp-htmlmin');
 const newer = require('gulp-newer');
 const jsonTransform = require('gulp-json-transform');
 const zip = require('gulp-zip');
+const lazypipe = require('lazypipe');
+
+const babel = require('gulp-babel');
 
 const paths = {
 	locales: {
@@ -52,9 +55,10 @@ function copyNewer (path) {
 }
 
 function html () {
+	const jsBabelUglify = lazypipe().pipe(babel).pipe(uglify);
 	return gulp.src(paths.interface.src)
 		.pipe(useref())
-		.pipe(gulpif('*.js', uglify()))
+		.pipe(gulpif('*.js', jsBabelUglify() ))
 		.pipe(gulpif('*.css', less()))
 		.pipe(gulpif('*.css', cleanCSS()))
 		.pipe(gulpif('*.html', htmlmin({collapseWhitespace: true})))
