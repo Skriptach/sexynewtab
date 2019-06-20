@@ -36,5 +36,8 @@
     "gulp-zip": "^5.0.0",
     "lazypipe": "^1.0.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+	  "lint": "eslint *.js app/**/*.js --ignore-pattern app/scripts/vendor/* -o lint-report.html -f html"
+  }
 }
