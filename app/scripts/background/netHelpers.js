@@ -71,7 +71,7 @@
 			});
 			return f.getBody();
 		});
-	}
+	};
 
 	function convertBlobToBase64(blob) {
 		return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@
 					};
 				});
 		});
-	}
+	};
 
 
 })();

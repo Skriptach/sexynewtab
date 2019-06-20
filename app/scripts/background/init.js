@@ -4,10 +4,10 @@
 
 	let thumbs,
 		favicons,
-		resolve;
+		resolveBG;
 
 	const ready = new Promise((res) => {
-		resolve = res;
+		resolveBG = res;
 	});
 
 	window.load = (callback) => {
@@ -15,7 +15,7 @@
 	};
 
 	function done () {
-		resolve({
+		resolveBG({
 			slotsList,
 			settings,
 			swap,

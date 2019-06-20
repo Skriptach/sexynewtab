@@ -8,7 +8,7 @@
 
 			this.input = document.createElement('input');
 			this.appendChild(this.input);
-			
+
 			action = action || this.getAttribute('action');
 			if (action) {
 				this.action = action;
@@ -31,7 +31,7 @@
 		set action(newVal) {
 			if (!newVal) {
 				this._actBtn && this._actBtn.remove;
-				this._actBtn = undefined;
+				this._actBtn = null;
 			}
 			this._actBtn = this._actBtn || new ActionBtn();
 			this._actBtn.type = newVal;
@@ -72,7 +72,7 @@
 			this.input.setAttribute('placeholder', placeholder);
 			const pattern = this.getAttribute('pattern') || '^https?:\\/\\/[\\w]+[-.\\w]+\\.[\\w]+(\\/.*)?';
 			this.input.setAttribute('pattern', pattern);
-			
+
 			this._actBtn && this._actBtn.on('ok', triggerDone); // click
 			this.on('keydown', () => {
 				if (event.keyCode === 13) {

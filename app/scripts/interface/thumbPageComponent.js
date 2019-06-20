@@ -4,7 +4,7 @@
 
 	const template = d('x-page');
 
-	class ThumbPage extends HTMLElement {
+	window.ThumbPage = class extends HTMLElement {
 		constructor (index = 0, col = 0, row = 0) {
 			super();
 
@@ -17,7 +17,7 @@
 			this.setAttribute('data-col', col);
 			this.setAttribute('data-row', row);
 			this.classList.add('inactive');
-			
+
 		}
 
 		clear () {
@@ -76,7 +76,6 @@
 			this.classList.add('loading');
 		}
 	};
-	
-	window.ThumbPage = ThumbPage;
+
 	customElements.define('thumb-page', ThumbPage);
 })();
