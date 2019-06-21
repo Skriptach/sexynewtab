@@ -51,7 +51,7 @@
 			return new Promise((resolve, reject) => {
 				chrome.history.search({
 					text: _self.searchText,
-					startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 7
+					startTime: (new Date()).getTime() - 1000 * 60 * 60 * 24 * 365
 				}, resolve);
 			});
 		},
@@ -108,11 +108,11 @@
 				chrome.bookmarks.onChanged.addListener(checkChangings);
 			}
 		}
-		
+
 		refresh () {
 			const _self = this;
 
-			if (EDIT && get[this.type]){
+			if (EDIT && get.hasOwnProperty(this.type)){
 				get[this.type].then(_self.build.bind(_self));
 			}
 		}
