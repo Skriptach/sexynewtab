@@ -5,6 +5,7 @@
         "byUrl": true,
         "getOriginBy": true,
 
+        "toBase64": true,
         "get": true,
         "loadImage": true,
         "resolveUrl": true,

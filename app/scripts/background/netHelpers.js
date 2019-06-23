@@ -73,17 +73,6 @@
 		});
 	};
 
-	function convertBlobToBase64(blob) {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader;
-			reader.onerror = reject;
-			reader.onload = () => {
-				resolve(reader.result);
-			};
-			reader.readAsDataURL(blob);
-		});
-	}
-
 	window.loadImage = function (href) {
 		return new Fetcher(href).promise.then((fetcher) => {
 			const imageRX = /image\/*/;
@@ -91,7 +80,7 @@
 				throw new Error('Not an image');
 			}
 			return fetcher.response.blob()
-				.then(convertBlobToBase64)
+				.then(toBase64)
 				.then((dataUrl) => {
 					return {
 						dataUrl

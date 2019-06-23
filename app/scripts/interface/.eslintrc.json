@@ -5,6 +5,7 @@
         "$": true,
         "$click": true,
         "debounce": true,
+        "toBase64": true,
         "COLUMNS_COUNT": true,
         "ROWS_COUNT": true,
         "GAP": true,
