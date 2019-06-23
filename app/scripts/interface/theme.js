@@ -65,7 +65,7 @@
 		back.settings.BACK && (setBackground(back.settings.BACK), inputBack.value = back.settings.BACK);
 		back.settings.FLOW && toggleDisplay();
 
-		document.on('toggle', toggleDisplay);
+		document.on('flow', toggleDisplay);
 		document.on('customize', toggleCustomize);
 		$click.on('#customize .theme *', (target) => {
 			switchTheme(target.getAttribute('data'), true);
