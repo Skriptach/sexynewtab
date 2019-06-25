@@ -1,15 +1,15 @@
 .nth-pos(@n) when (@n > 0) {
-    .nth-pos(@n - 1);
+	.nth-pos(@n - 1);
 
-    &:nth-of-type(@{n}) {
-        top: 36px * (@n - 1);
-        bottom: 36px * (4 - @n) - 1;
-    }
+	&:nth-of-type(@{n}) {
+		top: 36px * (@n - 1);
+		bottom: 36px * (4 - @n) - 1;
+	}
 }
 
 #edit {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
 	position:absolute;
 	padding: 20px;
@@ -19,78 +19,78 @@
 	box-shadow: 35px 35px 65px rgba(0,0,0,0.8);
 	transition-property: transform, margin;
 	transition-duration: .5s;
-    transform: rotateY(-180deg);
-    transition-timing-function: ease-out;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
+	transform: rotateY(-180deg);
+	transition-timing-function: ease-out;
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
 
-    .accordion {
-        flex-grow: 1;
-        overflow: hidden scroll;
-    
-        position: relative;
-        margin: 14px 0;
-        padding-right: 2px;
-        margin-right: -8px;
-        cursor:default;
+	.accordion {
+		flex-grow: 1;
+		overflow: hidden scroll;
 
-        ul {
-            margin: 0;
-            padding: 0;
-        }
+		position: relative;
+		margin: 14px 0;
+		padding-right: 2px;
+		margin-right: -8px;
+		cursor:default;
 
-    }
+		ul {
+			margin: 0;
+			padding: 0;
+		}
 
-    accord-btn {
-        cursor: pointer;
-        display: block;
+	}
 
-        font-size:14px;
-        background-color: #e0e0e0;
-        margin-top: 5px;
-        padding: 5px;
+	accord-btn {
+		cursor: pointer;
+		display: block;
 
-        position: sticky;
-        .nth-pos(4);
-        &:first-child {
-            margin-top: 0;
-        }
-    }
-    
-    .item {
-        border: 1px solid transparent;
-        background-position:2px center;
-        background-repeat:no-repeat;
-        
-        background-size:16px;
-        padding: 4px 2px 2px 22px;
-        margin-top:3px;
-        
-        text-overflow:ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    
-    .selected {
-        border:dotted 1px #4d90fe;
-        background-color:#BBEEFF;
-    }
+		font-size:14px;
+		background-color: #e0e0e0;
+		margin-top: 5px;
+		padding: 5px;
+
+		position: sticky;
+		.nth-pos(4);
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.item {
+		border: 1px solid transparent;
+		background-position:2px center;
+		background-repeat:no-repeat;
+
+		background-size:16px;
+		padding: 4px 2px 2px 22px;
+		margin-top:3px;
+
+		text-overflow:ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.selected {
+		border:dotted 1px #4d90fe;
+		background-color:#BBEEFF;
+	}
 
 }
 
 action-btn[type="back"] {
 	color: #000;
-    background: #FFF;
-    position: absolute;
-    left: -35px;
-    top: 0;
-    border-radius: 3px 0 0 3px;
-    
-    &:before {
-        line-height: 35px;
-    }
-    &:hover,
-    &:focus {
-        color: #DC0000;
-    }
+	background: #FFF;
+	position: absolute;
+	left: -35px;
+	top: 0;
+	border-radius: 3px 0 0 3px;
+
+	&:before {
+		line-height: 35px;
+	}
+	&:hover,
+	&:focus {
+		color: #DC0000;
+	}
 }

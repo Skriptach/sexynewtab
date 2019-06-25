@@ -11,8 +11,8 @@
 
 	&[data-row="@{k}"] {
 		top: calc(@k * (var(--page-height) + var(--gap)) );
-	}	
-}	
+	}
+}
 
 thumb-page {
 	position:absolute;
@@ -21,7 +21,7 @@ thumb-page {
 	transition-property: left, top, width, height, box-shadow;
 	transition-duration: .3s;
 	transition-timing-function: ease-out;
-   	perspective: 3400px;
+	perspective: 3400px;
 
 	width: var(--page-width);
 	height: var(--page-height);
@@ -33,7 +33,7 @@ thumb-page {
 	&.draged {
 		box-shadow: 15px 15px 25px #222;
 		transition-property: transform;
-		
+
 		width: calc( var(--page-width) + 15px);
 		height: calc(var(--page-height) + 15px);
 
@@ -47,12 +47,12 @@ thumb-page {
 		&:hover {
 			box-shadow: none;
 		}
-		
+
 		#edit {
 			transform: rotateY(0deg);
 			border-top-left-radius: 0;
 		}
-		
+
 	}
 
 	body:not(.flow) & {
@@ -86,7 +86,7 @@ thumb-page {
 		transition-duration: .2s;
 		box-shadow: none;
 		border-radius: 0;
-		
+
 		.flipper {
 			top: -50%;
 			left: -50%;
@@ -124,9 +124,9 @@ thumb-page {
 				right: 10px;
 				bottom: 10px;
 			}
-	
+
 		}
-	}				
+	}
 
 	// do not animate on switch mode
 	body.reflow & {
@@ -161,7 +161,7 @@ thumb-page.turned .flipper,
 .bg-switch() {
 	.bg-common();
 	background+: var(--small-bg);
-	
+
 	.full & {
 		.bg-common();
 		background+: var(--full-bg);
@@ -174,7 +174,7 @@ thumb-page.turned .flipper,
 	display: flex;
 	border-radius:7px;
 	.bg-switch();
-	
+
 	&:after {
 		content: '';
 		position: absolute;
@@ -197,17 +197,17 @@ thumb-page.turned .flipper,
 	}
 
 	i {
-        color: #000070;
-        margin:auto;
+		color: #000070;
+		margin:auto;
 		font-size: calc(var(--page-height)  * 35.457 / 100);
 
-        thumb-page:not(.inactive) & {
-            display: none;
-        }
-        thumb-page:hover & {
-            color: #0000C0;
-        }
-    }
+		thumb-page:not(.inactive) & {
+			display: none;
+		}
+		thumb-page:hover & {
+			color: #0000C0;
+		}
+	}
 }
 
 a[is="thumb-link"] {

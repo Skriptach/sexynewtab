@@ -17,11 +17,11 @@ body {
 	background-color:hsl(300, 100%, 5%);
 
 	font-size:12px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 
-    margin:0;
-    
-    user-select: none;
+	margin:0;
+
+	user-select: none;
 	overflow:hidden;
 }
 
@@ -31,36 +31,36 @@ button {
 	color: #FFF;
 	font-size: 22px;
 	outline: none;
-    text-align: center;
-    display: inline-block;
+	text-align: center;
+	display: inline-block;
 
-    cursor: pointer;
+	cursor: pointer;
 
-    width: 35px;
+	width: 35px;
 	height: 35px;
-    padding: 0;
- 
-    &[disabled] {
-        background: buttonface !important;
-        color: graytext !important;
+	padding: 0;
 
-        cursor: default !important;
-    }
+	&[disabled] {
+		background: buttonface !important;
+		color: graytext !important;
+
+		cursor: default !important;
+	}
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
-    
-    &-thumb {
-        border-radius: 6px;
-        background-color: rgba(0,0,0,0.4);
+	width: 6px;
 
-        &:hover {
-            background-color: rgba(0,0,0,0.6);
-        }
-        &:active {
-            background-color: rgba(0,0,0,0.8);
-        }
-    }
-    
+	&-thumb {
+		border-radius: 6px;
+		background-color: rgba(0,0,0,0.4);
+
+		&:hover {
+			background-color: rgba(0,0,0,0.6);
+		}
+		&:active {
+			background-color: rgba(0,0,0,0.8);
+		}
+	}
+
 }

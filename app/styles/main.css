@@ -1,4 +1,4 @@
-﻿.ontop {
+.ontop {
 	z-index: 100;
 }
 
@@ -15,7 +15,7 @@
 #set {
 	position:relative;
 	margin:auto;
-	
+
 	--thumb-image: url();
 	--fav-image: url();
 
