@@ -2,7 +2,7 @@
 
 ;(() => {
 
-	class ActionInput extends IconElement {
+	window.ActionInput = class extends IconElement {
 		constructor (type, action) {
 			super(type);
 
@@ -55,7 +55,7 @@
 		}
 
 		_onbeforechange (){}
-	}
+	};
 
 	customElements.define('action-input', ActionInput);
 

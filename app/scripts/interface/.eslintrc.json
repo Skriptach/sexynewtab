@@ -30,6 +30,7 @@
         "flowTo": true,
         "ThumbPage": true,
         "IconElement": true,
+        "ActionInput": true,
         "ActionBtn": true,
         "AccordBtn": true
     }
