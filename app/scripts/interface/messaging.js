@@ -21,6 +21,9 @@
 				case 'remove':
 					d(`page${request.params.index}`).remove();
 					break;
+				case 'updateBg':
+					updateBackground();
+					break;
 				}
 			}
 		});

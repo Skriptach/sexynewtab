@@ -26,8 +26,14 @@
 			action: 'updatePage',
 			params: {
 				index: slot_index,
-				thumb: slotsList[slot_index].thumb 
+				thumb: slotsList[slot_index].thumb
 			}
+		});
+	};
+
+	function updateBg () {
+		chrome.runtime.sendMessage({
+			action: 'updateBg'
 		});
 	};
 
@@ -36,7 +42,9 @@
 			request.action === 'remove' ? onRemove(request.index) :
 				request.action === 'toggleView'    ? (settings.FLOW  = request.FLOW,  saveSync()) :
 				request.action === 'switchTheme'   ? (settings.THEME = request.theme, saveSync()) :
-				request.action === 'setBackground' ? (settings.BACK  = request.back,  saveSync()) : ('');
+				request.action === 'setBackground' ? (settings.BACK  = request.back, saveSync(), updateBg()) :
+				request.action === 'loadBackground' ? (settings.background  = request.image, saveBG(), updateBg()) :
+				('');
 		}
 		sendResponse({});
 	});

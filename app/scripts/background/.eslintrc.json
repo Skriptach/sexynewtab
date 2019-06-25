@@ -19,6 +19,7 @@
 
         "saveLocal": true,
         "saveSync": true,
+        "saveBG": true,
         "createThumbOf": true,
 
         "refreshPages": true,

@@ -49,6 +49,7 @@
 					settings.FLOW = res.settings.FLOW;
 					settings.THEME = res.settings.THEME;
 					settings.BACK = res.settings.BACK;
+					settings.BACK_TYPE = res.settings.BACK_TYPE || settings.BACK_TYPE;
 				}
 				resolve();
 			});
@@ -57,9 +58,10 @@
 
 	function getLocal() {
 		return new Promise((resolve) => {
-			chrome.storage.local.get(['thumbs', 'favicons'], (res) => {
+			chrome.storage.local.get(['thumbs', 'favicons', 'background'], (res) => {
 				thumbs = res.thumbs || {};
 				favicons = res.favicons || {};
+				settings.background = res.background;
 				resolve();
 			});
 		});

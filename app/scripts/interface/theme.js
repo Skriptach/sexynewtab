@@ -17,24 +17,26 @@
 		});
 	}
 
-	function setBackground (bg) {
-		d('main').style['background-image'] = bg.length ? `url(${bg})` : null;
+	window.updateBackground = function () {
+		const bg = back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
+			back.settings.BACK_TYPE === 'IMAGE' ? back.settings.background : '';
+
+		d('main').style['background-image'] = bg.length ? bg : null;
 		if (bg.length){
 			document.body.classList.add('custom-bg');
 		} else {
 			document.body.classList.remove('custom-bg');
 		}
-		chrome.runtime.sendMessage({
-			action: 'setBackground',
-			back: bg
-		});
-	}
+	};
 
 	const inputBack = $('#customize url-input')[0];
 
 	function bgChange () {
-		if (inputBack.validity.valid){
-			setBackground(inputBack.value);
+		if (inputBack.validity.valid) {
+			chrome.runtime.sendMessage({
+				action: 'setBackground',
+				back: inputBack.value
+			});
 		}
 	}
 
@@ -60,9 +62,11 @@
 		});
 	}
 
+
 	window.on('ready', () => {
 		back.settings.THEME && switchTheme(back.settings.THEME);
-		back.settings.BACK && (setBackground(back.settings.BACK), inputBack.value = back.settings.BACK);
+		back.settings.BACK && (inputBack.value = back.settings.BACK);
+		updateBackground();
 		back.settings.FLOW && toggleDisplay();
 
 		document.on('flow', toggleDisplay);

@@ -7,7 +7,8 @@
 		COLUMNS_COUNT : 5,
 		ROWS_COUNT : 4,
 		FLOW : false,
-		THEME: 'deep-purple'
+		THEME: 'deep-purple',
+		BACK_TYPE: 'THEME',
 	};
 
 

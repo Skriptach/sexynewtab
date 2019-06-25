@@ -2,6 +2,11 @@
 
 ;(() => {
 
+	window.saveBG = () => {
+		const background = settings.background;
+		chrome.storage.local.set({ background });
+	};
+
 	window.saveLocal = () => {
 		const thumbs = {};
 		const favicons = {};
@@ -21,7 +26,7 @@
 		});
 		chrome.storage.sync.set({
 			slots,
-			settings
+			settings: Object.assign({}, settings, { background: undefined })
 		});
 	};
 

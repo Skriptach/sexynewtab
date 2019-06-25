@@ -6,6 +6,7 @@
         "$click": true,
         "debounce": true,
         "toBase64": true,
+        "updateBackground": true,
         "COLUMNS_COUNT": true,
         "ROWS_COUNT": true,
         "GAP": true,
