@@ -27,8 +27,11 @@
 	}
 
 	function seti18nLabels () {
-		$('#customize h3')[0].innerText = chrome.i18n.getMessage('theme_label');
-		$('#customize h3')[1].innerText = chrome.i18n.getMessage('background_label');
+		document.querySelectorAll('[i-18n-msg]').forEach((tag) => {
+			const msg = tag.getAttribute('i-18n-msg');
+			const fallback = tag.innerText;
+			tag.innerText = chrome.i18n.getMessage(msg) || fallback;
+		});
 	}
 
 	window.on('load', () => {
