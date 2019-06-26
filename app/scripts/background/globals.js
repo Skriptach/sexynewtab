@@ -8,6 +8,7 @@
 		ROWS_COUNT : 4,
 		FLOW : false,
 		THEME: 'deep-purple',
+		BACK: '',
 		BACK_TYPE: 'THEME',
 	};
 

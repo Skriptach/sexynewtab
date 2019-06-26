@@ -61,7 +61,7 @@
 			chrome.storage.local.get(['thumbs', 'favicons', 'background'], (res) => {
 				thumbs = res.thumbs || {};
 				favicons = res.favicons || {};
-				settings.background = res.background;
+				settings.background = res.background || '';
 				resolve();
 			});
 		});
