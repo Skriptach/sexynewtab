@@ -43,4 +43,29 @@
 
 	customElements.define('accord-btn', AccordBtn);
 
+	class ToggleBtn extends ActionBtn {
+		constructor() {
+			super();
+
+			this.on('mousedown', this.toggle.bind(this));
+		}
+
+		toggle() {
+			const isActive = this.classList.contains('active');
+			isActive ? this.turnOff() : this.turnOn();
+		}
+
+		turnOn() {
+			this.classList.add('active');
+			this.dispatchEvent(new Event('active', { bubbles: true }));
+		}
+
+		turnOff() {
+			this.classList.remove('active');
+			this.dispatchEvent(new Event('disactive', { bubbles: true }));
+		}
+	}
+
+	customElements.define('toggle-btn', ToggleBtn);
+
 })();
