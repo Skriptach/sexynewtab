@@ -42,6 +42,7 @@
 			request.action === 'remove' ? onRemove(request.index) :
 				request.action === 'toggleView'    ? (settings.FLOW  = request.FLOW,  saveSync()) :
 				request.action === 'switchTheme'   ? (settings.THEME = request.theme, saveSync()) :
+				request.action === 'switchType'    ? (settings.BACK_TYPE  = request.type, saveSync(), updateBg()) :
 				request.action === 'setBackground' ? (settings.BACK  = request.back, saveSync(), updateBg()) :
 				request.action === 'loadBackground' ? (settings.background  = request.image, saveBG(), updateBg()) :
 				('');

@@ -1,0 +1,42 @@
+switch-panel {
+	switch-controls {
+		display: flex;
+		margin: 10px 0;
+
+		switch-btn {
+			flex-grow: 1;
+			font-size: 14px;
+			background-color: #000070;
+			color: #FFF;
+			height: 35px;
+			line-height: 35px;
+			text-align: center;
+			cursor: pointer;
+
+			&:active,
+			&.active {
+				background-color: #0000C0;
+			}
+
+		}
+
+		&[current=URL] + switch-tabs > :first-child {
+			margin-left: -100%;
+		}
+
+		&[current=IMAGE] + switch-tabs > :first-child {
+			margin-left: -200%;
+		}
+	}
+
+	switch-tabs {
+		display: flex;
+		overflow: hidden;
+
+		> * {
+			width: 100%;
+			flex-shrink: 0;
+			margin-top: auto;
+		}
+	}
+}
