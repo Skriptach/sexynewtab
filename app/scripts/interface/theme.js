@@ -4,7 +4,6 @@
 
 	function toggleCustomize () {
 		d('customize').classList.toggle('open');
-		event.target.classList.toggle('active');
 	}
 
 	function switchTheme (newTheme, save) {
