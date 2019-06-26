@@ -40,15 +40,24 @@
 		<toggle-btn type="flow"></toggle-btn>
 	</div>
 <div id="customize">
-	<h3 i-18n-msg="theme_label">Theme</h3>
-	<div>
-		<a class="theme" data="metal"><span></span><br>Metal</a>
-		<a class="theme" data="deep-purple"><span></span><br>Deep Purple</a>
-		<a class="theme" data="dark-side"><span></span><br>Dark Side</a>
-		<a class="theme" data="cosmos"><span></span><br>Space</a>
-	</div>
-	<h3 i-18n-msg="background_label">Background</h3>
-	<url-input placeholder="https://picsum.photos/1920/1080" ></url-input>
+	<h3 class="st-picture" i-18n-msg="background_label">Background</h3>
+	<switch-panel>
+		<switch-controls>
+			<switch-btn type="THEME" i-18n-msg="theme_label">Theme</switch-btn>
+			<switch-btn type="URL" i-18n-msg="url">Url</switch-btn>
+			<switch-btn type="IMAGE" i-18n-msg="upload">Upload</switch-btn>
+		</switch-controls>
+		<switch-tabs>
+			<div class="theme">
+				<a data="metal"><span></span><br>Metal</a>
+				<a data="deep-purple"><span></span><br>Deep Purple</a>
+				<a data="dark-side"><span></span><br>Dark Side</a>
+				<a data="cosmos"><span></span><br>Space</a>
+			</div>
+			<url-input placeholder="https://picsum.photos/1920/1080" ></url-input>
+			<image-input><span i-18n-msg="upload_image">Upload image</span></image-input>
+		</switch-tabs>
+	</switch-panel>
 </div>
 </footer>
 <div id="one-google-end-of-body"></div>
@@ -74,6 +83,8 @@
 <script type="text/javascript" src="scripts/interface/thumbLinkComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/thumbPageComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/linkListComponent.js"></script>
+<script type="text/javascript" src="scripts/interface/imageInputComponent.js"></script>
+<script type="text/javascript" src="scripts/interface/switchComponent.js"></script>
 <script type="text/javascript" src="scripts/interface/pageSize.js"></script>
 <script type="text/javascript" src="scripts/interface/dragPage.js"></script>
 <script type="text/javascript" src="scripts/interface/modalEdit.js"></script>

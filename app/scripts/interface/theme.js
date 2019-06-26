@@ -70,7 +70,7 @@
 
 		document.on('flow', toggleDisplay);
 		document.on('customize', toggleCustomize);
-		$click.on('#customize .theme *', (target) => {
+		$click.on('#customize .theme a *', (target) => {
 			switchTheme(target.getAttribute('data'), true);
 		});
 

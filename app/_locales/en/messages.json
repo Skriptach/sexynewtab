@@ -24,9 +24,18 @@
 		"message": "Cancel"
 	},
 	"theme_label":{
-		"message":"Color Theme"
+		"message":"Theme"
 	},
 	"background_label":{
-		"message":"Background Image"
+		"message":"Background"
+	},
+	"upload": {
+		"message": "Upload"
+	},
+	"upload_image": {
+		"message": "Upload from computer"
+	},
+	"url": {
+		"message": "Link"
 	}
 }

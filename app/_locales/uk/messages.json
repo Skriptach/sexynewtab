@@ -24,9 +24,18 @@
 		"message": "Відміна"
 	},
 	"theme_label":{
-		"message":"Кольорова тема"
+		"message":"Тема"
 	},
 	"background_label":{
-		"message":"Фонове Зображення"
+		"message":"Фонове зображення"
+	},
+	"upload": {
+		"message": "Завантажити"
+	},
+	"upload_image": {
+		"message": "Завантажити з комп'ютеру"
+	},
+	"url": {
+		"message": "Посилання"
 	}
 }

@@ -25,16 +25,22 @@
 	}
 
 	.theme {
-		text-align: center;
-		display: inline-block;
-		width: 80px;
-		cursor: pointer;
+		transition-property: margin-left;
+		transition-duration: 0.2s;
 
-		span {
+		& > a {
+			text-align: center;
 			display: inline-block;
-			width: 40px;
-			height: 40px;
-			background-color: #000;
+			width: 80px;
+			cursor: pointer;
+			padding-top: 6px;
+
+			span {
+				display: inline-block;
+				width: 40px;
+				height: 40px;
+				background-color: #000;
+			}
 		}
 	}
 }

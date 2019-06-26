@@ -61,7 +61,7 @@
 			}
 		}
 
-		.theme[data="@{theme}"] {
+		[data="@{theme}"] {
 			font-weight: bold;
 
 			span {
@@ -70,9 +70,9 @@
 		}
 	}
 
-	// theme color preview rect appears dark to human eye 
+	// theme color preview rect appears dark to human eye
 	// make it slightly brighter
-	#customize a.theme[data="@{theme}"] span {
+	#customize a[data="@{theme}"] span {
 		background: hsl(@h, @s, 6* ( @l + 1) );
 	}
 
@@ -81,10 +81,10 @@
 
 .cosmos {
 	#container {
-		background-image: url('/styles/img/space.jpg');
+		background-image: url('https://source.unsplash.com/1920x1080?nebula');
 	}
 
-	.theme[data="cosmos"] {
+	[data="cosmos"] {
 		font-weight: bold;
 
 		span {

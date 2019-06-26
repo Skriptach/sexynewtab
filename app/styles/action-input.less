@@ -1,11 +1,13 @@
 @color : #ababab;
 action-input,
 search-input,
+image-input,
 url-input {
 	display: flex;
 	flex-shrink: 0;
 	overflow: hidden;
 	font-size: 16px;
+	position: relative;
 
 	border: 1px solid #4d90fe;
 	border-radius: 5px;
@@ -57,5 +59,18 @@ url-input action-btn {
 	}
 	&:active {
 		background: linear-gradient(#064, #0a6);
+	}
+}
+
+image-input {
+	border: none;
+	cursor: pointer;
+
+	input {
+		display: none;
+	}
+
+	span {
+		padding: 5px 5px 5px 35px;
 	}
 }

@@ -24,9 +24,18 @@
 		"message": "Отмена"
 	},
 	"theme_label":{
-		"message":"Цветовая тема"
+		"message":"Тема"
 	},
 	"background_label":{
 		"message":"Фоновое изображение"
+	},
+	"upload": {
+		"message": "Загрузить"
+	},
+	"upload_image": {
+		"message": "Загрузить с компьютера"
+	},
+	"url": {
+		"message": "Ссылка"
 	}
 }
