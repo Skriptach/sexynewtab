@@ -16,6 +16,17 @@
 		});
 	}
 
+	window.uploadBgImage = function (file) {
+		toBase64(file)
+			.then((base64) => {
+				const image = base64.length ? `url(${base64})` : null;
+				chrome.runtime.sendMessage({
+					action: 'loadBackground',
+					image,
+				});
+			});
+	};
+
 	window.updateBackground = function () {
 		const bg = back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
 			back.settings.BACK_TYPE === 'IMAGE' ? back.settings.background : '';
