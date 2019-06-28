@@ -33,6 +33,9 @@
 			this.setAttribute('current', this.#current.type);
 
 			this.on('active', () => {
+				if (this.#current === event.target) {
+					return;
+				}
 				this.#current && this.#current.turnOff();
 				this.#current = event.target;
 				this.setAttribute('current', this.#current.type);
