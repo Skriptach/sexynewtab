@@ -6,6 +6,11 @@
 		d('customize').classList.toggle('open');
 	}
 
+	function toggleEye() {
+		document.body.classList.toggle('shut-eye');
+		event.target.classList.toggle('st-eye-off');
+	}
+
 	function switchTheme (newTheme, save) {
 		document.body.classList.remove(currentTheme);
 		currentTheme = newTheme;
@@ -31,7 +36,7 @@
 		const bg = back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
 			back.settings.BACK_TYPE === 'IMAGE' ? back.settings.background : '';
 
-		d('main').style['background-image'] = bg.length ? bg : null;
+		d('container').style['background-image'] = bg.length ? bg : null;
 		if (bg.length){
 			document.body.classList.add('custom-bg');
 		} else {
@@ -82,6 +87,7 @@
 		back.settings.FLOW && document.querySelector('toggle-btn[type="flow"]').toggle();
 
 		document.on('customize', toggleCustomize);
+		document.on('eye', toggleEye);
 		$click.on('#customize .theme a *', (target) => {
 			switchTheme(target.getAttribute('data'), true);
 		});

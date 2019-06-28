@@ -10,6 +10,14 @@
 #main {
 	display: flex;
 	background-size: cover;
+
+	transition-property: opacity, transform;
+	transition-duration: 0.5s;
+}
+
+body.shut-eye #main {
+	transform: scale(0.9);
+	opacity: 0;
 }
 
 #set {
