@@ -3,15 +3,21 @@
 ; (() => {
 
 	window.ActionBtn = class extends IconElement {
+		#dispatch = () => {
+			this.dispatchEvent(new Event(this.type, { bubbles: true }));
+		}
+
 		constructor (type) {
 			super(type);
 
 			this.label && (this.title = this.label);
 
-			this.on('click', () => {
-				this.dispatchEvent(new Event(this.type, { bubbles: true }));
-			});
+			this.on('click', this.trigger );
 
+		}
+
+		get trigger() {
+			return this.#dispatch;
 		}
 
 		get type() {
@@ -48,11 +54,14 @@
 			super();
 
 			this.on('mousedown', this.toggle.bind(this));
+
+			this.off('click', this.trigger);
 		}
 
 		toggle() {
 			const isActive = this.classList.contains('active');
 			isActive ? this.turnOff() : this.turnOn();
+			this.trigger();
 		}
 
 		turnOn() {
