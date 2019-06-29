@@ -59,14 +59,13 @@
 			if (this.url) {
 				this.querySelector('a').setAttribute('href', this.url);
 				this.classList.remove('inactive');
-				if (!this.thumb) {
-					const isVector = !!slotsList[this.index].favicon.color;
-					const url = slotsList[this.index].favicon.dataUrl;
-					this.style.setProperty('--fav-image', isVector ? null : `url("${url}")`);
-					this.style.setProperty('--fav-mask', isVector ? `url("${url}")` : null);
-					this.style.setProperty('--fav-color', isVector ? slotsList[this.index].favicon.color || '#FFF' : null);
-				}
-				this.style.setProperty('--thumb-image', this.thumb ? `url("${this.thumb}")` : null);
+				const useThumb = back.settings.THUMB_TYPE === 'SCREENS' && this.thumb;
+				const isVector = !!slotsList[this.index].favicon.color;
+				const url = slotsList[this.index].favicon.dataUrl;
+				this.style.setProperty('--fav-image', !useThumb && isVector ? null : `url("${url}")`);
+				this.style.setProperty('--fav-mask', !useThumb && isVector ? `url("${url}")` : null);
+				this.style.setProperty('--fav-color', !useThumb && isVector ? slotsList[this.index].favicon.color || '#FFF' : null);
+				this.style.setProperty('--thumb-image', useThumb ? `url("${this.thumb}")` : null);
 			}
 		}
 

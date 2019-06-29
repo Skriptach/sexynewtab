@@ -50,6 +50,7 @@
 					settings.THEME = res.settings.THEME;
 					settings.BACK = res.settings.BACK;
 					settings.BACK_TYPE = res.settings.BACK_TYPE || settings.BACK_TYPE;
+					settings.THUMB_TYPE = res.settings.THUMB_TYPE || settings.THUMB_TYPE;
 				}
 				resolve();
 			});

@@ -10,6 +10,7 @@
 		THEME: 'deep-purple',
 		BACK: '',
 		BACK_TYPE: 'THEME',
+		THUMB_TYPE: 'SCREENS',
 	};
 
 
