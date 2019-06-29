@@ -29,6 +29,7 @@
 		if (hasImage() && file) {
 			event.preventDefault();
 			uploadBgImage(file);
+			$('[type="IMAGE"]')[0].turnOn();
 			off();
 		}
 	}
