@@ -1,4 +1,4 @@
-{
+﻿{
 	"descript":{
 		"message":"Sexy New Tab replace new tab with beautiful page. Display as gallery or as tile. Synchronizes."
 	},
@@ -37,5 +37,14 @@
 	},
 	"url": {
 		"message": "Link"
+	},
+	"thumbnails": {
+		"message": "Thumbnails"
+	},
+	"screenshots": {
+		"message": "Screenshots"
+	},
+	"icons": {
+		"message": "Icons"
 	}
 }

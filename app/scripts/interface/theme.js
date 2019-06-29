@@ -101,6 +101,7 @@
 		});
 
 		$('#customize .background')[0].on('switch', switchTypeSender('switchBgType'));
+		$('#customize .thumb')[0].on('switch', switchTypeSender('switchThumbType'));
 
 		setTimeout(() => document.body.classList.remove('reflow'), 50);
 		inputBack.on('change', bgChange);

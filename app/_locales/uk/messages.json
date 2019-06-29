@@ -37,5 +37,14 @@
 	},
 	"url": {
 		"message": "Посилання"
+	},
+	"thumbnails": {
+		"message": "Мініатюри"
+	},
+	"screenshots": {
+		"message": "Скріншоти"
+	},
+	"icons": {
+		"message": "Іконки"
 	}
 }
