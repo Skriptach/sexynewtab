@@ -1,4 +1,4 @@
-﻿{
+{
 	"descript":{
 		"message":"Sexy New Tab replace new tab with beautiful page. Display as gallery or as tile. Synchronizes."
 	},
@@ -23,10 +23,10 @@
 	"back":{
 		"message": "Cancel"
 	},
-	"theme_label":{
+	"theme":{
 		"message":"Theme"
 	},
-	"background_label":{
+	"background":{
 		"message":"Background"
 	},
 	"upload": {

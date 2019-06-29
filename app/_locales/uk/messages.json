@@ -23,17 +23,17 @@
 	"back": {
 		"message": "Відміна"
 	},
-	"theme_label":{
+	"theme":{
 		"message":"Тема"
 	},
-	"background_label":{
-		"message":"Фонове зображення"
+	"background":{
+		"message":"Фон"
 	},
 	"upload": {
 		"message": "Завантажити"
 	},
 	"upload_image": {
-		"message": "Завантажити з комп'ютеру"
+		"message": "Завантажити з комп'ютера"
 	},
 	"url": {
 		"message": "Посилання"

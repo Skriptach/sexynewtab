@@ -1,4 +1,4 @@
-﻿{
+{
 	"descript":{
 		"message":"Sexy New Tab заменяет новую вкладку на красивую страницу. Отображает в виде галереи или плитки. Синхронизируется."
 	},
@@ -23,11 +23,11 @@
 	"back": {
 		"message": "Отмена"
 	},
-	"theme_label":{
+	"theme":{
 		"message":"Тема"
 	},
-	"background_label":{
-		"message":"Фоновое изображение"
+	"background":{
+		"message":"Фон"
 	},
 	"upload": {
 		"message": "Загрузить"
