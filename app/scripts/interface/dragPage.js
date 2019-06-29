@@ -40,7 +40,7 @@
 			const from = sign > 0 ? dragPage.index + sign : position;
 			const to = sign < 0 ? dragPage.index + sign : position;
 			const range = $(`thumb-page:nth-child(n+${from + 1}):nth-child(-n+${to + 1})`);
-			Array.prototype.slice.apply( range )
+			Array.from( range )
 				.sort((a, b) => (a.index - b.index) * sign)
 				.reduce((prev, current, i, arr) => {
 					const stash = getParams(current);

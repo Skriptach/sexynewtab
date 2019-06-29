@@ -27,7 +27,7 @@
 
 	function current_index () {
 		const pages = $('thumb-page:not(.inactive):not(.deleting)');
-		return Array.prototype.slice.call(pages).indexOf(current_flow_page);
+		return Array.from(pages).indexOf(current_flow_page);
 	}
 
 	const step = 10,
