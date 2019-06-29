@@ -22,6 +22,7 @@
 		const slots = slotsList.map((slot) => {
 			return slot && slot.url ? {
 				url: slot.url,
+				title: slot.title,
 			} : null;
 		});
 		chrome.storage.sync.set({

@@ -27,13 +27,14 @@
 		return resolveUrl(url, url);
 	}
 
-	window.editPage = (url, slot_index) => {
+	window.editPage = (url, slot_index, title) => {
 		url = fixUrl(url);
 		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
 
 		const oldUrl = slotsList[slot_index] && slotsList[slot_index].url;
 		slotsList[slot_index] = {
 			url,
+			title,
 			favicon: {},
 		};
 		if (!slotsList.find(byUrl(oldUrl))) {

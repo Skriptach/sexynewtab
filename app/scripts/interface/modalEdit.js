@@ -16,7 +16,7 @@
 
 	function editPage () {
 		if (!inputUrl.validity.valid){return;}
-		if (back.editPage(inputUrl.value, currentEditPage.index)) {
+		if (back.editPage(inputUrl.value, currentEditPage.index, currentItem && currentItem.title)) {
 			currentEditPage.loading();
 		}
 		hideEditForm();

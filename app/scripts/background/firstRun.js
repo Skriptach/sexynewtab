@@ -6,7 +6,7 @@
 		chrome.topSites.get((topSites) => {
 			const lng = Math.min(topSites.length, slotsList.length);
 			for (let i = 0; i < lng; i++) {
-				editPage(topSites[i].url, i);
+				editPage(topSites[i].url, i, topSites[i].title);
 			}
 		});
 	}

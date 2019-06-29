@@ -57,7 +57,9 @@
 				(oldUrl === this.url) ? this.thumb : '';
 
 			if (this.url) {
-				this.querySelector('a').setAttribute('href', this.url);
+				const link = this.querySelector('a');
+				link.href = this.url;
+				link.title = slotsList[this.index].title || '';
 				this.classList.remove('inactive');
 				const useThumb = back.settings.THUMB_TYPE === 'SCREENS' && this.thumb;
 				const isVector = !!slotsList[this.index].favicon.color;
