@@ -23,6 +23,9 @@
 	}
 
 	function findLargest (links) {
+		if (!links.length){
+			return Promise.reject(new Error('No available icons in the list'));
+		}
 		const link = links[0];
 		return loadImage(link.href)
 			.then((favicon) => {
@@ -33,7 +36,6 @@
 			})
 			.catch(() => {
 				links.shift();
-				if (!links.length){throw new Error('No available icons in the list');}
 				return findLargest(links);
 			});
 	}
@@ -59,13 +61,9 @@
 					}).sort((a, b) => {
 						return b.size - a.size;
 					});
-				if (links.length) {
-					return findLargest(links)
-						.catch(() => tryGuess(response.url || url));
-				}
-
-				return tryGuess(response.url || url);
-			}, (error) => tryGuess(error.url || url));
+				return findLargest(links);
+			})
+			.catch((error) => tryGuess(error.url || url));
 	};
 
 	chrome.webRequest.onHeadersReceived.addListener((details) => {
