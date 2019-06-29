@@ -15,6 +15,11 @@
 		chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			if (sender.id === chrome.runtime.id) {
 				switch (request.action) {
+				case 'updateAll':
+					$('thumb-page').forEach((page) => {
+						page.update();
+					});
+					break;
 				case 'updatePage':
 					d(`page${request.params.index}`).update(request.params.thumb);
 					break;

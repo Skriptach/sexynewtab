@@ -2,12 +2,18 @@
 
 ;(() => {
 
+	function getSettings(btn) {
+		const classList = btn.closest('switch-panel').classList;
+		return classList.contains('background') ? back.settings.BACK_TYPE :
+			classList.contains('thumb') ? back.settings.THUMB_TYPE : '';
+	}
+
 	class SwitchBtn extends HTMLElement {
 		constructor(){
 			super();
 
 			this.type = this.getAttribute('type');
-			if (this.type === back.settings.BACK_TYPE){
+			if (this.type === getSettings(this)){
 				this.turnOn();
 			}
 			this.on('mousedown', this.turnOn.bind(this));
@@ -40,11 +46,12 @@
 				this.#current = event.target;
 				this.setAttribute('current', this.#current.type);
 
-				chrome.runtime.sendMessage({
-					action: 'switchType',
-					type: this.#current.type
-				});
+				this.dispatchEvent(new Event('switch', { bubbles: true }));
 			});
+		}
+
+		get type() {
+			return this.#current.type;
 		}
 	}
 

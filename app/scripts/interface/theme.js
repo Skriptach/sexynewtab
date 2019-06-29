@@ -77,6 +77,14 @@
 		});
 	}
 
+	function switchTypeSender(action) {
+		return () => {
+			chrome.runtime.sendMessage({
+				action,
+				type: event.target.type
+			});
+		};
+	}
 
 	window.on('ready', () => {
 		back.settings.THEME && switchTheme(back.settings.THEME);
@@ -91,6 +99,8 @@
 		$click.on('#customize .theme a *', (target) => {
 			switchTheme(target.getAttribute('data'), true);
 		});
+
+		$('#customize .background')[0].on('switch', switchTypeSender('switchBgType'));
 
 		setTimeout(() => document.body.classList.remove('reflow'), 50);
 		inputBack.on('change', bgChange);
