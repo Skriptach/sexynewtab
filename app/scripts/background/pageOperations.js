@@ -27,7 +27,7 @@
 		return resolveUrl(url, url);
 	}
 
-	window.editPage = (url, slot_index, requestedTab) => {
+	window.editPage = (url, slot_index) => {
 		url = fixUrl(url);
 		if (!url || (slotsList[slot_index] && slotsList[slot_index].url === url)){return;}
 
@@ -41,11 +41,7 @@
 		}
 		saveLocal();
 		saveSync();
-		if (requestedTab) {
-			createThumbOf(requestedTab, slot_index);
-		} else {
-			updateFavicon(slotsList[slot_index]);
-		}
+		updateFavicon(slotsList[slot_index]);
 		return true;
 	};
 

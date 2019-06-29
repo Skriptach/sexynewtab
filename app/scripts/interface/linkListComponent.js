@@ -129,9 +129,6 @@
 					let item = _self.list.get(link.id || link.url);
 					item = item || getItem(link);
 					update(item, link);
-					if (_self.type === 'tab') {
-						item.tab = link;
-					}
 					newList.set(link.id || link.url, item);
 					fragment.appendChild(item);
 				}
