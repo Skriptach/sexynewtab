@@ -20,7 +20,7 @@
 		}
 	}
 
-	window.refreshPages = (slot_index) => {
+	window.updatePage = (slot_index) => {
 		if (slot_index < 0){return;}
 		chrome.runtime.sendMessage({
 			action: 'updatePage',

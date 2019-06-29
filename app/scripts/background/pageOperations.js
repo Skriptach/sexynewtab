@@ -8,7 +8,7 @@
 				if (slotsList.indexOf(slot) < 0){return;}
 				slot.favicon = response;
 				slot.favicon.lastUpdate = Date.now();
-				refreshPages(slotsList.indexOf(slot));
+				updatePage(slotsList.indexOf(slot));
 			});
 	};
 

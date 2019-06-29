@@ -22,7 +22,7 @@
         "saveBG": true,
         "createThumbOf": true,
 
-        "refreshPages": true,
+        "updatePage": true,
         "updateFavicon": true,
         "swap": true,
         "editPage": true

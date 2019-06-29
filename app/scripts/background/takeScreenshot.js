@@ -31,7 +31,7 @@
 			if (processing.tab.favIconUrl){
 				updateFavicon(slotsList[processing.slot_index]);
 			}
-			refreshPages(processing.slot_index);
+			updatePage(processing.slot_index);
 			saveLocal();
 			processing = null;
 			process();
