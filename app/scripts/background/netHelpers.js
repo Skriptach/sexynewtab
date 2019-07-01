@@ -54,9 +54,9 @@
 	}
 
 	window.get = function (url) {
-		/*	
+		/*
 			Fixes access errors. Some pages requiers credentials,
-			but some denies access for cors request while logged in i.e. twitter.com 
+			but some denies access for cors request while logged in i.e. twitter.com
 		*/
 		const ofRequest = [
 			new Fetcher(url),
