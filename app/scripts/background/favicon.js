@@ -2,7 +2,7 @@
 
 ;(() => {
 
-	const blankIcon = { dataUrl: '/icons/document.svg', color: 'rgba(220, 220, 220, 0.9)'};
+	const blankIcon = { dataUrl: '/icons/document.svg' };
 
 	function getSize (link) {
 		const mostFitWidth = screen.width * 0.2 * window.devicePixelRatio,
