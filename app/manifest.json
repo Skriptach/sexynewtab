@@ -10,6 +10,7 @@
 			"scripts/background/netHelpers.js",
 			"scripts/background/urlHelpers.js",
 			"scripts/background/favicon.js",
+			"scripts/background/getMetadata.js",
 			"scripts/background/save.js",
 			"scripts/background/takeScreenshot.js",
 			"scripts/background/pageOperations.js",
@@ -31,8 +32,8 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "0.10.29.4",
-	"version_name": "0.10.29.4",
+	"version": "0.10.30",
+	"version_name": "0.10.30",
 	"minimum_chrome_version": "69.0.0",
 	"author": "Liubomudr Nazariev"
 }

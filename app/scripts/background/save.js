@@ -23,6 +23,7 @@
 			return slot && slot.url ? {
 				url: slot.url,
 				title: slot.title,
+				lastUpdate: slot.lastUpdate,
 			} : null;
 		});
 		chrome.storage.sync.set({

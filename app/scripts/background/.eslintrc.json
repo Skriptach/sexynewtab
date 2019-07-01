@@ -9,8 +9,8 @@
         "get": true,
         "loadImage": true,
         "resolveUrl": true,
-        "urlBasedDom": true,
         "getFavicon": true,
+        "getMeta": true,
 
         "slotsList": true,
         "settings": true,
@@ -23,7 +23,7 @@
         "createThumbOf": true,
 
         "updatePage": true,
-        "updateFavicon": true,
+        "updateMeta": true,
         "swap": true,
         "editPage": true
 

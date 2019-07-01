@@ -29,9 +29,9 @@
 				if (slot && slot.url) {
 					slot.thumb = thumbs[slot.url];
 					slot.favicon = favicons[slot.url];
-					// update favicon not more often than 24h
-					if (slot.favicon && (Date.now() - slot.favicon.lastUpdate < 24 * 60 * 60000)) { return; }
-					return updateFavicon(slot);
+					// update metadata not often than 24h
+					if (slot.favicon && (Date.now() - slot.lastUpdate < 24 * 60 * 60000)) { return; }
+					return updateMeta(slot);
 				}
 			})
 		);

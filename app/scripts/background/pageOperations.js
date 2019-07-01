@@ -2,12 +2,11 @@
 
 ;(() => {
 
-	window.updateFavicon = (slot) => {
-		return getFavicon(slot.url)
-			.then((response) => {
+	window.updateMeta = (slot) => {
+		return getMeta(slot.url)
+			.then((data) => {
 				if (slotsList.indexOf(slot) < 0){return;}
-				slot.favicon = response;
-				slot.favicon.lastUpdate = Date.now();
+				Object.assign(slot, data);
 				updatePage(slotsList.indexOf(slot));
 			});
 	};
@@ -42,7 +41,7 @@
 		}
 		saveLocal();
 		saveSync();
-		updateFavicon(slotsList[slot_index]);
+		updateMeta(slotsList[slot_index]);
 		return true;
 	};
 

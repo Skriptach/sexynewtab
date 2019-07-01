@@ -29,7 +29,7 @@
 			}
 			slotsList[processing.slot_index].thumb = thumb;
 			if (processing.tab.favIconUrl){
-				updateFavicon(slotsList[processing.slot_index]);
+				updateMeta(slotsList[processing.slot_index]);
 			}
 			updatePage(processing.slot_index);
 			saveLocal();

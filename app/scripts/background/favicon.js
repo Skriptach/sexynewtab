@@ -48,22 +48,19 @@
 			.catch(() => blankIcon);
 	}
 
-	window.getFavicon = function (url) {
-		return get(url)
-			.then((response) => {
-				const doc = urlBasedDom(response.body, response.url || url),
-					links = [].map.call(doc.querySelectorAll('link[rel*="icon"][href]'), (link) => {
-						return {
-							href: link.href,
-							color: link.getAttribute('color'),
-							size: getSize(link)
-						};
-					}).sort((a, b) => {
-						return b.size - a.size;
-					});
-				return findLargest(links);
-			})
-			.catch((error) => tryGuess(error.url || url));
+	window.getFavicon = function (doc) {
+		const links = Array.from(doc.querySelectorAll('link[rel*="icon"][href]'))
+			.map((link) => {
+				return {
+					href: link.href,
+					color: link.getAttribute('color'),
+					size: getSize(link)
+				};
+			}).sort((a, b) => {
+				return b.size - a.size;
+			});
+		return findLargest(links)
+			.catch((error) => tryGuess(error.url || doc.baseURI));
 	};
 
 	chrome.webRequest.onHeadersReceived.addListener((details) => {
