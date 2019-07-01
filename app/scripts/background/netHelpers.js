@@ -70,15 +70,14 @@
 		}
 	}
 
-	window.get = function (url) {
+	window.get = function (url, asBuffer) {
 		/*
 			Fixes access errors. Some pages requiers credentials,
 			but some denies access for cors request while logged in i.e. twitter.com
 		*/
 		const ofRequest = [
+			new Fetcher(url, true),
 			new Fetcher(url),
-			/* https://www.chromestatus.com/feature/5088147346030592
-			new Fetcher(url, true),*/
 		];
 		return Promise.any(ofRequest).then(f => {
 			ofRequest.forEach(v => {
@@ -86,7 +85,7 @@
 					v.abort();
 				}
 			});
-			return f.getBody();
+			return (asBuffer ? f.getBuffer() : f.getBody());
 		});
 	};
 
