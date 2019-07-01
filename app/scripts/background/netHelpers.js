@@ -7,7 +7,9 @@
 		return Promise.race(fetchers.map(f => {
 			return f.promise.catch(e => {
 				errors.push(e);
-				if (errors.length >= fetchers.length) { throw errors; }
+				if (errors.length >= fetchers.length) {
+					throw errors;
+				}
 
 				return Promise.race([]);
 			});
@@ -22,8 +24,8 @@
 				signal: this.controller.signal,
 				credentials: isInclude ? 'include' : 'omit',
 			}).then(r => {
+				_self.response = r;
 				if (r.ok) {
-					_self.response = r;
 					return _self;
 				}
 
@@ -36,13 +38,6 @@
 		}
 
 		getBody() {
-			if (!this.response.ok) {
-				const fallback = {
-					url: this.response.url
-				};
-				throw fallback;
-			}
-
 			return this.response.text()
 				.then(body => {
 					return {
@@ -53,12 +48,6 @@
 		}
 
 		getBuffer() {
-			if (!this.response.ok) {
-				const fallback = {
-					url: this.response.url
-				};
-				throw fallback;
-			}
 			return this.response.arrayBuffer()
 				.then(buffer => {
 					return {
@@ -85,6 +74,12 @@
 					v.abort();
 				}
 			});
+			if (!f.response.ok) {
+				const fallback = {
+					url: f.response.url
+				};
+				throw fallback;
+			}
 			return (asBuffer ? f.getBuffer() : f.getBody());
 		});
 	};
