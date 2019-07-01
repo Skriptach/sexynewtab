@@ -51,6 +51,23 @@
 					};
 				});
 		}
+
+		getBuffer() {
+			if (!this.response.ok) {
+				const fallback = {
+					url: this.response.url
+				};
+				throw fallback;
+			}
+			return this.response.arrayBuffer()
+				.then(buffer => {
+					return {
+						buffer,
+						url: this.response.url,
+						contentType: this.response.headers.get('content-type')
+					};
+				});
+		}
 	}
 
 	window.get = function (url) {
