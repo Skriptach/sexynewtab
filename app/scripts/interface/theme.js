@@ -33,7 +33,8 @@
 	};
 
 	window.updateBackground = function () {
-		const bg = back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
+		const bg = (back.settings.BACK_TYPE === 'THEME' && presets[back.settings.THEME]) ? back.getBg(innerWidth, innerHeight, currentTheme):
+			back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
 			back.settings.BACK_TYPE === 'IMAGE' ? back.settings.background : '';
 
 		d('container').style['background-image'] = bg.length ? bg : null;
@@ -96,8 +97,10 @@
 
 		document.on('customize', toggleCustomize);
 		document.on('eye', toggleEye);
-		$click.on('#customize .theme a *', (target) => {
-			switchTheme(target.getAttribute('data'), true);
+
+		$('#customize .theme')[0].value = back.settings.THEME;
+		$('#customize .theme')[0].on('change', () => {
+			switchTheme(event.target.value, true);
 		});
 
 		$('#customize .background')[0].on('switch', switchTypeSender('switchBgType'));

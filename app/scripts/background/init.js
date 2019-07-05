@@ -19,7 +19,8 @@
 			slotsList,
 			settings,
 			swap,
-			editPage
+			editPage,
+			getBg,
 		});
 	}
 
@@ -59,11 +60,17 @@
 
 	function getLocal() {
 		return new Promise((resolve) => {
-			chrome.storage.local.get(['thumbs', 'favicons', 'background'], (res) => {
+			chrome.storage.local.get(Object.keys(presets).concat([
+				'thumbs',
+				'favicons',
+				'background',
+			]), (res) => {
 				thumbs = res.thumbs || {};
 				favicons = res.favicons || {};
 				settings.background = res.background || '';
-				resolve();
+				Promise.all([
+					Object.keys(presets).map((preset) => initBg({ preset, image: res[preset] }))
+				]).then(resolve);
 			});
 		});
 	}

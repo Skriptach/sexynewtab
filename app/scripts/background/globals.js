@@ -13,5 +13,4 @@
 		THUMB_TYPE: 'SCREENS',
 	};
 
-
 })();

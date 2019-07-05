@@ -58,13 +58,22 @@
 			<switch-btn type="IMAGE" i-18n-msg="upload">Upload</switch-btn>
 		</switch-controls>
 		<switch-tabs>
-			<div class="theme">
-				<a data="metal"><span></span><br>Metal</a>
-				<a data="deep-purple"><span></span><br>Deep Purple</a>
-				<a data="dark-side"><span></span><br>Dark Side</a>
-				<a data="cosmos"><span></span><br>Space</a>
-			</div>
-			<url-input placeholder="https://picsum.photos/1920/1080" ></url-input>
+			<select class="theme">
+				<optgroup label="Colored">
+					<option value="metal">Metal</option>
+					<option value="deep-purple">Deep Purple</option>
+					<option value="dark-side">Dark Side</option>
+				</optgroup>
+				<optgroup label="Presets">
+					<option value="cosmos">Cosmos</option>
+					<option value="sky">Sky</option>
+					<option value="stormy">Stormy</option>
+					<option value="shore">Shore</option>
+					<option value="girls">Girls</option>
+					<option value="marine">Marine</option>
+				</optgroup>
+			</select>
+			<url-input placeholder="https://source.unsplash.com/random/1920x1080" ></url-input>
 			<image-input><span i-18n-msg="upload_image">Upload image</span></image-input>
 		</switch-tabs>
 	</switch-panel>

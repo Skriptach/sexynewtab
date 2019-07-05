@@ -39,6 +39,7 @@
 		chrome.runtime.getBackgroundPage( (bg) => {
 			window.toBase64 = bg.toBase64;
 			window.Fetcher = bg.Fetcher;
+			window.presets = bg.presets;
 			bg.load().then(ready);
 		} );
 	});

@@ -21,11 +21,11 @@ switch-panel {
 		}
 
 		&[current=URL] + switch-tabs > :first-child {
-			margin-left: -100%;
+			margin-left: calc( -100% - 3px );
 		}
 
 		&[current=IMAGE] + switch-tabs > :first-child {
-			margin-left: -200%;
+			margin-left: calc( -200% - 6px);
 		}
 	}
 
@@ -33,10 +33,13 @@ switch-panel {
 		display: flex;
 		overflow: hidden;
 
+		margin: -3px;
+		padding: 3px;
+
 		> * {
 			width: 100%;
 			flex-shrink: 0;
-			margin-top: auto;
+			margin-right: 3px;
 		}
 	}
 }

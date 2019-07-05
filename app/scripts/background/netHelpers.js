@@ -17,12 +17,13 @@
 	};
 
 	class Fetcher {
-		constructor(url, isInclude) {
+		constructor(url, isInclude, noCache) {
 			const _self = this;
 			this.controller = new AbortController();
 			this.promise = fetch(url, {
 				signal: this.controller.signal,
 				credentials: isInclude ? 'include' : 'omit',
+				cache: noCache ? 'no-cache' : 'default',
 			}).then(r => {
 				_self.response = r;
 				if (r.ok) {

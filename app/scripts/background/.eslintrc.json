@@ -22,6 +22,9 @@
         "saveBG": true,
         "createThumbOf": true,
 
+        "presets": true,
+        "initBg": true,
+        "getBg": true,
         "updatePage": true,
         "updateMeta": true,
         "swap": true,
