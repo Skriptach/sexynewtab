@@ -36,7 +36,11 @@
 
 	window.on('load', () => {
 		seti18nLabels();
-		chrome.runtime.getBackgroundPage( (bg) => bg.load().then(ready) );
+		chrome.runtime.getBackgroundPage( (bg) => {
+			window.toBase64 = bg.toBase64;
+			window.Fetcher = bg.Fetcher;
+			bg.load().then(ready);
+		} );
 	});
 
 })();

@@ -6,6 +6,7 @@
         "$click": true,
         "debounce": true,
         "toBase64": true,
+        "Fetcher": true,
         "uploadBgImage": true,
         "updateBackground": true,
         "COLUMNS_COUNT": true,

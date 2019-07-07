@@ -59,6 +59,8 @@
 		}
 	}
 
+	window.Fetcher = Fetcher;
+
 	window.get = function (url, asBuffer) {
 		/*
 			Fixes access errors. Some pages requiers credentials,
