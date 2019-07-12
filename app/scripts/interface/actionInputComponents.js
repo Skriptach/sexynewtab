@@ -40,16 +40,10 @@
 
 		_bindChange() {
 			const setValue = () => {
-				if (event.type === 'paste') {
-					event.preventDefault();
-					this.value = event.clipboardData.getData('text');
-					return;
-				}
-
 				this.value = this.input.value;
 			};
 
-			this.input.on('paste', setValue.bind(this));
+			this.input.on('paste', () => setTimeout(setValue.bind(this), 1));
 			this.input.on('keyup', setValue.bind(this));
 			this.input.on('change', setValue.bind(this));
 		}
