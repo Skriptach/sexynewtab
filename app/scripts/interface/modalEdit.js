@@ -7,7 +7,8 @@
 	const list = $('#edit source-list')[0];
 	let currentItem = null;
 
-	function selectLink (target) {
+	function selectLink () {
+		const target = event.target.closest('.item');
 		inputUrl.value = target.url;
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = target;
@@ -43,7 +44,7 @@
 		});
 
 		document.on('back', hideEditForm);
-		$click.on('#edit .item', selectLink);
+		$('#edit')[0].on('click', selectLink);
 
 	});
 
