@@ -37,8 +37,8 @@
 			back.settings.BACK_TYPE === 'URL' ? back.settings.BACK && `url(${back.settings.BACK})` :
 			back.settings.BACK_TYPE === 'IMAGE' ? back.settings.background : '';
 
-		d('container').style['background-image'] = bg.length ? bg : null;
 		if (bg.length){
+			document.body.style.setProperty('--bg', bg);
 			document.body.classList.add('custom-bg');
 		} else {
 			document.body.classList.remove('custom-bg');
