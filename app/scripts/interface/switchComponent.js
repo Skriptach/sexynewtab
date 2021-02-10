@@ -12,8 +12,8 @@
 		constructor(){
 			super();
 
-			this.type = this.getAttribute('type');
-			if (this.type === getSettings(this)){
+			this.tab = this.getAttribute('tab');
+			if (this.tab === getSettings(this)){
 				this.turnOn();
 			}
 			this.on('mousedown', this.turnOn.bind(this));
@@ -22,11 +22,19 @@
 		turnOn() {
 			this.classList.add('active');
 			this.dispatchEvent(new Event('active', { bubbles: true }));
+			this.allowTab();
 		}
 
 		turnOff() {
 			this.classList.remove('active');
 			this.dispatchEvent(new Event('disactive', { bubbles: true }));
+		}
+
+		allowTab() {
+			const tabElement = this.closest('switch-panel').querySelectorAll('switch-tabs [tab]');
+			Array.prototype.forEach.call(tabElement, (element) => {
+				(element.input || element).tabIndex = element.getAttribute('tab') === this.tab ? 0 : -1;
+			});
 		}
 	}
 
@@ -36,7 +44,7 @@
 			super();
 
 			this.#current = this.querySelector('.active');
-			this.setAttribute('current', this.#current.type);
+			this.setAttribute('current', this.#current.tab);
 
 			this.on('active', () => {
 				if (this.#current === event.target) {
@@ -44,14 +52,14 @@
 				}
 				this.#current && this.#current.turnOff();
 				this.#current = event.target;
-				this.setAttribute('current', this.#current.type);
+				this.setAttribute('current', this.#current.tab);
 
 				this.dispatchEvent(new Event('switch', { bubbles: true }));
 			});
 		}
 
 		get type() {
-			return this.#current.type;
+			return this.#current.tab;
 		}
 	}
 

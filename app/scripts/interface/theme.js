@@ -78,14 +78,12 @@
 		});
 	}
 
-	function switchTypeSender(action) {
-		return () => {
-			chrome.runtime.sendMessage({
-				action,
-				type: event.target.type
-			});
-		};
-	}
+	const switchTypeSender = (action) => (event) => {
+		chrome.runtime.sendMessage({
+			action,
+			type: event.target.type
+		});
+	};
 
 	window.on('ready', () => {
 		back.settings.THEME && switchTheme(back.settings.THEME);

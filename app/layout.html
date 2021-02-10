@@ -46,19 +46,19 @@
 	<h3 class="st-thumbs" i-18n-msg="thumbnails">Thumbnails</h3>
 	<switch-panel class="thumb">
 		<switch-controls>
-			<switch-btn type="SCREENS" i-18n-msg="screenshots">Screenshots</switch-btn>
-			<switch-btn type="ICONS" i-18n-msg="icons">Icons</switch-btn>
+			<switch-btn tab="SCREENS" i-18n-msg="screenshots">Screenshots</switch-btn>
+			<switch-btn tab="ICONS" i-18n-msg="icons">Icons</switch-btn>
 		</switch-controls>
 	</switch-panel>
 	<h3 class="st-picture" i-18n-msg="background">Background</h3>
 	<switch-panel class="background">
 		<switch-controls>
-			<switch-btn type="THEME" i-18n-msg="theme">Theme</switch-btn>
-			<switch-btn type="URL" i-18n-msg="url">Url</switch-btn>
-			<switch-btn type="IMAGE" i-18n-msg="upload">Upload</switch-btn>
+			<switch-btn tab="THEME" i-18n-msg="theme">Theme</switch-btn>
+			<switch-btn tab="URL" i-18n-msg="url">Url</switch-btn>
+			<switch-btn tab="IMAGE" i-18n-msg="upload">Upload</switch-btn>
 		</switch-controls>
 		<switch-tabs>
-			<select class="theme">
+			<select tab="THEME" class="theme">
 				<optgroup label="Colored">
 					<option value="metal">Metal</option>
 					<option value="deep-purple">Deep Purple</option>
@@ -73,8 +73,8 @@
 					<option value="marine">Marine</option>
 				</optgroup>
 			</select>
-			<url-input placeholder="https://source.unsplash.com/random/1920x1080" ></url-input>
-			<image-input><span i-18n-msg="upload_image">Upload image</span></image-input>
+			<url-input tab="URL" placeholder="https://source.unsplash.com/random/1920x1080"></url-input>
+			<image-input tab="IMAGE"><span i-18n-msg="upload_image">Upload image</span></image-input>
 		</switch-tabs>
 	</switch-panel>
 </div>
