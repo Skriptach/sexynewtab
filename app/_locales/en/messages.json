@@ -49,5 +49,29 @@
 	},
 	"error": {
 		"message": "Page is unavailable"
+	},
+	"Colored": {
+		"message": "Colored"
+	},
+	"Presets": {
+		"message": "Presets"
+	},
+	"cosmos": {
+		"message": "Cosmos"
+	},
+	"sky": {
+		"message": "Sky"
+	},
+	"stormy": {
+		"message": "Stormy"
+	},
+	"shore": {
+		"message": "Shore"
+	},
+	"girls": {
+		"message": "Girls"
+	},
+	"marine": {
+		"message": "Marine"
 	}
 }

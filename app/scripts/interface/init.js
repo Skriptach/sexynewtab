@@ -28,9 +28,14 @@
 
 	function seti18nLabels () {
 		document.querySelectorAll('[i-18n-msg]').forEach((tag) => {
-			const msg = tag.getAttribute('i-18n-msg');
-			const fallback = tag.innerText;
-			tag.innerText = chrome.i18n.getMessage(msg) || fallback;
+			if (tag.tagName === 'OPTGROUP'){
+				const msg = tag.label;
+				tag.label = chrome.i18n.getMessage(msg) || msg;
+			} else {
+				const msg = tag.getAttribute('i-18n-msg') || tag.value;
+				const fallback = tag.innerText;
+				tag.innerText = chrome.i18n.getMessage(msg) || fallback;
+			}
 		});
 	}
 

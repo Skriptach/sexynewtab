@@ -49,5 +49,29 @@
 	},
 	"error": {
 		"message": "Сторінка недоступна"
+	},
+	"Colored": {
+		"message": "Кольорова"
+	},
+	"Presets": {
+		"message": "Колекції"
+	},
+	"cosmos": {
+		"message": "Космос"
+	},
+	"sky": {
+		"message": "Небо"
+	},
+	"stormy": {
+		"message": "Гроза"
+	},
+	"shore": {
+		"message": "Узбережжя"
+	},
+	"girls": {
+		"message": "Дівчата"
+	},
+	"marine": {
+		"message": "Море"
 	}
 }
