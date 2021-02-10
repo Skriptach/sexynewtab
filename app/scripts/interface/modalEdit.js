@@ -9,6 +9,9 @@
 
 	function selectLink () {
 		const target = event.target.closest('.item');
+		if (!target) {
+			return;
+		}
 		inputUrl.value = target.url;
 		currentItem && currentItem.classList.remove('selected');
 		currentItem = target;

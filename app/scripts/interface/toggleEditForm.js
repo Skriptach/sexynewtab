@@ -6,8 +6,10 @@
 		EDIT = true;
 		currentEditPage.appendChild(d('edit'));
 		d('edit').dispatchEvent(new Event('shown', {bubbles: true}));
-		$('#edit url-input')[0].value = currentEditPage.url;
-		setTimeout(() => currentEditPage.classList.add('turned', 'ontop'), 10);
+		setTimeout(() => {
+			currentEditPage.classList.add('turned', 'ontop');
+			$('#edit url-input')[0].value = currentEditPage.url;
+		}, 10);
 	}
 
 	window.hideEditForm = () => {

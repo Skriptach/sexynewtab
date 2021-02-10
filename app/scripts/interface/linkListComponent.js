@@ -94,19 +94,6 @@
 
 			document.on('shown', refresh);
 			window.on('focus', refresh);
-
-			if (this.type === 'tabs' || this.type === 'bookmarks'){
-				chrome[this.type].onCreated.addListener(refresh);
-				chrome[this.type].onRemoved.addListener(refresh);
-			}
-
-			if (this.type === 'tabs'){
-				chrome.tabs.onReplaced.addListener(refresh);
-				chrome.tabs.onUpdated.addListener(checkChangings);
-			}
-			if (this.type === 'bookmarks'){
-				chrome.bookmarks.onChanged.addListener(checkChangings);
-			}
 		}
 
 		refresh () {
