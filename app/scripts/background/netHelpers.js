@@ -40,23 +40,19 @@
 
 		getBody() {
 			return this.response.text()
-				.then(body => {
-					return {
-						body,
-						url: this.response.url,
-					};
-				});
+				.then(body => ({
+					body,
+					url: this.response.url,
+				}));
 		}
 
 		getBuffer() {
 			return this.response.arrayBuffer()
-				.then(buffer => {
-					return {
-						buffer,
-						url: this.response.url,
-						contentType: this.response.headers.get('content-type')
-					};
-				});
+				.then(buffer => ({
+					buffer,
+					url: this.response.url,
+					contentType: this.response.headers.get('content-type'),
+				}));
 		}
 	}
 
@@ -95,11 +91,7 @@
 			}
 			return fetcher.response.blob()
 				.then(toBase64)
-				.then((dataUrl) => {
-					return {
-						dataUrl
-					};
-				});
+				.then((dataUrl) => ({ dataUrl }));
 		});
 	};
 

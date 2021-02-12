@@ -8,9 +8,9 @@
 		charsetRX = /.*charset="?([^"]+)/,
 		parser = new DOMParser();
 
-	function lowerTrim(str) {
-		return str.trim().toLowerCase();
-	}
+	const lowerTrim = (str) => str.trim().toLowerCase();
+
+	const decode = (buf, enc) => new TextDecoder(enc).decode(buf);
 
 	function parseContentType(str) {
 		if (!str) {
@@ -26,10 +26,6 @@
 		return metaCharset ? lowerTrim(metaCharset.getAttribute('charset')) :
 			metaContentType ? parseContentType(metaContentType.content) :
 			UTF8;
-	}
-
-	function decode(buf, enc) {
-		return new TextDecoder(enc).decode(buf);
 	}
 
 	function urlBasedDom (buf, base_url, contentType) {
@@ -50,7 +46,7 @@
 		return doc;
 	};
 
-	window.getMeta = function (url) { return url.match(webstore) ?
+	window.getMeta = (url) => url.match(webstore) ?
 		Promise.resolve({
 			title: 'Chrome Web Store - Extensions',
 			favicon: { dataUrl: 'https://ssl.gstatic.com/chrome/webstore/images/icon_144px.png' },
@@ -58,18 +54,14 @@
 		})
 		: get(url, true)
 			.then((response) => urlBasedDom(response.buffer, response.url || url, response.contentType))
-			.then(async (doc) => {
-				return {
-					title: doc.title,
-					favicon: await getFavicon(doc),
-					lastUpdate : Date.now(),
-				};
-			}).catch((e) => {
-				return {
-					title: chrome.i18n.getMessage('error'),
-					favicon: { dataUrl: '/icons/error.svg' }
-				};
-			});
-	};
+			.then(async (doc) => ({
+				title: doc.title,
+				favicon: await getFavicon(doc),
+				lastUpdate : Date.now(),
+			}))
+			.catch((e) => ({
+				title: chrome.i18n.getMessage('error'),
+				favicon: { dataUrl: '/icons/error.svg' },
+			}));
 
 })();

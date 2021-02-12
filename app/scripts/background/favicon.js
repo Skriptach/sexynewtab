@@ -26,7 +26,7 @@
 		if (!links.length){
 			return Promise.reject(new Error('No available icons in the list'));
 		}
-		const link = links[0];
+		const link = links.shift();
 		return loadImage(link.href)
 			.then((favicon) => {
 				if (link.color){
@@ -34,10 +34,7 @@
 				}
 				return favicon;
 			})
-			.catch(() => {
-				links.shift();
-				return findLargest(links);
-			});
+			.catch(() => findLargest(links));
 	}
 
 	function tryGuess (url) {
@@ -50,26 +47,21 @@
 
 	window.getFavicon = function (doc) {
 		const links = Array.from(doc.querySelectorAll('link[rel*="icon"][href]'))
-			.map((link) => {
-				return {
-					href: link.href,
-					color: link.getAttribute('color'),
-					size: getSize(link)
-				};
-			}).sort((a, b) => {
-				return b.size - a.size;
-			});
+			.map((link) => ({
+				href: link.href,
+				color: link.getAttribute('color'),
+				size: getSize(link)
+			}))
+			.sort((a, b) => b.size - a.size);
 		return findLargest(links)
 			.catch((error) => tryGuess(error.url || doc.baseURI));
 	};
 
-	chrome.webRequest.onHeadersReceived.addListener((details) => {
-		return {
-			responseHeaders: details.initiator === `chrome-extension://${chrome.runtime.id}` ?
-				details.responseHeaders.filter(header => header.name.toLowerCase() !== 'link') :
-				details.responseHeaders
-		};
-	}, {
+	chrome.webRequest.onHeadersReceived.addListener((details) => ({
+		responseHeaders: details.initiator === `chrome-extension://${chrome.runtime.id}` ?
+			details.responseHeaders.filter(header => header.name.toLowerCase() !== 'link') :
+			details.responseHeaders
+	}), {
 		urls: ['<all_urls>'],
 		types: ['xmlhttprequest']
 	}, ['blocking', 'responseHeaders']);
