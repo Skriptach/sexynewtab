@@ -37,7 +37,7 @@
 		});
 	};
 
-	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	chrome.runtime.onMessage.addListener((request, sender) => {
 		if (sender.tab && sender.id === chrome.runtime.id) {
 			request.action === 'remove' ? onRemove(request.index) :
 				request.action === 'toggleView'    ? (settings.FLOW  = request.FLOW,  saveSync()) :
@@ -48,7 +48,6 @@
 				request.action === 'loadBackground' ? (settings.background  = request.image, saveBG(), update()) :
 				('');
 		}
-		sendResponse({});
 	});
 
 })();

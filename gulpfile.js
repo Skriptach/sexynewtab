@@ -37,6 +37,11 @@ const paths = {
 		base: 'app/',
 		dest: 'dist/scripts',
 	},
+	contentScript: {
+		src: 'app/scripts/contentScript.js',
+		min: 'contentScript.min.js',
+		dest: 'dist/scripts',
+	},
 	manifest: {
 		src: 'app/manifest.json',
 		dest: 'dist/',
@@ -82,6 +87,12 @@ function background () {
 		.pipe(gulp.dest(paths.background.dest));
 };
 
+function contentScript () {
+	return gulp.src(paths.contentScript.src)
+		.pipe(uglify())
+		.pipe(gulp.dest(paths.contentScript.dest));
+};
+
 
 const build = gulp.series(
 	html,
@@ -89,7 +100,8 @@ const build = gulp.series(
 	copyNewer(paths.icons),
 	copyNewer(paths.img),
 	manifest,
-	background
+	background,
+	contentScript,
 );
 
 gulp.task('build', build);

@@ -65,7 +65,7 @@
 
 	function prepareDrag (e) {
 		dragPage = event.target.closest('thumb-page');
-		if (dragPage.classList.contains('turned') || FLOW) {
+		if (!dragPage || dragPage.classList.contains('turned') || FLOW) {
 			e.preventDefault();
 			return;
 		}

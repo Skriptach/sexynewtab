@@ -39,11 +39,13 @@
 		}
 
 		getBody() {
-			return this.response.text()
+			return this.promise.then(() => this.response
+				.text()
 				.then(body => ({
 					body,
 					url: this.response.url,
-				}));
+				}))
+			);
 		}
 
 		getBuffer() {
