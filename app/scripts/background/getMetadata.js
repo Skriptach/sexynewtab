@@ -4,6 +4,7 @@
 
 	const UTF8 = 'utf-8',
 		protocolRX = /^https?:\/\//,
+		webstore = /^https?:\/\/chrome\.google\.com\/webstore/,
 		charsetRX = /.*charset="?([^"]+)/,
 		parser = new DOMParser();
 
@@ -49,8 +50,13 @@
 		return doc;
 	};
 
-	window.getMeta = function (url) {
-		return get(url, true)
+	window.getMeta = function (url) { return url.match(webstore) ?
+		Promise.resolve({
+			title: 'Chrome Web Store - Extensions',
+			favicon: { dataUrl: 'https://ssl.gstatic.com/chrome/webstore/images/icon_144px.png' },
+			lastUpdate : Date.now(),
+		})
+		: get(url, true)
 			.then((response) => urlBasedDom(response.buffer, response.url || url, response.contentType))
 			.then(async (doc) => {
 				return {
