@@ -7,7 +7,6 @@
         "toBase64": true,
         "Fetcher": true,
         "presets": true,
-        "interpolate": true,
         "uploadBgImage": true,
         "updateBackground": true,
         "COLUMNS_COUNT": true,
