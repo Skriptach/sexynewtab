@@ -78,16 +78,6 @@
 			const refresh = () => {
 				this.refresh();
 			};
-			const checkChangings = (id, changeInfo) => {
-				const property = ['url', 'favIconUrl', 'title'];
-				function hasChancged(prop) {
-					return prop in changeInfo;
-				}
-
-				if (property.some(hasChancged)) {
-					refresh();
-				}
-			};
 
 			this.type = type || this.getAttribute('type');
 			this.list = new Map();
@@ -99,7 +89,7 @@
 		refresh () {
 			const _self = this;
 
-			if (EDIT && get.hasOwnProperty(this.type)){
+			if (EDIT && Object.prototype.hasOwnProperty.call(get, this.type)){
 				get[this.type].then(_self.build.bind(_self));
 			}
 		}

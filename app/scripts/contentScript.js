@@ -1,3 +1,4 @@
+/* global chrome */
 'use strict';
 
 ;(() => {
@@ -38,6 +39,7 @@
 		function tweakLocation() {
 			const ORIGIN1 = 'chrome-untrusted://new-tab-page';
 			const ORIGIN2 = 'chrome://new-tab-page';
+			// eslint-disable-next-line no-unused-vars, no-shadow
 			const { ancestorOrigins, assign, reload, replace, toString, ...props } = location;
 			const loc = {
 				...props,

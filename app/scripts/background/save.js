@@ -28,7 +28,7 @@
 		});
 		chrome.storage.sync.set({
 			slots,
-			settings: Object.assign({}, settings, { background: undefined })
+			settings: Object.assign({}, settings, { background: null })
 		});
 	};
 

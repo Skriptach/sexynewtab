@@ -48,6 +48,7 @@
 			this.input.on('change', setValue.bind(this));
 		}
 
+		// eslint-disable-next-line class-methods-use-this, no-empty-function
 		_onbeforechange (){}
 	};
 

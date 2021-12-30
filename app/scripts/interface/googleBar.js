@@ -101,6 +101,7 @@
 	}
 
 	function inject(script) {
+		// eslint-disable-next-line no-new-func
 		const f = Function(script);
 		f.apply(window);
 	}

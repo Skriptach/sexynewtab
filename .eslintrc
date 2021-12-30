@@ -63,7 +63,7 @@
         "no-undefined":                 "error",
         "no-unmodified-loop-condition": "error",
         "no-unused-vars":               ["error", { "args": "none" }],
-        "no-use-before-define":         "error",
+        "no-use-before-define":         ["error", { "functions": false }],
         "no-useless-call":              "error",
         "no-useless-computed-key":      "error",
         "no-useless-concat":            "error",
