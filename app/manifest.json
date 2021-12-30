@@ -14,7 +14,7 @@
 		"webRequestBlocking",
 		"unlimitedStorage"
 	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://ogs.google.com/; object-src 'self'",
+	"content_security_policy": "script-src 'self' 'unsafe-eval' blob: filesystem: https://www.gstatic.com https://apis.google.com https://ogs.google.com/; object-src 'self'",
 	"background": {
 		"scripts":[
 			"scripts/background/globals.js",
@@ -37,16 +37,6 @@
 	"chrome_url_overrides": {
 		"newtab": "layout.html"
 	},
-	"content_scripts": [{
-		"matches": [
-			"https://ogs.google.com/*widget/app*"
-		],
-		"run_at": "document_start",
-		"js": [
-			"scripts/contentScript.js"
-		],
-		"all_frames": true
-	}],
 	"icons": {
 		"128": "icons/128.png",
 		"16": "icons/16.png",
@@ -55,8 +45,8 @@
 	},
 	"update_url": "http://clients2.google.com/service/update2/crx",
 	"default_locale": "en",
-	"version": "1.0.0",
-	"version_name": "1.0.0",
+	"version": "1.0.1",
+	"version_name": "1.0.1",
 	"minimum_chrome_version": "69.0.0",
 	"author": "Liubomudr Nazariev"
 }

@@ -101,7 +101,6 @@ const build = gulp.series(
 	copyNewer(paths.img),
 	manifest,
 	background,
-	contentScript,
 );
 
 gulp.task('build', build);
