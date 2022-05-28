@@ -2,14 +2,12 @@
 
 ;(() => {
 
-	window.updateMeta = (slot) => {
-		return getMeta(slot.url)
-			.then((data) => {
-				if (slotsList.indexOf(slot) < 0){return;}
-				Object.assign(slot, data);
-				updatePage(slotsList.indexOf(slot));
-			});
-	};
+	window.updateMeta = (slot) => getMeta(slot.url)
+		.then((data) => {
+			if (slotsList.indexOf(slot) < 0){return;}
+			Object.assign(slot, data, { loading: false });
+			updatePage(slotsList.indexOf(slot));
+		});
 
 	window.swap = (old_index, new_index) => {
 		slotsList.splice(new_index, 0, slotsList.splice(old_index, 1)[0]);

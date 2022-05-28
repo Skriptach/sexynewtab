@@ -49,21 +49,26 @@
 		}
 
 		update (thumb) {
-			this.classList.remove('loading');
+			const slot = slotsList[this.index];
 			const oldUrl = this.url;
-			this.url = slotsList[this.index] ? slotsList[this.index].url : '';
+			this.url = slot ? slot.url : '';
 			this.thumb = thumb ? thumb :
-				slotsList[this.index] && slotsList[this.index].thumb ? slotsList[this.index].thumb :
+				slot && slot.thumb ? slot.thumb :
 				(oldUrl === this.url) ? this.thumb : '';
 
 			if (this.url) {
 				const link = this.querySelector('a');
 				link.href = this.url;
-				link.title = slotsList[this.index].title || '';
+				link.title = slot.title || '';
 				this.classList.remove('inactive');
 				const useThumb = back.settings.THUMB_TYPE === 'SCREENS' && this.thumb;
-				const isVector = !!slotsList[this.index].favicon.color;
-				const url = slotsList[this.index].favicon.dataUrl;
+				if (slot.loading && !useThumb) {
+					this.classList.add('loading');
+					return;
+				}
+				this.classList.remove('loading');
+				const isVector = !!slot.favicon.color;
+				const url = slot.favicon.dataUrl;
 				this.style.setProperty('--fav-image', !useThumb && isVector ? null : `url("${url}")`);
 				this.style.setProperty('--fav-mask', !useThumb && isVector ? `url("${url}")` : null);
 				this.style.setProperty('--fav-color', !useThumb && isVector ? slotsList[this.index].favicon.color || '#FFF' : null);
