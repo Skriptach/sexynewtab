@@ -3,7 +3,6 @@
 }
 
 #container {
-	background-image: var(--bg);
 	background-size: cover;
 	background-position: center center;
 }
